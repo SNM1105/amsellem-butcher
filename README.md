@@ -1,45 +1,76 @@
-# Amsellem Kosher Butcher — React + Vite
+# Amsellem Kosher Butcher
 
-Dark theme with burgundy highlights, products by category, basket, delivery/pickup, and Clover POS integration.
+Modern e-commerce website for Amsellem Kosher Butcher with bilingual support (English/Hebrew), shopping cart, and admin panel.
 
-## Run Locally
+## Features
 
-```powershell
+- 🥩 Product catalog with categories (Beef, Lamb, Chicken, Veal, Spices, etc.)
+- 🛒 Shopping cart functionality
+- 🌐 Bilingual support (English/Hebrew)
+- 📱 Responsive design
+- 🔐 Password-protected admin panel
+- 💾 Supabase backend for product management
+- ⚡ Built with React + Vite
+
+## Tech Stack
+
+- **Frontend**: React, React Router, Vite
+- **Backend**: Supabase (PostgreSQL)
+- **Styling**: Custom CSS
+- **Hosting**: Vercel (recommended)
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 16+
+- Supabase account
+- npm or yarn
+
+### Installation
+
+1. Clone the repository
+2. Install dependencies:
+```bash
 npm install
-npm run dev
-# open the printed local URL (e.g. http://localhost:5173)
 ```
 
-## Clover POS Integration
+3. Create `.env` file:
+```bash
+cp .env.example .env
+```
 
-Orders are sent from the frontend to the backend server (`/api/clover/order`), which forwards them to your Clover POS system for processing.
+4. Add your Supabase credentials to `.env`:
+```
+VITE_SUPABASE_URL=your-supabase-url
+VITE_SUPABASE_ANON_KEY=your-anon-key
+VITE_ADMIN_PASSWORD=your-secure-password
+```
 
-**To complete the integration:**
+5. Set up the database:
+   - Go to your Supabase dashboard
+   - Run the SQL script from `SUPABASE_SETUP.md`
+   - Run the migration script from `migrate_products.sql`
 
-1. Get your Clover API credentials from your account administrator:
+6. Start the development server:
+```bash
+npm run dev
+```
 
-   - Merchant ID
-   - API Key
-   - API Endpoint
+## Admin Panel
 
-2. Update `server/index.js` - `POST /api/clover/order` endpoint with:
+Access the admin panel at `/admin` to manage products:
+- Add, edit, and delete products
+- Update prices, descriptions, and categories
+- Manage stock levels
 
-   - Your Clover API authentication
-   - Order submission format per Clover specs
-   - Handle Clover API responses
+## Deployment on Vercel
 
-3. The frontend will send orders with:
-   - Customer info (name, phone, email)
-   - Items with quantities and weights
-   - Delivery/Pickup method
-   - Address (if delivery)
-   - Order total
+1. Push code to GitHub
+2. Import project in Vercel
+3. Add environment variables in Vercel dashboard
+4. Deploy!
 
-## Structure
+## License
 
-- `src/pages`: `Products`, `About`, `Contact`, `CartPage`, `Checkout`
-- `src/components`: `Header`, `ProductCard`
-- `src/context`: `CartContext` (localStorage persistence)
-- `src/data`: `products.js`
-- `src/styles.css`: dark + burgundy theme
-- `server/index.js`: Backend API for Clover orders
+Private project for Amsellem Kosher Butcher
