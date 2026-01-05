@@ -91,22 +91,9 @@ export async function getCategories() {
  */
 export async function updateProduct(id, updates) {
   try {
-    // Support both old schema (name, description) and new schema (name_en, name_fr, etc.)
-    // Check if we're using new schema fields
-    const hasNewSchema = updates.name_en !== undefined
-    
-    const updateData = hasNewSchema ? {
-      name_en: updates.name_en,
-      name_fr: updates.name_fr,
-      description_en: updates.description_en,
-      description_fr: updates.description_fr,
-      price: parseFloat(updates.price),
-      category: updates.category,
-      stock: parseInt(updates.stock),
-      image_url: updates.image_url
-    } : {
-      name: updates.name,
-      description: updates.description,
+    const updateData = {
+      name: updates.name_en || updates.name,
+      description: updates.description_en || updates.description,
       price: parseFloat(updates.price),
       category: updates.category,
       stock: parseInt(updates.stock),
@@ -168,19 +155,7 @@ export async function deleteProduct(id) {
  */
 export async function createProduct(productData) {
   try {
-    // Support both old and new schema
-    const hasNewSchema = productData.name_en !== undefined
-    
-    const insertData = hasNewSchema ? {
-      name_en: productData.name_en,
-      name_fr: productData.name_fr,
-      description_en: productData.description_en,
-      description_fr: productData.description_fr,
-      price: parseFloat(productData.price),
-      category: productData.category,
-      stock: parseInt(productData.stock) || 0,
-      image_url: productData.image_url || ''
-    } : {
+    const insertData = {
       name: productData.name,
       description: productData.description,
       price: parseFloat(productData.price),

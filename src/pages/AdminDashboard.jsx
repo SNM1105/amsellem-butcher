@@ -33,7 +33,12 @@ export default function AdminDashboard() {
   }
 
   const handleEdit = (product) => {
-    setEditingProduct({ ...product, image_url: product.image })
+    setEditingProduct({ 
+      ...product, 
+      image_url: product.image,
+      name: product.name_en || product.name,
+      description: product.description_en || product.description
+    })
     setShowAddForm(false)
   }
 
@@ -72,10 +77,8 @@ export default function AdminDashboard() {
     e.preventDefault()
     const formData = new FormData(e.target)
     const newProduct = {
-      name_en: formData.get('name_en'),
-      name_fr: formData.get('name_fr'),
-      description_en: formData.get('description_en'),
-      description_fr: formData.get('description_fr'),
+      name: formData.get('name_en'),
+      description: formData.get('description_en'),
       price: formData.get('price'),
       category: formData.get('category'),
       stock: formData.get('stock'),
