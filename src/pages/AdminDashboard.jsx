@@ -17,11 +17,13 @@ export default function AdminDashboard() {
   }, [])
 
   async function loadData() {
+    console.log('loadData called')
     setLoading(true)
     const [productsData, categoriesData] = await Promise.all([
       getAllProducts(),
       getCategories()
     ])
+    console.log('Products loaded:', productsData.length, 'products')
     setProducts(productsData)
     setCategories(categoriesData)
     setLoading(false)
@@ -46,11 +48,16 @@ export default function AdminDashboard() {
 
   const handleSave = async (e) => {
     e.preventDefault()
+    console.log('handleSave called with editingProduct:', editingProduct)
     try {
-      await updateProduct(editingProduct.id, editingProduct)
+      const result = await updateProduct(editingProduct.id, editingProduct)
+      console.log('Update result:', result)
       await loadData()
+      console.log('Data reloaded')
       setEditingProduct(null)
+      alert('Product updated successfully!')
     } catch (error) {
+      console.error('Error in handleSave:', error)
       alert('Error updating product: ' + error.message)
     }
   }
