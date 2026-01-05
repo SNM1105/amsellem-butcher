@@ -13,13 +13,17 @@ export async function getAllProducts() {
 
     if (error) throw error
     
-    // Transform image_url to image for compatibility with existing code
+    // Transform to compatible format - handle both old and new schema
     return data.map(product => ({
       id: product.id,
-      name: product.name,
+      name_en: product.name_en || product.name,
+      name_fr: product.name_fr || product.name_en || product.name,
+      description_en: product.description_en || product.description,
+      description_fr: product.description_fr || product.description_en || product.description,
+      name: product.name || product.name_en, // Keep for compatibility
+      description: product.description || product.description_en,
       price: product.price,
       category: product.category,
-      description: product.description,
       image: product.image_url,
       stock: product.stock
     }))
@@ -87,11 +91,24 @@ export async function getCategories() {
  */
 export async function updateProduct(id, updates) {
   try {
-    const updateData = {
-      name: updates.name,
+    // Support both old schema (name, description) and new schema (name_en, name_fr, etc.)
+    // Check if we're using new schema fields
+    const hasNewSchema = updates.name_en !== undefined
+    
+    const updateData = hasNewSchema ? {
+      name_en: updates.name_en,
+      name_fr: updates.name_fr,
+      description_en: updates.description_en,
+      description_fr: updates.description_fr,
       price: parseFloat(updates.price),
       category: updates.category,
+      stock: parseInt(updates.stock),
+      image_url: updates.image_url
+    } : {
+      name: updates.name,
       description: updates.description,
+      price: parseFloat(updates.price),
+      category: updates.category,
       stock: parseInt(updates.stock),
       image_url: updates.image_url
     }
@@ -101,17 +118,21 @@ export async function updateProduct(id, updates) {
       .update(updateData)
       .eq('id', id)
       .select()
-      .single()
 
     if (error) throw error
     
+    const product = data[0] || data
     return {
-      id: data.id,
-      name: data.name,
-      price: data.price,
-      category: data.category,
-      description: data.description,
-      image: data.image_url,
+      id: product.id,
+      name_en: product.name_en || product.name,
+      name_fr: product.name_fr || product.name_en || product.name,
+      description_en: product.description_en || product.description,
+      description_fr: product.description_fr || product.description_en || product.description,
+      name: product.name || product.name_en,
+      description: product.description || product.description_en,
+      price: product.price,
+      category: product.category,
+      image: product.image_url,
       stock: data.stock
     }
   } catch (error) {
@@ -147,16 +168,30 @@ export async function deleteProduct(id) {
  */
 export async function createProduct(productData) {
   try {
+    // Support both old and new schema
+    const hasNewSchema = productData.name_en !== undefined
+    
+    const insertData = hasNewSchema ? {
+      name_en: productData.name_en,
+      name_fr: productData.name_fr,
+      description_en: productData.description_en,
+      description_fr: productData.description_fr,
+      price: parseFloat(productData.price),
+      category: productData.category,
+      stock: parseInt(productData.stock) || 0,
+      image_url: productData.image_url || ''
+    } : {
+      name: productData.name,
+      description: productData.description,
+      price: parseFloat(productData.price),
+      category: productData.category,
+      stock: parseInt(productData.stock) || 0,
+      image_url: productData.image_url || ''
+    }
+
     const { data, error } = await supabase
       .from('products')
-      .insert([{
-        name: productData.name,
-        price: parseFloat(productData.price),
-        category: productData.category,
-        description: productData.description,
-        stock: parseInt(productData.stock) || 0,
-        image_url: productData.image_url || ''
-      }])
+      .insert([insertData])
       .select()
       .single()
 
@@ -164,10 +199,14 @@ export async function createProduct(productData) {
     
     return {
       id: data.id,
-      name: data.name,
+      name_en: data.name_en || data.name,
+      name_fr: data.name_fr || data.name_en || data.name,
+      description_en: data.description_en || data.description,
+      description_fr: data.description_fr || data.description_en || data.description,
+      name: data.name || data.name_en,
+      description: data.description || data.description_en,
       price: data.price,
       category: data.category,
-      description: data.description,
       image: data.image_url,
       stock: data.stock
     }

@@ -72,10 +72,12 @@ export default function AdminDashboard() {
     e.preventDefault()
     const formData = new FormData(e.target)
     const newProduct = {
-      name: formData.get('name'),
+      name_en: formData.get('name_en'),
+      name_fr: formData.get('name_fr'),
+      description_en: formData.get('description_en'),
+      description_fr: formData.get('description_fr'),
       price: formData.get('price'),
       category: formData.get('category'),
-      description: formData.get('description'),
       stock: formData.get('stock'),
       image_url: formData.get('image_url')
     }
@@ -115,8 +117,12 @@ export default function AdminDashboard() {
           <form onSubmit={handleCreateProduct}>
             <div style={{ display: 'grid', gap: '16px' }}>
               <div>
-                <label>Name</label>
-                <input type="text" name="name" required style={inputStyle} />
+                <label>Name (English)</label>
+                <input type="text" name="name_en" required style={inputStyle} />
+              </div>
+              <div>
+                <label>Name (French)</label>
+                <input type="text" name="name_fr" required style={inputStyle} />
               </div>
               <div>
                 <label>Price</label>
@@ -130,8 +136,12 @@ export default function AdminDashboard() {
                 </datalist>
               </div>
               <div>
-                <label>Description</label>
-                <textarea name="description" rows="3" style={inputStyle} />
+                <label>Description (English)</label>
+                <textarea name="description_en" rows="3" style={inputStyle} />
+              </div>
+              <div>
+                <label>Description (French)</label>
+                <textarea name="description_fr" rows="3" style={inputStyle} />
               </div>
               <div>
                 <label>Stock</label>
@@ -151,13 +161,13 @@ export default function AdminDashboard() {
       )}
 
       {editingProduct && (
-        <div className="panel" style={{ padding: '24px', marginBottom: '24px' }}>
+        <div className="panel" style={{ padding: '24px', marginBottom: '24px', maxHeight: '80vh', overflowY: 'auto' }}>
           <h2>Edit Product</h2>
           {editingProduct.image_url && (
             <div style={{ marginBottom: '16px' }}>
               <img 
                 src={editingProduct.image_url} 
-                alt={editingProduct.name}
+                alt={editingProduct.name_en || editingProduct.name}
                 style={{ width: '150px', height: '150px', objectFit: 'cover', borderRadius: '8px' }}
               />
             </div>
@@ -165,11 +175,21 @@ export default function AdminDashboard() {
           <form onSubmit={handleSave}>
             <div style={{ display: 'grid', gap: '16px' }}>
               <div>
-                <label>Name</label>
+                <label>Name (English)</label>
                 <input
                   type="text"
-                  value={editingProduct.name}
-                  onChange={(e) => setEditingProduct({ ...editingProduct, name: e.target.value })}
+                  value={editingProduct.name_en || editingProduct.name || ''}
+                  onChange={(e) => setEditingProduct({ ...editingProduct, name_en: e.target.value })}
+                  style={inputStyle}
+                  required
+                />
+              </div>
+              <div>
+                <label>Name (French)</label>
+                <input
+                  type="text"
+                  value={editingProduct.name_fr || ''}
+                  onChange={(e) => setEditingProduct({ ...editingProduct, name_fr: e.target.value })}
                   style={inputStyle}
                   required
                 />
@@ -200,10 +220,19 @@ export default function AdminDashboard() {
                 </datalist>
               </div>
               <div>
-                <label>Description</label>
+                <label>Description (English)</label>
                 <textarea
-                  value={editingProduct.description || ''}
-                  onChange={(e) => setEditingProduct({ ...editingProduct, description: e.target.value })}
+                  value={editingProduct.description_en || editingProduct.description || ''}
+                  onChange={(e) => setEditingProduct({ ...editingProduct, description_en: e.target.value })}
+                  rows="3"
+                  style={inputStyle}
+                />
+              </div>
+              <div>
+                <label>Description (French)</label>
+                <textarea
+                  value={editingProduct.description_fr || ''}
+                  onChange={(e) => setEditingProduct({ ...editingProduct, description_fr: e.target.value })}
                   rows="3"
                   style={inputStyle}
                 />
@@ -254,12 +283,12 @@ export default function AdminDashboard() {
                   {product.image && (
                     <img 
                       src={product.image} 
-                      alt={product.name} 
+                      alt={product.name_en || product.name} 
                       style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '6px' }}
                     />
                   )}
                 </td>
-                <td style={tdStyle}>{product.name}</td>
+                <td style={tdStyle}>{product.name_en || product.name}</td>
                 <td style={tdStyle}>${product.price.toFixed(2)}</td>
                 <td style={tdStyle}>{product.category}</td>
                 <td style={tdStyle}>{product.stock}</td>
