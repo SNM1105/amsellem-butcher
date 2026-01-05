@@ -7,14 +7,9 @@ export default function ProductCard({ product, categoryLabel }){
   const { t } = useI18n()
   const [weight, setWeight] = useState(1)
   
-  // Try to get translation, but fallback to product data if translation key doesn't exist
-  const translationKey = `products_list.${product.id}_name`
-  const translatedName = t(translationKey)
-  const productName = translatedName === translationKey ? product.name : translatedName
-  
-  const descKey = `products_list.${product.id}_desc`
-  const translatedDesc = t(descKey)
-  const productDesc = translatedDesc === descKey ? product.description : translatedDesc
+  // Use product data directly from database
+  const productName = product.name
+  const productDesc = product.description
   
   const isPerLb = productName.includes('per lb')
 
