@@ -190,3 +190,50 @@ export async function createProduct(productData) {
     throw error
   }
 }
+
+/**
+ * Get the active special banner text
+ * @returns {Promise<Object>} Special banner text
+ */
+export async function getSpecial() {
+  try {
+    const { data, error } = await supabase
+      .from('specials')
+      .select('*')
+      .eq('active', true)
+      .single()
+
+    if (error) throw error
+    return data
+  } catch (error) {
+    console.error('Error fetching special:', error)
+    return { text_en: '', text_fr: '' }
+  }
+}
+
+/**
+ * Update special banner text
+ * @param {string} id - Special ID
+ * @param {Object} updates - Fields to update
+ * @returns {Promise<Object>} Updated special
+ */
+export async function updateSpecial(id, updates) {
+  try {
+    const { data, error } = await supabase
+      .from('specials')
+      .update({
+        text_en: updates.text_en,
+        text_fr: updates.text_fr,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', id)
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  } catch (error) {
+    console.error('Error updating special:', error)
+    throw error
+  }
+}

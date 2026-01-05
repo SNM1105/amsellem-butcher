@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAdminAuth } from '../context/AdminAuthContext'
-import { getAllProducts, getCategories, updateProduct, deleteProduct, createProduct } from '../lib/productsService'
+import { getAllProducts, getCategories, updateProduct, deleteProduct, createProduct, getSpecial, updateSpecial } from '../lib/productsService'
 
 export default function AdminDashboard() {
   const { logout } = useAdminAuth()
@@ -11,9 +11,12 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true)
   const [editingProduct, setEditingProduct] = useState(null)
   const [showAddForm, setShowAddForm] = useState(false)
+  const [special, setSpecial] = useState(null)
+  const [editingSpecial, setEditingSpecial] = useState(false)
 
   useEffect(() => {
     loadData()
+    loadSpecial()
   }, [])
 
   async function loadData() {
@@ -27,6 +30,11 @@ export default function AdminDashboard() {
     setProducts(productsData)
     setCategories(categoriesData)
     setLoading(false)
+  }
+
+  async function loadSpecial() {
+    const data = await getSpecial()
+    setSpecial(data)
   }
 
   const handleLogout = () => {
@@ -102,6 +110,18 @@ export default function AdminDashboard() {
     }
   }
 
+  const handleSaveSpecial = async (e) => {
+    e.preventDefault()
+    try {
+      await updateSpecial(special.id, special)
+      await loadSpecial()
+      setEditingSpecial(false)
+      alert('Special banner updated successfully!')
+    } catch (error) {
+      alert('Error updating special: ' + error.message)
+    }
+  }
+
   if (loading) {
     return (
       <div className="container">
@@ -120,6 +140,51 @@ export default function AdminDashboard() {
           <button className="btn" onClick={handleLogout}>Logout</button>
         </div>
       </div>
+
+      {special && !editingSpecial && (
+        <div className="panel" style={{ padding: '24px', marginBottom: '24px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <h2>Specials Banner</h2>
+            <button className="btn" onClick={() => setEditingSpecial(true)}>Edit</button>
+          </div>
+          <p style={{ color: 'var(--muted)', marginTop: '12px' }}>English: {special.text_en}</p>
+          <p style={{ color: 'var(--muted)' }}>French: {special.text_fr}</p>
+        </div>
+      )}
+
+      {special && editingSpecial && (
+        <div className="panel" style={{ padding: '24px', marginBottom: '24px' }}>
+          <h2>Edit Specials Banner</h2>
+          <form onSubmit={handleSaveSpecial}>
+            <div style={{ display: 'grid', gap: '16px' }}>
+              <div>
+                <label>Banner Text (English)</label>
+                <textarea
+                  value={special.text_en}
+                  onChange={(e) => setSpecial({ ...special, text_en: e.target.value })}
+                  rows="2"
+                  style={inputStyle}
+                  required
+                />
+              </div>
+              <div>
+                <label>Banner Text (French)</label>
+                <textarea
+                  value={special.text_fr}
+                  onChange={(e) => setSpecial({ ...special, text_fr: e.target.value })}
+                  rows="2"
+                  style={inputStyle}
+                  required
+                />
+              </div>
+              <div style={{ display: 'flex', gap: '12px' }}>
+                <button type="submit" className="btn">Save</button>
+                <button type="button" className="btn" onClick={() => setEditingSpecial(false)}>Cancel</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      )}
 
       {showAddForm && (
         <div className="panel" style={{ padding: '24px', marginBottom: '24px' }}>

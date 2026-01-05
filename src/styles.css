@@ -89,6 +89,50 @@ nav a {
     position: relative;
     transition: color 0.2s ease
 }
+
+/* Specials Banner */
+.specials-banner {
+    background: linear-gradient(135deg, var(--accent) 0%, #5a0c12 100%);
+    border-bottom: 2px solid var(--gold);
+    padding: 8px 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    position: relative;
+}
+
+.specials-scroll {
+    display: flex;
+    white-space: nowrap;
+    animation: scroll 30s linear infinite;
+}
+
+.specials-scroll p {
+    margin: 0;
+    padding: 0 50px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: 0.3px;
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+@media (max-width: 768px) {
+    .specials-banner {
+        padding: 6px 0;
+    }
+    .specials-scroll p {
+        font-size: 0.85rem;
+    }
+}
+
 .icon-button {
     background: transparent;
     border: 1px solid rgba(255,255,255,0.1);
@@ -500,8 +544,7 @@ textarea {
 
 /* Hero */
 .hero {
-    background: radial-gradient(1000px 400px at 20% 20%, rgba(123, 15, 23, 0.25), transparent),
-                radial-gradient(800px 320px at 80% 10%, rgba(212, 175, 55, 0.12), transparent);
+    background: #230E10;
     border-bottom: 1px solid rgba(255,255,255,0.05);
 }
 .hero-inner {
