@@ -153,6 +153,15 @@ export default function AdminDashboard() {
       {editingProduct && (
         <div className="panel" style={{ padding: '24px', marginBottom: '24px' }}>
           <h2>Edit Product</h2>
+          {editingProduct.image_url && (
+            <div style={{ marginBottom: '16px' }}>
+              <img 
+                src={editingProduct.image_url} 
+                alt={editingProduct.name}
+                style={{ width: '150px', height: '150px', objectFit: 'cover', borderRadius: '8px' }}
+              />
+            </div>
+          )}
           <form onSubmit={handleSave}>
             <div style={{ display: 'grid', gap: '16px' }}>
               <div>
@@ -230,6 +239,7 @@ export default function AdminDashboard() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+              <th style={thStyle}>Image</th>
               <th style={thStyle}>Name</th>
               <th style={thStyle}>Price</th>
               <th style={thStyle}>Category</th>
@@ -240,6 +250,15 @@ export default function AdminDashboard() {
           <tbody>
             {products.map(product => (
               <tr key={product.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                <td style={tdStyle}>
+                  {product.image && (
+                    <img 
+                      src={product.image} 
+                      alt={product.name} 
+                      style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '6px' }}
+                    />
+                  )}
+                </td>
                 <td style={tdStyle}>{product.name}</td>
                 <td style={tdStyle}>${product.price.toFixed(2)}</td>
                 <td style={tdStyle}>{product.category}</td>
