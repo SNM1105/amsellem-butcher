@@ -35,9 +35,7 @@ export default function AdminDashboard() {
   const handleEdit = (product) => {
     setEditingProduct({ 
       ...product, 
-      image_url: product.image,
-      name: product.name_en || product.name,
-      description: product.description_en || product.description
+      image_url: product.image
     })
     setShowAddForm(false)
   }
@@ -77,8 +75,10 @@ export default function AdminDashboard() {
     e.preventDefault()
     const formData = new FormData(e.target)
     const newProduct = {
-      name: formData.get('name_en'),
-      description: formData.get('description_en'),
+      name_en: formData.get('name_en'),
+      name_fr: formData.get('name_fr'),
+      description_en: formData.get('description_en'),
+      description_fr: formData.get('description_fr'),
       price: formData.get('price'),
       category: formData.get('category'),
       stock: formData.get('stock'),
@@ -170,7 +170,7 @@ export default function AdminDashboard() {
             <div style={{ marginBottom: '16px' }}>
               <img 
                 src={editingProduct.image_url} 
-                alt={editingProduct.name_en || editingProduct.name}
+                alt={editingProduct.name_en}
                 style={{ width: '150px', height: '150px', objectFit: 'cover', borderRadius: '8px' }}
               />
             </div>
@@ -181,7 +181,7 @@ export default function AdminDashboard() {
                 <label>Name (English)</label>
                 <input
                   type="text"
-                  value={editingProduct.name_en || editingProduct.name || ''}
+                  value={editingProduct.name_en || ''}
                   onChange={(e) => setEditingProduct({ ...editingProduct, name_en: e.target.value })}
                   style={inputStyle}
                   required
@@ -225,7 +225,7 @@ export default function AdminDashboard() {
               <div>
                 <label>Description (English)</label>
                 <textarea
-                  value={editingProduct.description_en || editingProduct.description || ''}
+                  value={editingProduct.description_en || ''}
                   onChange={(e) => setEditingProduct({ ...editingProduct, description_en: e.target.value })}
                   rows="3"
                   style={inputStyle}
@@ -286,12 +286,12 @@ export default function AdminDashboard() {
                   {product.image && (
                     <img 
                       src={product.image} 
-                      alt={product.name_en || product.name} 
+                      alt={product.name_en} 
                       style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '6px' }}
                     />
                   )}
                 </td>
-                <td style={tdStyle}>{product.name_en || product.name}</td>
+                <td style={tdStyle}>{product.name_en}</td>
                 <td style={tdStyle}>${product.price.toFixed(2)}</td>
                 <td style={tdStyle}>{product.category}</td>
                 <td style={tdStyle}>{product.stock}</td>

@@ -9,19 +9,16 @@ export async function getAllProducts() {
     const { data, error } = await supabase
       .from('products')
       .select('*')
-      .order('name', { ascending: true })
+      .order('name_en', { ascending: true })
 
     if (error) throw error
     
-    // Transform to compatible format - handle both old and new schema
     return data.map(product => ({
       id: product.id,
-      name_en: product.name_en || product.name,
-      name_fr: product.name_fr || product.name_en || product.name,
-      description_en: product.description_en || product.description,
-      description_fr: product.description_fr || product.description_en || product.description,
-      name: product.name || product.name_en, // Keep for compatibility
-      description: product.description || product.description_en,
+      name_en: product.name_en,
+      name_fr: product.name_fr,
+      description_en: product.description_en,
+      description_fr: product.description_fr,
       price: product.price,
       category: product.category,
       image: product.image_url,
@@ -92,8 +89,10 @@ export async function getCategories() {
 export async function updateProduct(id, updates) {
   try {
     const updateData = {
-      name: updates.name_en || updates.name,
-      description: updates.description_en || updates.description,
+      name_en: updates.name_en,
+      name_fr: updates.name_fr,
+      description_en: updates.description_en,
+      description_fr: updates.description_fr,
       price: parseFloat(updates.price),
       category: updates.category,
       stock: parseInt(updates.stock),
@@ -111,12 +110,10 @@ export async function updateProduct(id, updates) {
     const product = data[0] || data
     return {
       id: product.id,
-      name_en: product.name_en || product.name,
-      name_fr: product.name_fr || product.name_en || product.name,
-      description_en: product.description_en || product.description,
-      description_fr: product.description_fr || product.description_en || product.description,
-      name: product.name || product.name_en,
-      description: product.description || product.description_en,
+      name_en: product.name_en,
+      name_fr: product.name_fr,
+      description_en: product.description_en,
+      description_fr: product.description_fr,
       price: product.price,
       category: product.category,
       image: product.image_url,
@@ -156,8 +153,10 @@ export async function deleteProduct(id) {
 export async function createProduct(productData) {
   try {
     const insertData = {
-      name: productData.name,
-      description: productData.description,
+      name_en: productData.name_en,
+      name_fr: productData.name_fr,
+      description_en: productData.description_en,
+      description_fr: productData.description_fr,
       price: parseFloat(productData.price),
       category: productData.category,
       stock: parseInt(productData.stock) || 0,
@@ -174,12 +173,10 @@ export async function createProduct(productData) {
     
     return {
       id: data.id,
-      name_en: data.name_en || data.name,
-      name_fr: data.name_fr || data.name_en || data.name,
-      description_en: data.description_en || data.description,
-      description_fr: data.description_fr || data.description_en || data.description,
-      name: data.name || data.name_en,
-      description: data.description || data.description_en,
+      name_en: data.name_en,
+      name_fr: data.name_fr,
+      description_en: data.description_en,
+      description_fr: data.description_fr,
       price: data.price,
       category: data.category,
       image: data.image_url,
