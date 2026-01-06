@@ -203,17 +203,37 @@ nav a::after {
 nav a:hover { color: var(--text) }
 nav a:hover::after { width: 100% }
 
-.lang-toggle {
-    margin-left: 12px;
+.lang-link {
+    margin-left: 16px;
     background: transparent;
-    border: 1px solid rgba(255,255,255,0.1);
-    color: var(--text);
-    padding: 6px 10px;
-    border-radius: 6px;
+    border: none;
+    color: var(--muted);
+    padding: 0;
     cursor: pointer;
-    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.2s ease
+    position: relative;
+    transition: color 0.2s ease;
+    font-size: inherit;
+    font-family: inherit;
 }
-.lang-toggle:hover { transform: translateY(-1px); box-shadow: 0 6px 12px rgba(0,0,0,0.25); border-color: var(--gold) }
+
+.lang-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--gold), var(--accent));
+    transition: width 0.2s ease;
+}
+
+.lang-link:hover {
+    color: var(--text);
+}
+
+.lang-link:hover::after {
+    width: 100%;
+}
 
 .products-page .filters {
     margin: 16px 0
