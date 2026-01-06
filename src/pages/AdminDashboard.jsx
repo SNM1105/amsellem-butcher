@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAdminAuth } from '../context/AdminAuthContext'
 import { getAllProducts, getCategories, updateProduct, deleteProduct, createProduct, getSpecial, updateSpecial } from '../lib/productsService'
@@ -39,24 +39,24 @@ export default function AdminDashboard() {
     setSpecial(data)
   }
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     logout()
     navigate('/admin')
-  }
+  }, [logout, navigate])
 
-  const handleEdit = (product) => {
+  const handleEdit = useCallback((product) => {
     setEditingProduct({ 
       ...product, 
       image_url: product.image
     })
     setIsModalOpen(true)
     setShowAddForm(false)
-  }
+  }, [])
 
-  const handleModalClose = () => {
+  const handleModalClose = useCallback(() => {
     setIsModalOpen(false)
     setEditingProduct(null)
-  }
+  }, [])
 
   const handleModalSave = async (e) => {
     e.preventDefault()
@@ -138,9 +138,9 @@ export default function AdminDashboard() {
 
   return (
     <div className="container" style={{ paddingBottom: '40px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+      <div className="admin-header-mobile" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
         <h1>Admin Dashboard</h1>
-        <div style={{ display: 'flex', gap: '12px' }}>
+        <div className="admin-actions-mobile" style={{ display: 'flex', gap: '12px' }}>
           <button className="btn" onClick={handleAdd}>Add Product</button>
           <button className="btn" onClick={handleLogout}>Logout</button>
         </div>
@@ -148,7 +148,7 @@ export default function AdminDashboard() {
 
       {special && !editingSpecial && (
         <div className="panel" style={{ padding: '24px', marginBottom: '24px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
             <h2>Specials Banner</h2>
             <button className="btn" onClick={() => setEditingSpecial(true)}>Edit</button>
           </div>
@@ -182,7 +182,7 @@ export default function AdminDashboard() {
                   required
                 />
               </div>
-              <div style={{ display: 'flex', gap: '12px' }}>
+              <div className="form-actions-mobile" style={{ display: 'flex', gap: '12px' }}>
                 <button type="submit" className="btn">Save</button>
                 <button type="button" className="btn" onClick={() => setEditingSpecial(false)}>Cancel</button>
               </div>
@@ -231,7 +231,7 @@ export default function AdminDashboard() {
                 <label>Image URL</label>
                 <input type="text" name="image_url" style={inputStyle} />
               </div>
-              <div style={{ display: 'flex', gap: '12px' }}>
+              <div className="form-actions-mobile" style={{ display: 'flex', gap: '12px' }}>
                 <button type="submit" className="btn">Create</button>
                 <button type="button" className="btn" onClick={() => setShowAddForm(false)}>Cancel</button>
               </div>
@@ -334,7 +334,7 @@ export default function AdminDashboard() {
                   style={inputStyle}
                 />
               </div>
-              <div style={{ display: 'flex', gap: '12px' }}>
+              <div className="form-actions-mobile" style={{ display: 'flex', gap: '12px' }}>
                 <button type="submit" className="btn">Save</button>
                 <button type="button" className="btn" onClick={handleModalClose}>Cancel</button>
               </div>
@@ -343,7 +343,7 @@ export default function AdminDashboard() {
         )}
       </Modal>
 
-      <div style={{ overflowX: 'auto' }}>
+      <div className="table-wrapper" style={{ overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>

@@ -8,7 +8,8 @@
 }
 
 * {
-    box-sizing: border-box
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -16,6 +17,8 @@ body {
     font-family: Inter, Segoe UI, Arial, sans-serif;
     background: var(--bg);
     color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 html, body { overflow-x: hidden }
@@ -47,6 +50,14 @@ h1, h2, h3 {
     font-size: 1.1rem;
     color: var(--gold);
     text-decoration: none;
+}
+
+@media (max-width: 640px) {
+    .hebrew-blessing {
+        top: 4px;
+        right: 12px;
+        font-size: 0.9rem;
+    }
 }
 
 .site-header .container.header-inner {
@@ -313,6 +324,10 @@ nav a:hover::after { width: 100% }
     text-decoration: none;
     display: inline-block;
     text-align: center;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn.small {
@@ -662,6 +677,46 @@ textarea {
     h2 { font-size: 1.4rem }
     h3 { font-size: 1.2rem }
     
+    /* Admin Dashboard mobile */
+    .admin-header-mobile {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 12px !important;
+    }
+    
+    .admin-actions-mobile {
+        width: 100%;
+        flex-direction: column !important;
+    }
+    
+    .admin-actions-mobile button {
+        width: 100%;
+    }
+    
+    /* Make tables scrollable on mobile */
+    .table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    table {
+        min-width: 600px;
+    }
+    
+    /* Improve panel padding on mobile */
+    .panel {
+        padding: 16px !important;
+    }
+    
+    /* Stack form buttons on mobile */
+    .form-actions-mobile {
+        flex-direction: column !important;
+    }
+    
+    .form-actions-mobile button {
+        width: 100%;
+    }
+    
     /* Header mobile */
     .site-header .container.header-inner { padding: 10px 16px }
     .lang-toggle { margin-left: 4px; padding: 4px 8px; font-size: 0.75rem }
@@ -697,13 +752,18 @@ textarea {
     form.contact-form { max-width: 100% }
     form label { margin-bottom: 10px }
     
+    /* Better inputs on mobile */
+    input, textarea, select {
+        font-size: 16px !important;
+    }
+    
     /* Summary */
     .summary-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05) }
     .order-summary { margin-bottom: 12px }
     
     /* Filters */
     .filters { display: flex; flex-wrap: wrap; gap: 6px }
-    .filters button { padding: 6px 10px; font-size: 0.85rem }
+    .filters button { padding: 6px 10px; font-size: 0.85rem; min-height: 44px }
     
     /* Modal mobile */
     .modal {
@@ -715,7 +775,71 @@ textarea {
         padding: 16px;
     }
     
+    .modal-header h2 {
+        font-size: 1.3rem;
+    }
+    
     .modal-body {
         padding: 16px;
+    }
+    
+    /* Improve product card on mobile */
+    .product-card {
+        padding: 16px;
+    }
+    
+    /* Better spacing for hero on mobile */
+    .hero-media img {
+        height: 220px;
+    }
+    
+    /* Better panel height on mobile */
+    .panel {
+        height: auto !important;
+        min-height: 200px;
+    }
+    
+    /* Improve weight input on mobile */
+    .weight-input input {
+        font-size: 16px;
+        min-height: 44px;
+    }
+    
+    /* Better touch targets for icon buttons */
+    .icon-button {
+        min-width: 44px;
+        min-height: 44px;
+    }
+    
+    .menu-button, .close-button {
+        min-width: 44px;
+        min-height: 44px;
+    }
+    
+    /* Better drawer on mobile */
+    .drawer {
+        width: 85%;
+        max-width: 320px;
+    }
+    
+    .drawer-links a,
+    .drawer-links .drawer-button {
+        min-height: 48px;
+        display: flex;
+        align-items: center;
+    }
+    
+    /* Stack table action buttons on very small screens */
+    @media (max-width: 480px) {
+        table td:last-child {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        table td:last-child button {
+            width: 100%;
+            margin: 0 !important;
+        }
     }
 }

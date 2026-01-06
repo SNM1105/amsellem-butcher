@@ -1,24 +1,23 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useCallback, memo } from 'react'
 
-export default function Modal({ isOpen, onClose, title, children }) {
-  useEffect(() => {
-    const handleEscape = (e) => {
-      if (e.key === 'Escape' && isOpen) {
-        onClose()
-      }
+const Modal = memo(function Modal({ isOpen, onClose, title, children }) {
+  const handleEscape = useCallback((e) => {
+    if (e.key === 'Escape') {
+      onClose()
     }
+  }, [onClose])
 
+  useEffect(() => {
     if (isOpen) {
       document.addEventListener('keydown', handleEscape)
-      const originalOverflow = document.body.style.overflow
       document.body.style.overflow = 'hidden'
 
       return () => {
         document.removeEventListener('keydown', handleEscape)
-        document.body.style.overflow = originalOverflow
+        document.body.style.overflow = ''
       }
     }
-  }, [isOpen, onClose])
+  }, [isOpen, handleEscape])
 
   if (!isOpen) return null
 
@@ -28,7 +27,7 @@ export default function Modal({ isOpen, onClose, title, children }) {
       <div className="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
         <div className="modal-header">
           <h2 id="modal-title">{title}</h2>
-          <button className="modal-close" onClick={onClose} aria-label="Close modal">
+          <button className="modal-close" onClick={onClose} aria-label="Close modal" type="button">
             ✕
           </button>
         </div>
@@ -38,4 +37,6 @@ export default function Modal({ isOpen, onClose, title, children }) {
       </div>
     </>
   )
-}
+})
+
+export default Modal
