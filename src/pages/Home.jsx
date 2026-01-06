@@ -25,16 +25,30 @@ export default function Home(){
       <section className="container history-section">
         <div className="section-head">
           <h2>{t('home.story')}</h2>
-          <p className="muted">{t('home.storyDesc')}</p>
+          <p className="lead" style={{ maxWidth: '70ch', margin: '0 auto' }}>{t('home.storyDesc')}</p>
         </div>
-        <div className="history-grid">
-          <div className="panel fade-up">
-            <img src="/Ams-Photo-Landscape.jpg" alt="Historic photo" className="media" />
-            <p>{t('home.history1')}</p>
+        <div className="history-timeline">
+          <div className="timeline-item fade-up">
+            <div className="timeline-content">
+              <div className="timeline-image">
+                <img src="/Ams-Photo-Landscape.jpg" alt="Historic photo" />
+              </div>
+              <div className="timeline-text">
+                <h3>Heritage & Tradition</h3>
+                <p>{t('home.history1')}</p>
+              </div>
+            </div>
           </div>
-          <div className="panel portrait-panel fade-up delay-1">
-            <img src="/Ams-Photo-profile.jpg" alt="Craftsmanship" className="media" />
-            <p>{t('home.history2')}</p>
+          <div className="timeline-item fade-up delay-1">
+            <div className="timeline-content reverse">
+              <div className="timeline-image portrait">
+                <img src="/Ams-Photo-profile.jpg" alt="Craftsmanship" />
+              </div>
+              <div className="timeline-text">
+                <h3>Craftsmanship & Quality</h3>
+                <p>{t('home.history2')}</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
