@@ -1,14 +1,32 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 export default function Modal({ isOpen, onClose, title, children }) {
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape' && isOpen) {
+        onClose()
+      }
+    }
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscape)
+      document.body.style.overflow = 'hidden'
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape)
+      document.body.style.overflow = 'unset'
+    }
+  }, [isOpen, onClose])
+
   if (!isOpen) return null
 
   return (
     <>
       <div className="modal-overlay" onClick={onClose} />
-      <div className="modal">
+      <div className="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
         <div className="modal-header">
-          <h2>{title}</h2>
+          <h2 id="modal-title">{title}</h2>
           <button className="modal-close" onClick={onClose} aria-label="Close modal">
             ✕
           </button>
