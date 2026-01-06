@@ -142,7 +142,7 @@ nav a {
         padding: 6px 0;
     }
     .specials-scroll {
-        animation: scroll 15s linear infinite;
+        animation: scroll 8s linear infinite;
     }
     .specials-scroll p {
         font-size: 0.85rem;
