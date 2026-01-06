@@ -15,10 +15,19 @@ export function CartProvider({ children }){
       return []
     }
   })
+  
+  const [toast, setToast] = useState(null)
 
   useEffect(()=>{
     localStorage.setItem('ams_cart', JSON.stringify(items))
   }, [items])
+  
+  useEffect(() => {
+    if (toast) {
+      const timer = setTimeout(() => setToast(null), 3000)
+      return () => clearTimeout(timer)
+    }
+  }, [toast])
 
   function addItem(product, qty=1){
     setItems(prev=>{
@@ -29,6 +38,7 @@ export function CartProvider({ children }){
       }
       return [...prev, {...product, qty}]
     })
+    setToast({ product, qty })
   }
 
   function removeItem(id, weight){
@@ -46,7 +56,7 @@ export function CartProvider({ children }){
   const total = items.reduce((s,p)=> s + p.price * p.qty * (p.weight || 1), 0)
 
   return (
-    <CartContext.Provider value={{ items, addItem, removeItem, updateQty, clearCart, total }}>
+    <CartContext.Provider value={{ items, addItem, removeItem, updateQty, clearCart, total, toast }}>
       {children}
     </CartContext.Provider>
   )

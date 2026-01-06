@@ -3,7 +3,9 @@ import { Routes, Route } from 'react-router-dom'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import SpecialsBanner from './components/SpecialsBanner'
+import Toast from './components/Toast'
 import ProtectedRoute from './components/ProtectedRoute'
+import { useCart } from './context/CartContext'
 import Home from './pages/Home'
 import Products from './pages/Products'
 import About from './pages/About'
@@ -15,10 +17,13 @@ import AdminLogin from './pages/AdminLogin'
 import AdminDashboard from './pages/AdminDashboard'
 
 export default function App(){
+  const { toast } = useCart()
+  
   return (
     <div className="app-root">
       <Header />
       <SpecialsBanner />
+      {toast && <Toast product={toast.product} qty={toast.qty} />}
       <main>
         <Routes>
           <Route path="/" element={<Home/>} />

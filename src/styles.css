@@ -910,6 +910,81 @@ textarea {
     .logo { height: 46px }
 }
 
+/* Toast Notification */
+.toast {
+    position: fixed;
+    top: 100px;
+    right: 24px;
+    background: var(--panel);
+    border: 1px solid var(--gold);
+    border-radius: 12px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    animation: slideInRight 0.3s ease, fadeOut 0.3s ease 2.7s;
+    min-width: 280px;
+}
+
+.toast-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), #c9a332);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--bg);
+    font-weight: 700;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.toast-content {
+    flex: 1;
+}
+
+.toast-title {
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+    font-size: 0.95rem;
+}
+
+.toast-message {
+    color: var(--muted);
+    font-size: 0.85rem;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        transform: translateX(400px);
+    }
+}
+
+@media (max-width: 640px) {
+    .toast {
+        top: 80px;
+        right: 16px;
+        left: 16px;
+        min-width: auto;
+    }
+}
+
 /* Modal */
 .modal-overlay {
     position: fixed;
