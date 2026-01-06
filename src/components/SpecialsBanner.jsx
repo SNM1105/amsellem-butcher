@@ -24,6 +24,8 @@ export default function SpecialsBanner() {
       <div className="specials-scroll">
         <p>{text}</p>
         <p>{text}</p>
+        <p>{text}</p>
+        <p>{text}</p>
       </div>
     </div>
   )

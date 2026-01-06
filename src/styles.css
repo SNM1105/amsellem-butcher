@@ -114,7 +114,8 @@ nav a {
 .specials-scroll {
     display: flex;
     white-space: nowrap;
-    animation: scroll 30s linear infinite;
+    animation: scroll 20s linear infinite;
+    will-change: transform;
 }
 
 .specials-scroll p {
@@ -124,6 +125,7 @@ nav a {
     font-weight: 500;
     color: var(--text);
     letter-spacing: 0.3px;
+    flex-shrink: 0;
 }
 
 @keyframes scroll {
