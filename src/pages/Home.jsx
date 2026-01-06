@@ -1,9 +1,24 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useI18n } from '../context/I18nContext'
+import { getAllProducts } from '../lib/productsService'
+import ProductCard from '../components/ProductCard'
 
 export default function Home(){
   const { t } = useI18n()
+  const [featuredProducts, setFeaturedProducts] = useState([])
+
+  useEffect(() => {
+    loadFeaturedProducts()
+  }, [])
+
+  async function loadFeaturedProducts() {
+    const products = await getAllProducts()
+    // Get first 3 products with images as featured
+    const featured = products.filter(p => p.image).slice(0, 3)
+    setFeaturedProducts(featured)
+  }
+
   return (
     <>
       <section className="hero">
@@ -22,60 +37,49 @@ export default function Home(){
         </div>
       </section>
 
-      {/* Special Offers */}
-      <section className="offers-section">
+      {/* Featured Products */}
+      <section className="featured-section">
         <div className="container">
           <div className="section-head centered">
-            <h2>{t('home.offersTitle')}</h2>
-            <p className="muted">{t('home.offersSubtitle')}</p>
+            <h2>Featured Products</h2>
+            <p className="muted">Hand-picked selections from our premium collection</p>
           </div>
-          <div className="offers-grid">
-            <div className="offer-card fade-up">
-              <div className="offer-icon">🎯</div>
-              <h3>{t('home.offer1Title')}</h3>
-              <p>{t('home.offer1Desc')}</p>
-            </div>
-            <div className="offer-card fade-up delay-1">
-              <div className="offer-icon">📦</div>
-              <h3>{t('home.offer2Title')}</h3>
-              <p>{t('home.offer2Desc')}</p>
-            </div>
-            <div className="offer-card fade-up delay-1">
-              <div className="offer-icon">⭐</div>
-              <h3>{t('home.offer3Title')}</h3>
-              <p>{t('home.offer3Desc')}</p>
-            </div>
+          <div className="featured-grid">
+            {featuredProducts.map(product => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+          <div style={{ textAlign: 'center', marginTop: '32px' }}>
+            <Link to="/meats" className="btn btn-lg">View All Products</Link>
           </div>
         </div>
       </section>
 
-      {/* Quality Certifications */}
+      {/* Kosher Certifications */}
       <section className="certifications-section">
         <div className="container">
           <div className="section-head centered">
-            <h2>{t('home.certTitle')}</h2>
-            <p className="muted">{t('home.certSubtitle')}</p>
+            <h2>Kosher Certifications</h2>
+            <p className="muted">Certified and trusted by leading kosher authorities</p>
           </div>
-          <div className="cert-grid">
-            <div className="cert-card fade-up">
-              <div className="cert-icon">✓</div>
-              <h3>{t('home.cert1')}</h3>
-              <p>{t('home.cert1Desc')}</p>
+          <div className="cert-badges">
+            <div className="cert-badge fade-up">
+              <div className="badge-image">
+                <span className="badge-placeholder">COR</span>
+              </div>
+              <p>COR Kosher</p>
             </div>
-            <div className="cert-card fade-up delay-1">
-              <div className="cert-icon">🥩</div>
-              <h3>{t('home.cert2')}</h3>
-              <p>{t('home.cert2Desc')}</p>
+            <div className="cert-badge fade-up delay-1">
+              <div className="badge-image">
+                <span className="badge-placeholder">MK</span>
+              </div>
+              <p>Montreal Kosher</p>
             </div>
-            <div className="cert-card fade-up">
-              <div className="cert-icon">👨‍🍳</div>
-              <h3>{t('home.cert3')}</h3>
-              <p>{t('home.cert3Desc')}</p>
-            </div>
-            <div className="cert-card fade-up delay-1">
-              <div className="cert-icon">⭐</div>
-              <h3>{t('home.cert4')}</h3>
-              <p>{t('home.cert4Desc')}</p>
+            <div className="cert-badge fade-up">
+              <div className="badge-image">
+                <span className="badge-placeholder">OU</span>
+              </div>
+              <p>Orthodox Union</p>
             </div>
           </div>
         </div>

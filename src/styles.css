@@ -641,15 +641,13 @@ textarea {
     font-size: 1.05rem;
 }
 
-/* Special Offers Section */
-.offers-section {
+/* Featured Products Section */
+.featured-section {
     padding: 60px 24px;
-    background: linear-gradient(135deg, rgba(123, 15, 23, 0.05) 0%, rgba(15, 15, 16, 0.8) 100%);
-    border-top: 1px solid rgba(212, 175, 55, 0.1);
-    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+    background: var(--bg);
 }
 
-.offers-grid {
+.featured-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 24px;
@@ -657,116 +655,85 @@ textarea {
     margin: 0 auto;
 }
 
-.offer-card {
-    background: var(--panel);
-    border: 1px solid rgba(212, 175, 55, 0.2);
-    border-radius: 12px;
-    padding: 32px 24px;
-    text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.offer-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-    border-color: var(--gold);
-}
-
-.offer-icon {
-    font-size: 3rem;
-    margin-bottom: 16px;
-}
-
-.offer-card h3 {
-    color: var(--gold);
-    margin: 0 0 12px 0;
-    font-size: 1.3rem;
-}
-
-.offer-card p {
-    color: var(--muted);
-    margin: 0;
-    line-height: 1.6;
-}
-
-/* Certifications Section */
+/* Kosher Certifications Badges */
 .certifications-section {
     padding: 60px 24px;
-    background: var(--bg);
+    background: linear-gradient(135deg, rgba(123, 15, 23, 0.03) 0%, rgba(15, 15, 16, 0.9) 100%);
+    border-top: 1px solid rgba(212, 175, 55, 0.15);
 }
 
-.cert-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 24px;
-    max-width: 1100px;
+.cert-badges {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 48px;
+    flex-wrap: wrap;
+    max-width: 900px;
     margin: 0 auto;
 }
 
-.cert-card {
-    background: var(--panel);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 12px;
-    padding: 28px 20px;
+.cert-badge {
     text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.cert-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-}
-
-.cert-icon {
-    font-size: 2.5rem;
-    margin-bottom: 16px;
+.badge-image {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 12px;
+    background: white;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 70px;
-    height: 70px;
-    margin: 0 auto 16px;
-    background: rgba(212, 175, 55, 0.1);
-    border-radius: 50%;
-    border: 2px solid rgba(212, 175, 55, 0.3);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    border: 3px solid var(--gold);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.cert-card h3 {
+.cert-badge:hover .badge-image {
+    transform: scale(1.05);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+}
+
+.badge-placeholder {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent);
+    font-family: 'Playfair Display', Georgia, serif;
+}
+
+.cert-badge p {
     color: var(--text);
-    margin: 0 0 8px 0;
-    font-size: 1.15rem;
-}
-
-.cert-card p {
-    color: var(--muted);
+    font-size: 0.95rem;
+    font-weight: 500;
     margin: 0;
-    font-size: 0.9rem;
-    line-height: 1.5;
 }
 
 @media (max-width: 800px) {
-    .offers-section,
-    .certifications-section {
+    .featured-section {
         padding: 40px 16px;
     }
     
-    .offers-grid {
+    .featured-grid {
         grid-template-columns: 1fr;
         gap: 20px;
     }
     
-    .cert-grid {
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 16px;
+    .certifications-section {
+        padding: 40px 16px;
     }
     
-    .offer-card {
-        padding: 24px 20px;
+    .cert-badges {
+        gap: 32px;
     }
     
-    .cert-card {
-        padding: 20px 16px;
+    .badge-image {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .badge-placeholder {
+        font-size: 1.6rem;
     }
 }
 
