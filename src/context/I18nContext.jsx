@@ -200,7 +200,7 @@ const dict = {
     }
   },
   fr: {
-    nav: { shop: 'Boutique', story: 'Notre Histoire', contact: 'Contact', cart: 'Panier' },
+    nav: { shop: 'Produits', story: 'Notre Histoire', contact: 'Contact', cart: 'Panier' },
     home: {
       title: 'Amsellem — Boucherie Cacher',
       lead: 'Tradition, savoir-faire et attention — nous servons notre communauté avec les meilleures viandes casher et des plats préparés.',
