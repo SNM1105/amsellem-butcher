@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAdminAuth } from '../context/AdminAuthContext'
 import { getAllProducts, getCategories, updateProduct, deleteProduct, createProduct, getSpecial, updateSpecial } from '../lib/productsService'
+import Modal from '../components/Modal'
 
 export default function AdminDashboard() {
   const { logout } = useAdminAuth()
@@ -13,6 +14,7 @@ export default function AdminDashboard() {
   const [showAddForm, setShowAddForm] = useState(false)
   const [special, setSpecial] = useState(null)
   const [editingSpecial, setEditingSpecial] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   useEffect(() => {
     loadData()
@@ -47,25 +49,28 @@ export default function AdminDashboard() {
       ...product, 
       image_url: product.image
     })
+    setIsModalOpen(true)
     setShowAddForm(false)
   }
 
-  const handleCancelEdit = () => {
+  const handleModalClose = () => {
+    setIsModalOpen(false)
     setEditingProduct(null)
   }
 
-  const handleSave = async (e) => {
+  const handleModalSave = async (e) => {
     e.preventDefault()
-    console.log('handleSave called with editingProduct:', editingProduct)
+    console.log('handleModalSave called with editingProduct:', editingProduct)
     try {
       const result = await updateProduct(editingProduct.id, editingProduct)
       console.log('Update result:', result)
       await loadData()
       console.log('Data reloaded')
+      setIsModalOpen(false)
       setEditingProduct(null)
       alert('Product updated successfully!')
     } catch (error) {
-      console.error('Error in handleSave:', error)
+      console.error('Error in handleModalSave:', error)
       alert('Error updating product: ' + error.message)
     }
   }
@@ -235,19 +240,18 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      {editingProduct && (
-        <div className="panel" style={{ padding: '24px', marginBottom: '24px', maxHeight: '80vh', overflowY: 'auto' }}>
-          <h2>Edit Product</h2>
-          {editingProduct.image_url && (
-            <div style={{ marginBottom: '16px' }}>
-              <img 
-                src={editingProduct.image_url} 
-                alt={editingProduct.name_en}
-                style={{ width: '150px', height: '150px', objectFit: 'cover', borderRadius: '8px' }}
-              />
-            </div>
-          )}
-          <form onSubmit={handleSave}>
+      <Modal isOpen={isModalOpen} onClose={handleModalClose} title="Edit Product">
+        {editingProduct && (
+          <form onSubmit={handleModalSave}>
+            {editingProduct.image_url && (
+              <div style={{ marginBottom: '16px' }}>
+                <img 
+                  src={editingProduct.image_url} 
+                  alt={editingProduct.name_en}
+                  style={{ width: '150px', height: '150px', objectFit: 'cover', borderRadius: '8px' }}
+                />
+              </div>
+            )}
             <div style={{ display: 'grid', gap: '16px' }}>
               <div>
                 <label>Name (English)</label>
@@ -332,12 +336,12 @@ export default function AdminDashboard() {
               </div>
               <div style={{ display: 'flex', gap: '12px' }}>
                 <button type="submit" className="btn">Save</button>
-                <button type="button" className="btn" onClick={handleCancelEdit}>Cancel</button>
+                <button type="button" className="btn" onClick={handleModalClose}>Cancel</button>
               </div>
             </div>
           </form>
-        </div>
-      )}
+        )}
+      </Modal>
 
       <div style={{ overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
