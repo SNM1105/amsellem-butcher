@@ -210,10 +210,10 @@ export default function AdminDashboard() {
               </div>
               <div>
                 <label>Category</label>
-                <input type="text" name="category" list="categories" required style={inputStyle} />
-                <datalist id="categories">
-                  {categories.map(cat => <option key={cat} value={cat} />)}
-                </datalist>
+                <select name="category" required style={inputStyle}>
+                  <option value="">Select a category...</option>
+                  {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                </select>
               </div>
               <div>
                 <label>Description (English)</label>
@@ -286,17 +286,15 @@ export default function AdminDashboard() {
               </div>
               <div>
                 <label>Category</label>
-                <input
-                  type="text"
+                <select
                   value={editingProduct.category}
                   onChange={(e) => setEditingProduct({ ...editingProduct, category: e.target.value })}
-                  list="categories"
                   style={inputStyle}
                   required
-                />
-                <datalist id="categories">
-                  {categories.map(cat => <option key={cat} value={cat} />)}
-                </datalist>
+                >
+                  <option value="">Select a category...</option>
+                  {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                </select>
               </div>
               <div>
                 <label>Description (English)</label>
