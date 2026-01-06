@@ -17,7 +17,7 @@ const dict = {
     },
     products: { title: 'Our Meats & Premade Foods', all: 'All' },
     categories: { Beef: 'Beef', Lamb: 'Lamb', Chicken: 'Chicken', Veal: 'Veal', Spices: 'Spices', Oil: 'Oil', Premade: 'Premade' },
-    product: { addToBasket: 'Add to Basket', each: 'each' },
+    product: { addToBasket: 'Add to Basket', each: 'each', outOfStock: 'Out of Stock' },
     products_list: {
       b1_name: 'Ribeye Steak (per lb)',
       b1_desc: 'Well-marbled ribeye, Kosher-cut.',
@@ -213,7 +213,7 @@ const dict = {
     },
     products: { title: 'Nos viandes et plats préparés', all: 'Toutes' },
     categories: { Beef: 'Boeuf', Lamb: 'Agneau', Chicken: 'Poulet', Veal: 'Veau', Spices: 'Épices', Oil: 'Huiles', Premade: 'Plats préparés' },
-    product: { addToBasket: 'Ajouter au panier', each: 'unité' },
+    product: { addToBasket: 'Ajouter au panier', each: 'unité', outOfStock: 'Rupture de Stock' },
     products_list: {
       b1_name: 'Steak Ribeye (par lb)',
       b1_desc: 'Ribeye bien persillé, coupe casher.',
