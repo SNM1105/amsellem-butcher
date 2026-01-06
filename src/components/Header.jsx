@@ -26,8 +26,8 @@ export default function Header(){
         </Link>
 
         <nav className="desktop-nav">
-          <Link to="/meats">{t('nav.meats')}</Link>
-          <Link to="/about">{t('nav.about')}</Link>
+          <Link to="/meats">{t('nav.shop')}</Link>
+          <Link to="/about">{t('nav.story')}</Link>
           <Link to="/contact">{t('nav.contact')}</Link>
           <Link to="/cart" className="icon-button cart" aria-label={t('nav.cart')}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -58,8 +58,8 @@ export default function Header(){
           </button>
         </div>
         <div className="drawer-links">
-          <Link to="/meats" onClick={closeMenu}>{t('nav.meats')}</Link>
-          <Link to="/about" onClick={closeMenu}>{t('nav.about')}</Link>
+          <Link to="/meats" onClick={closeMenu}>{t('nav.shop')}</Link>
+          <Link to="/about" onClick={closeMenu}>{t('nav.story')}</Link>
           <Link to="/contact" onClick={closeMenu}>{t('nav.contact')}</Link>
           <Link to="/cart" onClick={closeMenu}>{t('nav.cart')} ({count})</Link>
           <button className="drawer-button" onClick={()=> { toggleLang(); closeMenu() }}>

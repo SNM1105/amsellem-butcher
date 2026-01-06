@@ -4,7 +4,7 @@ const I18nContext = createContext()
 
 const dict = {
   en: {
-    nav: { meats: 'Meats', about: 'About', contact: 'Contact', cart: 'Cart' },
+    nav: { shop: 'Shop', story: 'Our Story', contact: 'Contact', cart: 'Cart' },
     home: {
       title: 'Amsellem — Kosher Butcherie',
       lead: 'Tradition, craftsmanship, and care — serving our community with the finest kosher meats and prepared foods.',
@@ -200,7 +200,7 @@ const dict = {
     }
   },
   fr: {
-    nav: { meats: 'Viandes', about: 'À propos', contact: 'Contact', cart: 'Panier' },
+    nav: { shop: 'Boutique', story: 'Notre Histoire', contact: 'Contact', cart: 'Panier' },
     home: {
       title: 'Amsellem — Boucherie Cacher',
       lead: 'Tradition, savoir-faire et attention — nous servons notre communauté avec les meilleures viandes casher et des plats préparés.',
