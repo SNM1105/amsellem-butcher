@@ -41,8 +41,8 @@ export default function Home(){
       <section className="featured-section">
         <div className="container">
           <div className="section-head centered">
-            <h2>Featured Products</h2>
-            <p className="muted">Hand-picked selections from our premium collection</p>
+            <h2>{t('home.featuredTitle')}</h2>
+            <p className="muted">{t('home.featuredSubtitle')}</p>
           </div>
           <div className="featured-grid">
             {featuredProducts.map(product => (
@@ -50,7 +50,7 @@ export default function Home(){
             ))}
           </div>
           <div style={{ textAlign: 'center', marginTop: '32px' }}>
-            <Link to="/meats" className="btn btn-lg">View All Products</Link>
+            <Link to="/meats" className="btn btn-lg">{t('home.viewAll')}</Link>
           </div>
         </div>
       </section>
@@ -59,8 +59,8 @@ export default function Home(){
       <section className="certifications-section">
         <div className="container">
           <div className="section-head centered">
-            <h2>Kosher Certifications</h2>
-            <p className="muted">Certified and trusted by leading kosher authorities</p>
+            <h2>{t('home.certTitle')}</h2>
+            <p className="muted">{t('home.certSubtitle')}</p>
           </div>
           <div className="cert-badges">
             <div className="cert-badge fade-up">
