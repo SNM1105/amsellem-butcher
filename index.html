@@ -1,9 +1,71 @@
 <!doctype html>
 <html lang="en">
     <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Amsellem Kosher Butcher</title>
+                <meta charset="utf-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                <title>Amsellem Kosher Butcher | Montreal Kosher Meats & Prepared Foods</title>
+                <meta name="description" content="Amsellem Kosher Butcher in Saint-Laurent, Montreal offers premium kosher meats, prepared foods, and bilingual service with delivery or pickup." />
+                <meta name="keywords" content="kosher butcher montreal, kosher meat montreal, butcher shop quebec, kosher meat delivery, saint-laurent butcher, kosher prepared foods" />
+                <meta name="author" content="Amsellem Kosher Butcher" />
+                <meta name="robots" content="index,follow" />
+
+                <link rel="canonical" id="canonical-link" href="/" />
+
+                <meta property="og:type" content="website" />
+                <meta property="og:title" content="Amsellem Kosher Butcher | Montreal Kosher Meats" />
+                <meta property="og:description" content="Premium kosher meats, prepared foods, and bilingual service in Saint-Laurent, QC. Delivery and pickup available." />
+                <meta property="og:image" id="og-image" content="/img/Rib%20Eye.JPG" />
+                <meta property="og:url" id="og-url" content="/" />
+                <meta property="og:locale" content="en_CA" />
+                <meta property="og:site_name" content="Amsellem Kosher Butcher" />
+
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content="Amsellem Kosher Butcher | Montreal Kosher Meats" />
+                <meta name="twitter:description" content="Premium kosher meats, prepared foods, and bilingual service in Saint-Laurent, QC." />
+                <meta name="twitter:image" id="twitter-image" content="/img/Rib%20Eye.JPG" />
+
+                <script>
+                    // Set absolute URLs for canonical and social tags using the current host
+                    (function(){
+                        var origin = window.location.origin;
+                        var canonical = document.getElementById('canonical-link');
+                        if (canonical && origin) canonical.href = origin + '/';
+                        var ogUrl = document.getElementById('og-url');
+                        if (ogUrl && origin) ogUrl.content = origin + '/';
+                        var imgPath = '/img/Rib%20Eye.JPG';
+                        var ogImg = document.getElementById('og-image');
+                        if (ogImg && origin) ogImg.content = origin + imgPath;
+                        var twImg = document.getElementById('twitter-image');
+                        if (twImg && origin) twImg.content = origin + imgPath;
+
+                        var ld = {
+                            "@context": "https://schema.org",
+                            "@type": "Butcher",
+                            "name": "Amsellem Kosher Butcher",
+                            "description": "Premium kosher butcher offering meats, prepared foods, and bilingual service in Saint-Laurent, QC.",
+                            "url": origin + '/',
+                            "image": origin + imgPath,
+                            "address": {
+                                "@type": "PostalAddress",
+                                "streetAddress": "2079 Rue Saint-Louis",
+                                "addressLocality": "Saint-Laurent",
+                                "addressRegion": "QC",
+                                "postalCode": "H4M 1P1",
+                                "addressCountry": "CA"
+                            },
+                            "areaServed": "Montreal, QC",
+                            "priceRange": "$$",
+                            "servesCuisine": "Kosher",
+                            "availableLanguage": ["en", "fr"]
+                        };
+
+                        var ldScript = document.createElement('script');
+                        ldScript.type = 'application/ld+json';
+                        ldScript.textContent = JSON.stringify(ld);
+                        document.head.appendChild(ldScript);
+                    })();
+                </script>
+
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
