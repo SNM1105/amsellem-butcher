@@ -174,11 +174,14 @@ const dict = {
       summary: 'Order Summary',
       subtotal: 'Subtotal',
       fee: 'Delivery',
+      gst: 'GST (5%)',
+      qst: 'QST (9.975%)',
+      taxes: 'Taxes',
       total: 'Total',
-      payWith: 'Submit Order to Clover',
-      submitOrder: 'Submit Order',
-      processing: 'Submitting order...',
-      cloverNote: 'Your order will be sent to the register. Payment will be processed at the counter.'
+      payWith: 'Pay with Clover (CAD)',
+      submitOrder: 'Pay Now',
+      processing: 'Processing payment...',
+      cloverNote: 'Secure Clover payment. Immediate capture in CAD with GST/QST included.'
     },
     contact: { title: 'Contact Us', name: 'Name', email: 'Email', message: 'Message', send: 'Send Message', thanks: 'Thanks! We received your message (demo).' },
     about: {
@@ -410,11 +413,14 @@ const dict = {
       summary: 'Récapitulatif de commande',
       subtotal: 'Sous-total',
       fee: 'Livraison',
+      gst: 'TPS (5%)',
+      qst: 'TVQ (9,975%)',
+      taxes: 'Taxes',
       total: 'Total',
-      payWith: 'Soumettre la commande à Clover',
-      submitOrder: 'Soumettre la commande',
-      processing: 'Envoi de la commande...',
-      cloverNote: 'Votre commande sera envoyée à la caisse. Le paiement sera traité au comptoir.'
+      payWith: 'Payer avec Clover (CAD)',
+      submitOrder: 'Payer maintenant',
+      processing: 'Traitement du paiement...',
+      cloverNote: 'Paiement Clover sécurisé. Capture immédiate en CAD avec TPS/TVQ incluses.'
     },
     contact: { title: 'Nous contacter', name: 'Nom', email: 'Email', message: 'Message', send: 'Envoyer', thanks: 'Merci ! Nous avons bien reçu votre message (démo).' },
     about: {
