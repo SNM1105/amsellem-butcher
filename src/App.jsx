@@ -1,5 +1,5 @@
-import React from 'react'
-import { Routes, Route } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import SpecialsBanner from './components/SpecialsBanner'
@@ -18,6 +18,12 @@ import AdminDashboard from './pages/AdminDashboard'
 
 export default function App(){
   const { toast } = useCart()
+  const location = useLocation()
+  
+  // Scroll to top on route change
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [location.pathname])
   
   return (
     <div className="app-root">
