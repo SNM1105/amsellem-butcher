@@ -146,10 +146,10 @@ export default function Home(){
             <h2>{t('home.stayConnected')}</h2>
             <p>{t('home.stayConnectedText')}</p>
             <div className="social-buttons">
-              <a href="#" className="social-btn" target="_blank" rel="noopener noreferrer">
+              <a href="https://www.facebook.com/maisomamaellem/" className="social-btn" target="_blank" rel="noopener noreferrer">
                 <span>Facebook</span>
               </a>
-              <a href="#" className="social-btn" target="_blank" rel="noopener noreferrer">
+              <a href="https://www.instagram.com/maisonamsellem/?hl=en" className="social-btn" target="_blank" rel="noopener noreferrer">
                 <span>Instagram</span>
               </a>
             </div>
