@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAdminAuth } from '../context/AdminAuthContext'
+import { useI18n } from '../context/I18nContext'
 import { getAllProducts, getCategories, updateProduct, deleteProduct, createProduct, getSpecial, updateSpecial } from '../lib/productsService'
+import Modal from '../components/Modal'
 
 export default function AdminDashboard() {
   const { logout } = useAdminAuth()
+  const { t } = useI18n()
   const navigate = useNavigate()
   const [products, setProducts] = useState([])
   const [categories, setCategories] = useState([])
@@ -13,6 +16,7 @@ export default function AdminDashboard() {
   const [showAddForm, setShowAddForm] = useState(false)
   const [special, setSpecial] = useState(null)
   const [editingSpecial, setEditingSpecial] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   useEffect(() => {
     loadData()
@@ -37,47 +41,50 @@ export default function AdminDashboard() {
     setSpecial(data)
   }
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     logout()
     navigate('/admin')
-  }
+  }, [logout, navigate])
 
-  const handleEdit = (product) => {
+  const handleEdit = useCallback((product) => {
     setEditingProduct({ 
       ...product, 
       image_url: product.image
     })
+    setIsModalOpen(true)
     setShowAddForm(false)
-  }
+  }, [])
 
-  const handleCancelEdit = () => {
+  const handleModalClose = useCallback(() => {
+    setIsModalOpen(false)
     setEditingProduct(null)
-  }
+  }, [])
 
-  const handleSave = async (e) => {
+  const handleModalSave = async (e) => {
     e.preventDefault()
-    console.log('handleSave called with editingProduct:', editingProduct)
+    console.log('handleModalSave called with editingProduct:', editingProduct)
     try {
       const result = await updateProduct(editingProduct.id, editingProduct)
       console.log('Update result:', result)
       await loadData()
       console.log('Data reloaded')
+      setIsModalOpen(false)
       setEditingProduct(null)
-      alert('Product updated successfully!')
+      alert(t('admin.updateSuccess'))
     } catch (error) {
-      console.error('Error in handleSave:', error)
-      alert('Error updating product: ' + error.message)
+      console.error('Error in handleModalSave:', error)
+      alert(t('admin.updateError') + error.message)
     }
   }
 
   const handleDelete = async (id) => {
-    if (!confirm('Are you sure you want to delete this product?')) return
+    if (!confirm(t('admin.deleteConfirm'))) return
     
     try {
       await deleteProduct(id)
       await loadData()
     } catch (error) {
-      alert('Error deleting product: ' + error.message)
+      alert(t('admin.deleteError') + error.message)
     }
   }
 
@@ -106,7 +113,7 @@ export default function AdminDashboard() {
       setShowAddForm(false)
       e.target.reset()
     } catch (error) {
-      alert('Error creating product: ' + error.message)
+      alert(t('admin.createError') + error.message)
     }
   }
 
@@ -116,36 +123,36 @@ export default function AdminDashboard() {
       await updateSpecial(special.id, special)
       await loadSpecial()
       setEditingSpecial(false)
-      alert('Special banner updated successfully!')
+      alert(t('admin.specialUpdateSuccess'))
     } catch (error) {
-      alert('Error updating special: ' + error.message)
+      alert(t('admin.specialUpdateError') + error.message)
     }
   }
 
   if (loading) {
     return (
       <div className="container">
-        <h1>Admin Dashboard</h1>
-        <p>Loading...</p>
+        <h1>{t('admin.dashboard')}</h1>
+        <p>{t('admin.loading')}</p>
       </div>
     )
   }
 
   return (
     <div className="container" style={{ paddingBottom: '40px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-        <h1>Admin Dashboard</h1>
-        <div style={{ display: 'flex', gap: '12px' }}>
-          <button className="btn" onClick={handleAdd}>Add Product</button>
-          <button className="btn" onClick={handleLogout}>Logout</button>
+      <div className="admin-header-mobile" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+        <h1>{t('admin.dashboard')}</h1>
+        <div className="admin-actions-mobile" style={{ display: 'flex', gap: '12px' }}>
+          <button className="btn" onClick={handleAdd}>{t('admin.addProduct')}</button>
+          <button className="btn" onClick={handleLogout}>{t('admin.logout')}</button>
         </div>
       </div>
 
       {special && !editingSpecial && (
         <div className="panel" style={{ padding: '24px', marginBottom: '24px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <h2>Specials Banner</h2>
-            <button className="btn" onClick={() => setEditingSpecial(true)}>Edit</button>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+            <h2>{t('admin.specialsBanner')}</h2>
+            <button className="btn" onClick={() => setEditingSpecial(true)}>{t('admin.edit')}</button>
           </div>
           <p style={{ color: 'var(--muted)', marginTop: '12px' }}>English: {special.text_en}</p>
           <p style={{ color: 'var(--muted)' }}>French: {special.text_fr}</p>
@@ -154,11 +161,11 @@ export default function AdminDashboard() {
 
       {special && editingSpecial && (
         <div className="panel" style={{ padding: '24px', marginBottom: '24px' }}>
-          <h2>Edit Specials Banner</h2>
+          <h2>{t('admin.edit')} {t('admin.specialsBanner')}</h2>
           <form onSubmit={handleSaveSpecial}>
             <div style={{ display: 'grid', gap: '16px' }}>
               <div>
-                <label>Banner Text (English)</label>
+                <label>{t('admin.bannerTextEn')}</label>
                 <textarea
                   value={special.text_en}
                   onChange={(e) => setSpecial({ ...special, text_en: e.target.value })}
@@ -168,7 +175,7 @@ export default function AdminDashboard() {
                 />
               </div>
               <div>
-                <label>Banner Text (French)</label>
+                <label>{t('admin.bannerTextFr')}</label>
                 <textarea
                   value={special.text_fr}
                   onChange={(e) => setSpecial({ ...special, text_fr: e.target.value })}
@@ -177,9 +184,9 @@ export default function AdminDashboard() {
                   required
                 />
               </div>
-              <div style={{ display: 'flex', gap: '12px' }}>
-                <button type="submit" className="btn">Save</button>
-                <button type="button" className="btn" onClick={() => setEditingSpecial(false)}>Cancel</button>
+              <div className="form-actions-mobile" style={{ display: 'flex', gap: '12px' }}>
+                <button type="submit" className="btn">{t('admin.save')}</button>
+                <button type="button" className="btn" onClick={() => setEditingSpecial(false)}>{t('admin.cancel')}</button>
               </div>
             </div>
           </form>
@@ -188,69 +195,68 @@ export default function AdminDashboard() {
 
       {showAddForm && (
         <div className="panel" style={{ padding: '24px', marginBottom: '24px' }}>
-          <h2>Add New Product</h2>
+          <h2>{t('admin.addNewProduct')}</h2>
           <form onSubmit={handleCreateProduct}>
             <div style={{ display: 'grid', gap: '16px' }}>
               <div>
-                <label>Name (English)</label>
+                <label>{t('admin.nameEn')}</label>
                 <input type="text" name="name_en" required style={inputStyle} />
               </div>
               <div>
-                <label>Name (French)</label>
+                <label>{t('admin.nameFr')}</label>
                 <input type="text" name="name_fr" required style={inputStyle} />
               </div>
               <div>
-                <label>Price</label>
+                <label>{t('admin.price')}</label>
                 <input type="number" name="price" step="0.01" required style={inputStyle} />
               </div>
               <div>
-                <label>Category</label>
-                <input type="text" name="category" list="categories" required style={inputStyle} />
-                <datalist id="categories">
-                  {categories.map(cat => <option key={cat} value={cat} />)}
-                </datalist>
+                <label>{t('admin.category')}</label>
+                <select name="category" required style={inputStyle}>
+                  <option value="">{t('admin.selectCategory')}</option>
+                  {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                </select>
               </div>
               <div>
-                <label>Description (English)</label>
+                <label>{t('admin.descEn')}</label>
                 <textarea name="description_en" rows="3" style={inputStyle} />
               </div>
               <div>
-                <label>Description (French)</label>
+                <label>{t('admin.descFr')}</label>
                 <textarea name="description_fr" rows="3" style={inputStyle} />
               </div>
               <div>
-                <label>Stock</label>
+                <label>{t('admin.stock')}</label>
                 <input type="number" name="stock" defaultValue="0" style={inputStyle} />
               </div>
               <div>
-                <label>Image URL</label>
+                <label>{t('admin.imageUrl')}</label>
                 <input type="text" name="image_url" style={inputStyle} />
               </div>
-              <div style={{ display: 'flex', gap: '12px' }}>
-                <button type="submit" className="btn">Create</button>
-                <button type="button" className="btn" onClick={() => setShowAddForm(false)}>Cancel</button>
+              <div className="form-actions-mobile" style={{ display: 'flex', gap: '12px' }}>
+                <button type="submit" className="btn">{t('admin.create')}</button>
+                <button type="button" className="btn" onClick={() => setShowAddForm(false)}>{t('admin.cancel')}</button>
               </div>
             </div>
           </form>
         </div>
       )}
 
-      {editingProduct && (
-        <div className="panel" style={{ padding: '24px', marginBottom: '24px', maxHeight: '80vh', overflowY: 'auto' }}>
-          <h2>Edit Product</h2>
-          {editingProduct.image_url && (
-            <div style={{ marginBottom: '16px' }}>
-              <img 
-                src={editingProduct.image_url} 
-                alt={editingProduct.name_en}
-                style={{ width: '150px', height: '150px', objectFit: 'cover', borderRadius: '8px' }}
-              />
-            </div>
-          )}
-          <form onSubmit={handleSave}>
+      <Modal isOpen={isModalOpen} onClose={handleModalClose} title={t('admin.editProduct')}>
+        {editingProduct && (
+          <form onSubmit={handleModalSave}>
+            {editingProduct.image_url && (
+              <div style={{ marginBottom: '16px' }}>
+                <img 
+                  src={editingProduct.image_url} 
+                  alt={editingProduct.name_en}
+                  style={{ width: '150px', height: '150px', objectFit: 'cover', borderRadius: '8px' }}
+                />
+              </div>
+            )}
             <div style={{ display: 'grid', gap: '16px' }}>
               <div>
-                <label>Name (English)</label>
+                <label>{t('admin.nameEn')}</label>
                 <input
                   type="text"
                   value={editingProduct.name_en || ''}
@@ -260,7 +266,7 @@ export default function AdminDashboard() {
                 />
               </div>
               <div>
-                <label>Name (French)</label>
+                <label>{t('admin.nameFr')}</label>
                 <input
                   type="text"
                   value={editingProduct.name_fr || ''}
@@ -270,7 +276,7 @@ export default function AdminDashboard() {
                 />
               </div>
               <div>
-                <label>Price</label>
+                <label>{t('admin.price')}</label>
                 <input
                   type="number"
                   step="0.01"
@@ -281,21 +287,19 @@ export default function AdminDashboard() {
                 />
               </div>
               <div>
-                <label>Category</label>
-                <input
-                  type="text"
+                <label>{t('admin.category')}</label>
+                <select
                   value={editingProduct.category}
                   onChange={(e) => setEditingProduct({ ...editingProduct, category: e.target.value })}
-                  list="categories"
                   style={inputStyle}
                   required
-                />
-                <datalist id="categories">
-                  {categories.map(cat => <option key={cat} value={cat} />)}
-                </datalist>
+                >
+                  <option value="">{t('admin.selectCategory')}</option>
+                  {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                </select>
               </div>
               <div>
-                <label>Description (English)</label>
+                <label>{t('admin.descEn')}</label>
                 <textarea
                   value={editingProduct.description_en || ''}
                   onChange={(e) => setEditingProduct({ ...editingProduct, description_en: e.target.value })}
@@ -304,7 +308,7 @@ export default function AdminDashboard() {
                 />
               </div>
               <div>
-                <label>Description (French)</label>
+                <label>{t('admin.descFr')}</label>
                 <textarea
                   value={editingProduct.description_fr || ''}
                   onChange={(e) => setEditingProduct({ ...editingProduct, description_fr: e.target.value })}
@@ -313,7 +317,7 @@ export default function AdminDashboard() {
                 />
               </div>
               <div>
-                <label>Stock</label>
+                <label>{t('admin.stock')}</label>
                 <input
                   type="number"
                   value={editingProduct.stock}
@@ -322,7 +326,7 @@ export default function AdminDashboard() {
                 />
               </div>
               <div>
-                <label>Image URL</label>
+                <label>{t('admin.imageUrl')}</label>
                 <input
                   type="text"
                   value={editingProduct.image_url || ''}
@@ -330,25 +334,25 @@ export default function AdminDashboard() {
                   style={inputStyle}
                 />
               </div>
-              <div style={{ display: 'flex', gap: '12px' }}>
-                <button type="submit" className="btn">Save</button>
-                <button type="button" className="btn" onClick={handleCancelEdit}>Cancel</button>
+              <div className="form-actions-mobile" style={{ display: 'flex', gap: '12px' }}>
+                <button type="submit" className="btn">{t('admin.save')}</button>
+                <button type="button" className="btn" onClick={handleModalClose}>{t('admin.cancel')}</button>
               </div>
             </div>
           </form>
-        </div>
-      )}
+        )}
+      </Modal>
 
-      <div style={{ overflowX: 'auto' }}>
+      <div className="table-wrapper" style={{ overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-              <th style={thStyle}>Image</th>
-              <th style={thStyle}>Name</th>
-              <th style={thStyle}>Price</th>
-              <th style={thStyle}>Category</th>
-              <th style={thStyle}>Stock</th>
-              <th style={thStyle}>Actions</th>
+              <th style={thStyle}>{t('admin.image')}</th>
+              <th style={thStyle}>{t('admin.name')}</th>
+              <th style={thStyle}>{t('admin.price')}</th>
+              <th style={thStyle}>{t('admin.category')}</th>
+              <th style={thStyle}>{t('admin.stock')}</th>
+              <th style={thStyle}>{t('admin.actions')}</th>
             </tr>
           </thead>
           <tbody>
@@ -373,14 +377,14 @@ export default function AdminDashboard() {
                     style={{ marginRight: '8px', padding: '4px 12px' }}
                     onClick={() => handleEdit(product)}
                   >
-                    Edit
+                    {t('admin.edit')}
                   </button>
                   <button 
                     className="btn" 
                     style={{ padding: '4px 12px', background: 'var(--accent)' }}
                     onClick={() => handleDelete(product.id)}
                   >
-                    Delete
+                    {t('admin.delete')}
                   </button>
                 </td>
               </tr>

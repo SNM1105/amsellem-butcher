@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { getAllProducts, getCategories } from '../lib/productsService'
 import ProductCard from '../components/ProductCard'
 import { useI18n } from '../context/I18nContext'
 
 export default function Products(){
   const { t, tCategory, lang } = useI18n()
-  const [cat, setCat] = useState('All')
+  const [searchParams] = useSearchParams()
+  const categoryParam = searchParams.get('category')
+  
+  const [cat, setCat] = useState(categoryParam || 'All')
   const [products, setProducts] = useState([])
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
@@ -23,6 +27,13 @@ export default function Products(){
     }
     loadData()
   }, [])
+  
+  // Update category when URL parameter changes
+  useEffect(() => {
+    if (categoryParam) {
+      setCat(categoryParam)
+    }
+  }, [categoryParam])
 
   const list = cat === 'All' ? products : products.filter(p=> p.category === cat)
 

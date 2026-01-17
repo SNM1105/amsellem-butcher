@@ -26,8 +26,8 @@ export default function Header(){
         </Link>
 
         <nav className="desktop-nav">
-          <Link to="/meats">{t('nav.meats')}</Link>
-          <Link to="/about">{t('nav.about')}</Link>
+          <Link to="/meats">{t('nav.shop')}</Link>
+          <Link to="/about">{t('nav.story')}</Link>
           <Link to="/contact">{t('nav.contact')}</Link>
           <Link to="/cart" className="icon-button cart" aria-label={t('nav.cart')}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -37,12 +37,8 @@ export default function Header(){
             </svg>
             <span className="cart-count" aria-hidden>{count}</span>
           </Link>
-          <button className="icon-button" onClick={toggleLang} aria-label="Toggle language">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 21c4.97 0 9-4.03 9-9s-4.03-9-9-9-9 4.03-9 9 4.03 9 9 9Z" stroke="currentColor" strokeWidth="1.6"/>
-              <path d="M3 12h18M12 3c2.5 3 2.5 15 0 18M7 5.5c1.6 1.3 1.6 11.7 0 13M17 5.5c-1.6 1.3-1.6 11.7 0 13" stroke="currentColor" strokeWidth="1.2"/>
-            </svg>
-            <span className="sr-only">{lang.toUpperCase()}</span>
+          <button className="lang-link" onClick={toggleLang} aria-label="Toggle language">
+            {lang.toUpperCase()}/{lang === 'en' ? 'FR' : 'EN'}
           </button>
         </nav>
       </div>
@@ -58,8 +54,8 @@ export default function Header(){
           </button>
         </div>
         <div className="drawer-links">
-          <Link to="/meats" onClick={closeMenu}>{t('nav.meats')}</Link>
-          <Link to="/about" onClick={closeMenu}>{t('nav.about')}</Link>
+          <Link to="/meats" onClick={closeMenu}>{t('nav.shop')}</Link>
+          <Link to="/about" onClick={closeMenu}>{t('nav.story')}</Link>
           <Link to="/contact" onClick={closeMenu}>{t('nav.contact')}</Link>
           <Link to="/cart" onClick={closeMenu}>{t('nav.cart')} ({count})</Link>
           <button className="drawer-button" onClick={()=> { toggleLang(); closeMenu() }}>

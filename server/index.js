@@ -4,6 +4,10 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const crypto = require('crypto');
 
+const GST_RATE = 0.05;      // Federal GST (Canada)
+const QST_RATE = 0.09975;   // Quebec Sales Tax
+const CURRENCY = 'CAD';
+
 const app = express();
 
 // Trust proxy if behind a reverse proxy (Cloudflare, etc.)
@@ -58,7 +62,11 @@ const PRODUCTS = [
 ];
 const PRODUCT_MAP = Object.fromEntries(PRODUCTS.map(p=> [p.id, p.price]));
 
-function calcTotal(items, method){
+function round2(n){
+  return Math.round((Number(n) || 0) * 100) / 100;
+}
+
+function calcTotals(items, method){
   let subtotal = 0;
   for(const it of items){
     const unit = PRODUCT_MAP[it.id];
@@ -68,8 +76,19 @@ function calcTotal(items, method){
     subtotal += unit * qty;
   }
   const fee = method === 'delivery' ? 5.0 : 0;
-  const total = +(subtotal + fee).toFixed(2);
-  return { subtotal: +subtotal.toFixed(2), fee, total };
+  const base = subtotal + fee;
+  const gst = round2(base * GST_RATE);
+  const qst = round2(base * QST_RATE);
+  const total = round2(base + gst + qst);
+  return {
+    currency: CURRENCY,
+    subtotal: round2(subtotal),
+    fee: round2(fee),
+    gst,
+    qst,
+    taxTotal: round2(gst + qst),
+    total
+  };
 }
 
 // API: get products (prices only for demo)
@@ -81,7 +100,7 @@ app.get('/api/products', (req, res)=> {
 app.post('/api/orders', (req, res)=> {
   try{
     const { items = [], method = 'delivery', contact = {} } = req.body || {};
-    const totals = calcTotal(items, method);
+    const totals = calcTotals(items, method);
     // Basic contact validation
     const nameOk = typeof contact.firstName === 'string' && typeof contact.lastName === 'string';
     const phoneOk = typeof contact.phone === 'string';
@@ -93,6 +112,50 @@ app.post('/api/orders', (req, res)=> {
     res.json({ id, totals });
   } catch(err){
     res.status(400).json({ error: err.message || 'Bad request' });
+  }
+});
+
+// API: Clover card payment (immediate capture, CAD)
+app.post('/api/payments/clover', async (req, res)=> {
+  try {
+    const { items = [], method = 'delivery', contact = {}, delivery = null, paymentToken = null } = req.body || {};
+    const totals = calcTotals(items, method);
+
+    const nameOk = typeof contact.firstName === 'string' && typeof contact.lastName === 'string';
+    const phoneOk = typeof contact.phone === 'string';
+    if(!nameOk || !phoneOk){
+      return res.status(400).json({ error: 'Invalid contact' });
+    }
+
+    // Require delivery fields when delivery is selected
+    if(method === 'delivery'){
+      const { street, city, postal } = delivery || {};
+      if(!street || !city || !postal){
+        return res.status(400).json({ error: 'Delivery address required' });
+      }
+    }
+
+    // If Clover credentials are missing, return a mock success so dev flow keeps working
+    const merchantId = process.env.CLOVER_MERCHANT_ID;
+    const secretKey = process.env.CLOVER_SECRET_KEY;
+    if(!merchantId || !secretKey){
+      const paymentId = `mock_clover_${Date.now()}`;
+      return res.json({
+        success: true,
+        mock: true,
+        message: 'Clover keys not set on server; returning mocked payment success',
+        paymentId,
+        totals
+      });
+    }
+
+    // TODO: Exchange paymentToken with Clover Payments API and capture funds
+    // Placeholder response until Clover integration is completed
+    const paymentId = `clover_${Date.now()}`;
+    res.json({ success: true, paymentId, totals });
+  } catch (err){
+    console.error('Clover payment error:', err);
+    res.status(400).json({ error: err.message || 'Payment failed' });
   }
 });
 
