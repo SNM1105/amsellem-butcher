@@ -1,14 +1,66 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
+import { motion, useScroll, useMotionValue, useMotionValueEvent, animate } from 'framer-motion'
 import { useI18n } from '../context/I18nContext'
 import { getAllProducts } from '../lib/productsService'
+
+// Hook for scroll overflow mask effect
+function useScrollOverflowMask(scrollXProgress) {
+  const left = '0%'
+  const right = '100%'
+  const leftInset = '15%'
+  const rightInset = '85%'
+  const transparent = 'rgba(0, 0, 0, 0)'
+  const opaque = 'rgba(0, 0, 0, 1)'
+  
+  const maskImage = useMotionValue(
+    `linear-gradient(90deg, ${opaque}, ${opaque} ${left}, ${opaque} ${rightInset}, ${transparent})`
+  )
+
+  useMotionValueEvent(scrollXProgress, 'change', (value) => {
+    if (value === 0) {
+      animate(
+        maskImage,
+        `linear-gradient(90deg, ${opaque}, ${opaque} ${left}, ${opaque} ${rightInset}, ${transparent})`,
+        { duration: 0.3 }
+      )
+    } else if (value === 1) {
+      animate(
+        maskImage,
+        `linear-gradient(90deg, ${transparent}, ${opaque} ${leftInset}, ${opaque} ${right}, ${opaque})`,
+        { duration: 0.3 }
+      )
+    } else if (scrollXProgress.getPrevious() === 0 || scrollXProgress.getPrevious() === 1) {
+      animate(
+        maskImage,
+        `linear-gradient(90deg, ${transparent}, ${opaque} ${leftInset}, ${opaque} ${rightInset}, ${transparent})`,
+        { duration: 0.3 }
+      )
+    }
+  })
+
+  return maskImage
+}
 
 export default function Home(){
   const { t } = useI18n()
   const [products, setProducts] = useState([])
+  const carouselRef = useRef(null)
+  const [isMobile, setIsMobile] = useState(false)
+  
+  // Track scroll progress for mask effect
+  const { scrollXProgress } = useScroll({ container: carouselRef })
+  const maskImage = useScrollOverflowMask(scrollXProgress)
 
   useEffect(() => {
     loadProducts()
+    
+    // Check if mobile
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768)
+    }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
     
     // Intersection Observer for scroll animations
     const observerOptions = {
@@ -26,7 +78,10 @@ export default function Home(){
     
     document.querySelectorAll('.scroll-fade').forEach(el => observer.observe(el))
     
-    return () => observer.disconnect()
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('resize', checkMobile)
+    }
   }, [])
 
   async function loadProducts() {
@@ -43,6 +98,18 @@ export default function Home(){
     <>
       {/* Hero Section */}
       <section className="hero-main">
+        {/* Video Background - Add your video file to the public folder */}
+        <video 
+          className="hero-video" 
+          autoPlay 
+          muted 
+          loop 
+          playsInline
+          poster="/Amsellem-store.jpg"
+        >
+          <source src="/hero-video.mp4" type="video/mp4" />
+          {/* Fallback image if video doesn't load */}
+        </video>
         <div className="hero-overlay">
           <div className="hero-content">
             <img src="/amsellem_logo.png" alt="Amsellem" className="hero-logo" />
@@ -60,37 +127,75 @@ export default function Home(){
             <h2>{t('home.categoriesTitle')}</h2>
             <p className="section-subtitle">{t('home.categoriesSubtitle')}</p>
           </div>
-          <div className="categories-carousel-wrapper">
-            <div className="categories-carousel">
-              <Link to="/meats?category=Beef" className="category-card-carousel">
-                <div className="category-image-carousel">
-                  <img src={beefProducts[0]?.image || '/img/Rib Eye.JPG'} alt="Beef" />
-                  <div className="category-overlay">
-                    <h3>{t('home.categoryBeef')}</h3>
-                    <p>{t('home.discoverSelection')}</p>
+          {isMobile ? (
+            <motion.div 
+              ref={carouselRef}
+              className="categories-carousel-wrapper"
+              style={{ maskImage, WebkitMaskImage: maskImage }}
+            >
+              <div className="categories-carousel">
+                <Link to="/meats?category=Beef" className="category-card-carousel">
+                  <div className="category-image-carousel">
+                    <img src={beefProducts[0]?.image || '/img/Rib Eye.JPG'} alt="Beef" />
+                    <div className="category-overlay">
+                      <h3>{t('home.categoryBeef')}</h3>
+                      <p>{t('home.discoverSelection')}</p>
+                    </div>
                   </div>
-                </div>
-              </Link>
-              <Link to="/meats?category=Chicken" className="category-card-carousel">
-                <div className="category-image-carousel">
-                  <img src={chickenProducts[0]?.image || '/img/Whole Chicken.JPG'} alt="Chicken" />
-                  <div className="category-overlay">
-                    <h3>{t('home.categoryChicken')}</h3>
-                    <p>{t('home.discoverSelection')}</p>
+                </Link>
+                <Link to="/meats?category=Chicken" className="category-card-carousel">
+                  <div className="category-image-carousel">
+                    <img src={chickenProducts[0]?.image || '/img/Whole Chicken.JPG'} alt="Chicken" />
+                    <div className="category-overlay">
+                      <h3>{t('home.categoryChicken')}</h3>
+                      <p>{t('home.discoverSelection')}</p>
+                    </div>
                   </div>
-                </div>
-              </Link>
-              <Link to="/meats?category=Premade" className="category-card-carousel">
-                <div className="category-image-carousel">
-                  <img src={premadeProducts[0]?.image || '/img/Kofta.JPG'} alt="Premade" />
-                  <div className="category-overlay">
-                    <h3>{t('home.categoryPremade')}</h3>
-                    <p>{t('home.discoverSelection')}</p>
+                </Link>
+                <Link to="/meats?category=Premade" className="category-card-carousel">
+                  <div className="category-image-carousel">
+                    <img src={premadeProducts[0]?.image || '/img/Kofta.JPG'} alt="Premade" />
+                    <div className="category-overlay">
+                      <h3>{t('home.categoryPremade')}</h3>
+                      <p>{t('home.discoverSelection')}</p>
+                    </div>
                   </div>
-                </div>
-              </Link>
+                </Link>
+              </div>
+            </motion.div>
+          ) : (
+            <div className="categories-carousel-wrapper">
+              <div className="categories-carousel">
+                <Link to="/meats?category=Beef" className="category-card-carousel">
+                  <div className="category-image-carousel">
+                    <img src={beefProducts[0]?.image || '/img/Rib Eye.JPG'} alt="Beef" />
+                    <div className="category-overlay">
+                      <h3>{t('home.categoryBeef')}</h3>
+                      <p>{t('home.discoverSelection')}</p>
+                    </div>
+                  </div>
+                </Link>
+                <Link to="/meats?category=Chicken" className="category-card-carousel">
+                  <div className="category-image-carousel">
+                    <img src={chickenProducts[0]?.image || '/img/Whole Chicken.JPG'} alt="Chicken" />
+                    <div className="category-overlay">
+                      <h3>{t('home.categoryChicken')}</h3>
+                      <p>{t('home.discoverSelection')}</p>
+                    </div>
+                  </div>
+                </Link>
+                <Link to="/meats?category=Premade" className="category-card-carousel">
+                  <div className="category-image-carousel">
+                    <img src={premadeProducts[0]?.image || '/img/Kofta.JPG'} alt="Premade" />
+                    <div className="category-overlay">
+                      <h3>{t('home.categoryPremade')}</h3>
+                      <p>{t('home.discoverSelection')}</p>
+                    </div>
+                  </div>
+                </Link>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </section>
 

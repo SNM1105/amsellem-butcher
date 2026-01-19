@@ -5,7 +5,7 @@ import ProductCard from '../components/ProductCard'
 import { useI18n } from '../context/I18nContext'
 
 export default function Products(){
-  const { t, tCategory, lang } = useI18n()
+  const { t, tCategory } = useI18n()
   const [searchParams] = useSearchParams()
   const categoryParam = searchParams.get('category')
   
@@ -58,7 +58,7 @@ export default function Products(){
 
       <div className="grid">
         {list.map(p=> (
-          <ProductCard key={p.id} product={p} categoryLabel={tCategory(p.category)} lang={lang} />
+          <ProductCard key={p.id} product={p} categoryLabel={tCategory(p.category)} />
         ))}
       </div>
     </section>

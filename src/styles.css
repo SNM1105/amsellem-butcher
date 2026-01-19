@@ -1,10 +1,11 @@
 :root {
-    --bg: #0f0f10;
-    --panel: #151416;
-    --muted: #9a9a9a;
-    --accent: #7b0f17; /* burgundy */
-    --gold: #d4af37; /* gold trim */
-    --text: #efefef;
+    --bg: #f8f6f3; /* warm cream */
+    --panel: #fff9f4; /* light ivory */
+    --muted: #8b7355; /* warm brown-gray */
+    --accent: #c9a74a; /* refined gold */
+    --gold: #b8945f; /* muted gold */
+    --text: #2c2416; /* warm dark brown */
+    --text-light: #5a4a3a; /* lighter warm brown */
 }
 
 * {
@@ -14,17 +15,32 @@
 
 body {
     margin: 0;
-    font-family: Inter, Segoe UI, Arial, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
     background: var(--bg);
     color: var(--text);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    letter-spacing: 0.01em;
 }
 
 html, body { overflow-x: hidden }
 
 h1, h2, h3 {
-    font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+    font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, 'Times New Roman', serif;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+h1 {
+    font-size: 3.5rem;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+}
+
+h2 {
+    font-size: 2.5rem;
+    font-weight: 500;
 }
 
 .container {
@@ -37,9 +53,10 @@ h1, h2, h3 {
     position: sticky;
     top: 0;
     z-index: 1000;
-    background: linear-gradient(90deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.2));
-    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(10px)
+    background: rgba(248, 246, 243, 0.95);
+    border-bottom: 1px solid rgba(201, 167, 74, 0.15);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 1px 4px rgba(44, 36, 22, 0.04);
 }
 
 .hebrew-blessing {
@@ -83,7 +100,7 @@ h1, h2, h3 {
     height: 36px;
     border-radius: 50%;
     border: 2px solid var(--gold);
-    box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.15);
+    box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
 }
 
 .brand {
@@ -103,10 +120,10 @@ nav a {
 
 /* Specials Banner */
 .specials-banner {
-    background: linear-gradient(135deg, var(--accent) 0%, #5a0c12 100%);
-    border-bottom: 2px solid var(--gold);
-    padding: 8px 0;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, var(--text) 0%, var(--text-light) 100%);
+    border-bottom: 1px solid rgba(201, 167, 74, 0.3);
+    padding: 10px 0;
+    box-shadow: 0 2px 8px rgba(44, 36, 22, 0.08);
     overflow: hidden;
     position: relative;
 }
@@ -123,7 +140,7 @@ nav a {
     padding: 0 50px;
     font-size: 0.95rem;
     font-weight: 500;
-    color: var(--text);
+    color: #ffffff;
     letter-spacing: 0.3px;
     flex-shrink: 0;
 }
@@ -151,7 +168,7 @@ nav a {
 
 .icon-button {
     background: transparent;
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid rgba(0,0,0,0.1);
     color: var(--text);
     padding: 6px 8px;
     border-radius: 8px;
@@ -165,7 +182,7 @@ nav a {
 
 .icon-button:hover {
     transform: translateY(-1px);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
     border-color: var(--gold);
 }
 .icon-button.cart { position: relative }
@@ -173,15 +190,15 @@ nav a {
 
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0 }
 
-.menu-button, .close-button { background: transparent; border: 1px solid rgba(255,255,255,0.1); color: var(--text); padding: 6px 8px; border-radius: 8px; display: none }
+.menu-button, .close-button { background: transparent; border: 1px solid rgba(0,0,0,0.1); color: var(--text); padding: 6px 8px; border-radius: 8px; display: none }
 
 .desktop-nav { display: flex; align-items: center }
 .desktop-nav .icon-button { margin-left: 16px; position: relative }
 
 /* Drawer */
-.drawer { position: fixed; top: 0; right: 0; transform: translateX(100%); width: 280px; height: 100vh; background: rgba(20,19,22,0.98); border-left: 1px solid rgba(255,255,255,0.06); transition: transform 0.25s ease; z-index: 1200; display: flex; flex-direction: column; will-change: transform }
+.drawer { position: fixed; top: 0; right: 0; transform: translateX(100%); width: 280px; height: 100vh; background: rgba(255,255,255,0.98); border-left: 1px solid rgba(0,0,0,0.1); transition: transform 0.25s ease; z-index: 1200; display: flex; flex-direction: column; will-change: transform; box-shadow: -4px 0 12px rgba(0,0,0,0.1); }
 .drawer.open { transform: translateX(0) }
-.drawer-header { display: flex; align-items: center; justify-content: space-between; padding: 16px; border-bottom: 1px solid rgba(255,255,255,0.06) }
+.drawer-header { display: flex; align-items: center; justify-content: space-between; padding: 16px; border-bottom: 1px solid rgba(0,0,0,0.1) }
 .drawer-links { display: flex; flex-direction: column; padding: 12px }
 .drawer-links a { padding: 10px 12px; color: var(--text); text-decoration: none }
 .drawer-links .drawer-button { display: block; width: 100%; padding: 10px 12px; color: var(--text); text-align: left; background: transparent; border: none; font: inherit; cursor: pointer }
@@ -244,7 +261,7 @@ nav a:hover::after { width: 100% }
     padding: 8px 12px;
     border-radius: 6px;
     background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     color: var(--muted);
     transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.2s ease
 }
@@ -257,7 +274,7 @@ nav a:hover::after { width: 100% }
 
 .filters button:hover {
     transform: translateY(-1px);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.2);
     border-color: var(--accent)
 }
 
@@ -269,25 +286,56 @@ nav a:hover::after { width: 100% }
 
 .product-card {
     background: var(--panel);
-    padding: 12px;
-    border-radius: 8px;
+    padding: 0;
+    border-radius: 0;
     display: flex;
     flex-direction: column;
     height: 100%;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(44, 36, 22, 0.08);
+    border: 1px solid rgba(201, 167, 74, 0.15);
+    transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 35px rgba(44, 36, 22, 0.12);
+    border-color: rgba(201, 167, 74, 0.3);
 }
 
 .product-image-wrapper {
     position: relative;
     width: 100%;
-    margin-bottom: 12px;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.05), rgba(255, 255, 255, 0.1));
+}
+
+.product-image-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, transparent 0%, transparent 60%, rgba(212, 175, 55, 0.2) 100%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.product-card:hover .product-image-wrapper::after {
+    opacity: 1;
 }
 
 .product-image {
     width: 100%;
-    height: 200px;
+    height: 240px;
     object-fit: cover;
-    border-radius: 6px;
-    transition: filter 0.3s ease;
+    transition: transform 0.5s ease, filter 0.3s ease;
+}
+
+.product-card:hover .product-image:not(.out-of-stock) {
+    transform: scale(1.05);
 }
 
 .product-image.out-of-stock {
@@ -299,8 +347,8 @@ nav a:hover::after { width: 100% }
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: rgba(0, 0, 0, 0.85);
-    color: white;
+    background: rgba(255, 255, 255, 0.95);
+    color: var(--text);
     padding: 8px 16px;
     border-radius: 6px;
     font-weight: 600;
@@ -312,21 +360,32 @@ nav a:hover::after { width: 100% }
 }
 
 .product-info h3 {
-    margin: 0 0 6px 0
+    margin: 0 0 8px 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
 }
 
 .product-info {
     flex: 1;
+    padding: 20px;
+    padding-bottom: 16px;
 }
 
 .muted {
     color: var(--muted);
-    font-size: 0.9rem
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
 }
 
 .desc {
     font-size: 0.95rem;
-    margin-top: 6px
+    margin-top: 8px;
+    line-height: 1.5;
+    color: rgba(26, 26, 26, 0.7);
 }
 
 .product-actions {
@@ -334,36 +393,53 @@ nav a:hover::after { width: 100% }
     flex-direction: column;
     align-items: stretch;
     margin-top: auto;
+    padding: 0 20px 20px 20px;
 }
 
 .price {
-    font-weight: 700;
-    margin-bottom: 8px;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 1.6rem;
+    margin-bottom: 12px;
     text-align: center;
+    color: var(--text);
+    text-shadow: none;
 }
 
 .weight-input {
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    margin-bottom: 8px;
-    padding: 8px;
-    background: rgba(0,0,0,0.2);
-    border-radius: 4px;
+    gap: 8px;
+    margin-bottom: 12px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 8px;
+    border: 1px solid rgba(212, 175, 55, 0.2);
 }
 
 .weight-input label {
-    font-size: 0.85rem;
-    color: var(--muted);
+    font-size: 0.8rem;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
 }
 
 .weight-input input {
-    padding: 6px 8px;
-    border-radius: 4px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: #0b0b0b;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    background: #ffffff;
     color: var(--text);
-    font-size: 0.95rem;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.weight-input input:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
 }
 
 .estimated-price {
@@ -373,30 +449,57 @@ nav a:hover::after { width: 100% }
 }
 
 .btn {
-    background: linear-gradient(180deg, var(--accent), #5e0b10);
-    border: none;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 6px;
+    background: var(--text);
+    border: 2px solid var(--text);
+    color: var(--bg);
+    padding: 14px 28px;
+    border-radius: 0;
     cursor: pointer;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     text-decoration: none;
     display: inline-block;
     text-align: center;
-    min-height: 44px;
+    min-height: 48px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    font-weight: 500;
+    font-size: 0.9rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(44, 36, 22, 0.15);
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn:hover::before {
+    left: 100%;
 }
 
 .btn.small {
-    padding: 6px 8px;
-    margin-left: 8px
+    padding: 8px 16px;
+    margin-left: 8px;
+    min-height: 36px;
+    font-size: 0.85rem;
 }
 
 .btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 6px 14px rgba(0,0,0,0.35)
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(44, 36, 22, 0.2);
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--text);
 }
 
 .btn-lg { padding: 12px 18px; font-size: 1rem }
@@ -410,7 +513,7 @@ nav a:hover::after { width: 100% }
 .btn-outline:hover {
     border-color: var(--accent);
     transform: translateY(-1px);
-    box-shadow: 0 6px 14px rgba(0,0,0,0.35);
+    box-shadow: 0 6px 14px rgba(212, 175, 55, 0.3);
 }
 
 .cart-list {
@@ -436,8 +539,8 @@ nav a:hover::after { width: 100% }
     width: 64px;
     padding: 6px;
     border-radius: 4px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    background: #0b0b0b;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: #ffffff;
     color: var(--text)
 }
 
@@ -464,7 +567,7 @@ nav a:hover::after { width: 100% }
 
 .contact-info-form {
     background: var(--panel);
-    border: 1px solid rgba(255,255,255,0.06);
+    border: 1px solid rgba(0,0,0,0.1);
     padding: 16px;
     border-radius: 8px;
     margin-bottom: 16px
@@ -490,8 +593,8 @@ nav a:hover::after { width: 100% }
     margin-top: 6px;
     padding: 10px 12px;
     border-radius: 6px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    background: rgba(11, 11, 11, 0.6);
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    background: #ffffff;
     color: var(--text);
     font-family: inherit;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -501,11 +604,19 @@ nav a:hover::after { width: 100% }
     outline: none;
     border-color: var(--gold);
     box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.1);
+    background: #ffffff;
+}
+
+.contact-info-form input:-webkit-autofill,
+.contact-info-form input:-webkit-autofill:hover,
+.contact-info-form input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px #ffffff inset;
+    -webkit-text-fill-color: var(--text);
 }
 
 .delivery-form {
     background: var(--panel);
-    border: 1px solid rgba(255,255,255,0.06);
+    border: 1px solid rgba(0,0,0,0.1);
     padding: 16px;
     border-radius: 8px;
     margin-bottom: 16px
@@ -532,8 +643,8 @@ nav a:hover::after { width: 100% }
     margin-top: 6px;
     padding: 10px 12px;
     border-radius: 6px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    background: rgba(11, 11, 11, 0.6);
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    background: #ffffff;
     color: var(--text);
     font-family: inherit;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -544,6 +655,14 @@ nav a:hover::after { width: 100% }
     outline: none;
     border-color: var(--gold);
     box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.1);
+    background: #ffffff;
+}
+
+.delivery-form input:-webkit-autofill,
+.delivery-form input:-webkit-autofill:hover,
+.delivery-form input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px #ffffff inset;
+    -webkit-text-fill-color: var(--text);
 }
 
 .form-row {
@@ -558,7 +677,7 @@ nav a:hover::after { width: 100% }
     padding: 12px; 
     border-radius: 6px; 
     margin-bottom: 12px;
-    border: 1px solid rgba(255,255,255,0.06)
+    border: 1px solid rgba(0,0,0,0.1)
 }
 
 .summary-item { 
@@ -568,13 +687,13 @@ nav a:hover::after { width: 100% }
     font-size: 0.9rem
 }
 
-.summary-item:not(:last-child) { border-bottom: 1px solid rgba(255,255,255,0.05) }
+.summary-item:not(:last-child) { border-bottom: 1px solid rgba(0,0,0,0.05) }
 
 .payment-panel { 
     background: var(--panel); 
     padding: 16px; 
     border-radius: 8px; 
-    border: 1px solid rgba(255,255,255,0.06) 
+    border: 1px solid rgba(0,0,0,0.1) 
 }
 
 .payment-panel h3 { margin-top: 0 }
@@ -584,7 +703,7 @@ nav a:hover::after { width: 100% }
     font-style: italic; 
     margin: 8px 0; 
     padding: 8px; 
-    background: rgba(0,0,0,0.2); 
+    background: rgba(212, 175, 55, 0.05); 
     border-radius: 4px 
 }
 
@@ -599,11 +718,33 @@ nav a:hover::after { width: 100% }
     align-items: start;
 }
 
+.contact-form-wrapper {
+    background: var(--panel);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    padding: 32px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.contact-form-wrapper h2 {
+    margin: 0 0 20px 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    font-weight: 500;
+    color: var(--text);
+    text-align: center;
+    border-bottom: 1px solid rgba(201, 167, 74, 0.2);
+    padding-bottom: 20px;
+    letter-spacing: 0.03em;
+}
+
 form.contact-form {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    height: 100%;
+    flex: 1;
 }
 
 form.contact-form label {
@@ -619,8 +760,8 @@ form.contact-form textarea {
     margin-top: 6px;
     padding: 10px 12px;
     border-radius: 6px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    background: var(--panel);
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    background: #ffffff;
     color: var(--text);
     font-family: inherit;
     transition: border-color 0.2s ease;
@@ -640,7 +781,7 @@ form.contact-form textarea:focus {
 /* Opening Hours Box */
 .opening-hours-box {
     background: var(--panel);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 12px;
     padding: 32px;
     height: 100%;
@@ -649,12 +790,32 @@ form.contact-form textarea:focus {
 }
 
 .opening-hours-box h2 {
-    margin: 0 0 24px 0;
-    font-size: 1.8rem;
-    color: var(--gold);
+    margin: 0 0 20px 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    font-weight: 500;
+    color: var(--text);
     text-align: center;
-    border-bottom: 2px solid rgba(212, 175, 55, 0.2);
-    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(201, 167, 74, 0.2);
+    padding-bottom: 20px;
+    letter-spacing: 0.03em;
+}
+
+.phone-number {
+    text-align: center;
+    margin: 0 0 24px 0;
+    font-size: 1.2rem;
+}
+
+.phone-number a {
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.phone-number a:hover {
+    color: var(--gold);
 }
 
 .hours-list {
@@ -668,13 +829,13 @@ form.contact-form textarea:focus {
     justify-content: space-between;
     align-items: center;
     padding: 12px 16px;
-    background: rgba(255, 255, 255, 0.02);
+    background: rgba(212, 175, 55, 0.05);
     border-radius: 8px;
     transition: background 0.2s ease;
 }
 
 .hours-item:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(212, 175, 55, 0.1);
 }
 
 .hours-item.closed {
@@ -709,17 +870,33 @@ textarea {
     margin-top: 6px;
     padding: 8px;
     border-radius: 6px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    background: #0b0b0b;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    background: #ffffff;
     color: var(--text);
     font-family: inherit;
     font-size: 14px
 }
 
+input:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--gold);
+    background: #ffffff;
+}
+
+/* Prevent autofill from changing background */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px #ffffff inset;
+    -webkit-text-fill-color: var(--text);
+    border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
 /* Hero */
 .hero {
-    background: #230E10;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, rgba(255, 255, 255, 0.95) 100%);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
 }
 .hero-inner {
     display: grid;
@@ -728,16 +905,16 @@ textarea {
     padding: 24px;
 }
 .lead { color: var(--muted); max-width: 50ch }
-.hero-media img { display: block; width: 100%; height: 280px; object-fit: cover; object-position: center 57%; border-radius: 10px; border: 1px solid rgba(255,255,255,0.06); box-shadow: 0 8px 24px rgba(0,0,0,0.3) }
+.hero-media img { display: block; width: 100%; height: 280px; object-fit: cover; object-position: center 57%; border-radius: 10px; border: 1px solid rgba(212, 175, 55, 0.2); box-shadow: 0 8px 24px rgba(0,0,0,0.1) }
 
 /* Footer */
-.site-footer { border-top: 1px solid rgba(255,255,255,0.06); background: rgba(20,19,22,0.6); margin-top: 24px }
+.site-footer { border-top: 1px solid rgba(212, 175, 55, 0.2); background: rgba(250, 250, 250, 0.95); margin-top: 24px }
 .footer-inner { display: flex; justify-content: space-between; align-items: flex-start; padding: 18px 24px }
 .footer-location h4 { margin: 0 0 8px 0 }
 .footer-location address a { color: var(--text); text-decoration: none }
 .footer-links a { color: var(--muted); text-decoration: none }
 .footer-links a:hover { color: var(--text) }
-.footer-bottom { border-top: 1px solid rgba(255,255,255,0.06); padding: 12px 24px }
+.footer-bottom { border-top: 1px solid rgba(0,0,0,0.1); padding: 12px 24px }
 
 @media (max-width:800px) {
     .footer-inner { flex-direction: column; gap: 12px; padding: 16px }
@@ -798,8 +975,8 @@ textarea {
 /* Kosher Certifications Badges */
 .certifications-section {
     padding: 40px 24px;
-    background: linear-gradient(135deg, rgba(123, 15, 23, 0.03) 0%, rgba(15, 15, 16, 0.9) 100%);
-    border-top: 1px solid rgba(212, 175, 55, 0.15);
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, rgba(255, 255, 255, 0.95) 100%);
+    border-top: 1px solid rgba(212, 175, 55, 0.2);
 }
 
 .cert-badges {
@@ -825,14 +1002,14 @@ textarea {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     border: 3px solid var(--gold);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .cert-badge:hover .badge-image {
     transform: scale(1.05);
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 6px 24px rgba(212, 175, 55, 0.3);
 }
 
 .badge-placeholder {
@@ -901,16 +1078,16 @@ textarea {
     gap: 40px;
     align-items: center;
     background: var(--panel);
-    border: 1px solid rgba(255,255,255,0.06);
+    border: 1px solid rgba(0,0,0,0.1);
     border-radius: 16px;
     padding: 32px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .timeline-content:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    box-shadow: 0 8px 30px rgba(212, 175, 55, 0.2);
 }
 
 .timeline-content.reverse {
@@ -930,8 +1107,8 @@ textarea {
     height: 320px;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
-    border: 2px solid rgba(212, 175, 55, 0.2);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    border: 2px solid rgba(212, 175, 55, 0.3);
 }
 
 .timeline-image img {
@@ -956,10 +1133,12 @@ textarea {
 }
 
 .timeline-text h3 {
-    color: var(--gold);
-    font-size: 1.5rem;
-    margin: 0 0 16px 0;
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--text);
+    font-size: 2rem;
+    font-weight: 500;
+    margin: 0 0 20px 0;
+    letter-spacing: 0.03em;
 }
 
 .timeline-text p {
@@ -1047,7 +1226,7 @@ textarea {
     display: flex;
     align-items: center;
     gap: 12px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
     z-index: 9999;
     animation: slideInRight 0.3s ease, fadeOut 0.3s ease 2.7s;
     min-width: 280px;
@@ -1057,11 +1236,11 @@ textarea {
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--gold), #c9a332);
+    background: linear-gradient(135deg, var(--gold), var(--accent));
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--bg);
+    color: #ffffff;
     font-weight: 700;
     font-size: 1.2rem;
     flex-shrink: 0;
@@ -1113,15 +1292,18 @@ textarea {
 /* Admin Dashboard Styles */
 .panel {
     background: var(--panel);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     padding: 24px;
 }
 
 .panel h2 {
     margin-top: 0;
-    margin-bottom: 20px;
-    color: var(--gold);
+    margin-bottom: 24px;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: 0.02em;
 }
 
 .panel h3 {
@@ -1148,7 +1330,7 @@ textarea {
 .panel textarea,
 .panel select {
     background: var(--bg);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.15);
     color: var(--text);
     padding: 10px 12px;
     border-radius: 6px;
@@ -1177,7 +1359,7 @@ table {
 }
 
 table thead {
-    background: rgba(123, 15, 23, 0.2);
+    background: rgba(212, 175, 55, 0.15);
 }
 
 table th {
@@ -1185,12 +1367,12 @@ table th {
     padding: 12px 16px;
     font-weight: 600;
     color: var(--gold);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 table td {
     padding: 12px 16px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     color: var(--text);
 }
 
@@ -1199,7 +1381,7 @@ table tr:last-child td {
 }
 
 table tr:hover {
-    background: rgba(255, 255, 255, 0.02);
+    background: rgba(212, 175, 55, 0.05);
 }
 
 table button {
@@ -1214,14 +1396,14 @@ table button:last-child {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 /* Modal */
 .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.4);
     z-index: 2000;
     backdrop-filter: blur(4px);
 }
@@ -1232,9 +1414,9 @@ table button:last-child {
     left: 50%;
     transform: translate(-50%, -50%);
     background: var(--panel);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 12px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     z-index: 2001;
     max-width: 600px;
     width: 90%;
@@ -1248,7 +1430,7 @@ table button:last-child {
     justify-content: space-between;
     align-items: center;
     padding: 20px 24px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .modal-header h2 {
@@ -1364,7 +1546,7 @@ table button:last-child {
     }
     
     /* Summary */
-    .summary-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05) }
+    .summary-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.05) }
     .order-summary { margin-bottom: 12px }
     
     /* Filters */
@@ -1457,66 +1639,130 @@ table button:last-child {
 /* Hero Main Section */
 .hero-main {
     position: relative;
-    height: 70vh;
-    min-height: 500px;
-    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), 
-                url('/Amsellem-store.jpg') center/cover;
+    height: 85vh;
+    min-height: 600px;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    color: white;
+    color: var(--text);
+    overflow: hidden;
+    background: var(--bg);
+}
+
+.hero-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+    object-fit: cover;
+}
+
+.hero-main::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        180deg,
+        rgba(248, 246, 243, 0.85) 0%,
+        rgba(248, 246, 243, 0.7) 40%,
+        rgba(248, 246, 243, 0.75) 60%,
+        rgba(248, 246, 243, 0.9) 100%
+    );
+    z-index: 1;
 }
 
 .hero-overlay {
     position: relative;
-    z-index: 1;
-    max-width: 800px;
-    padding: 40px 24px;
+    z-index: 2;
+    max-width: 900px;
+    padding: 60px 40px;
+    animation: heroFadeIn 1.2s ease-out;
+}
+
+@keyframes heroFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .hero-logo {
-    width: 300px;
+    width: 180px;
     height: auto;
-    margin: 0 auto 24px auto;
+    margin: 0 auto 40px auto;
     display: block;
-    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+    filter: drop-shadow(0 2px 8px rgba(44, 36, 22, 0.15));
+    opacity: 0.95;
 }
 
 .hero-tagline {
-    font-size: 2.5rem;
-    font-weight: 300;
-    margin: 0 0 16px 0;
-    letter-spacing: 2px;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: 0 0 20px 0;
+    letter-spacing: 0.3em;
     text-transform: uppercase;
+    color: var(--muted);
+    opacity: 0.9;
 }
 
 .hero-subtitle {
-    font-size: 3.5rem;
-    font-weight: 700;
-    margin: 0 0 40px 0;
-    letter-spacing: 3px;
-    color: var(--gold);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 4.5rem;
+    font-weight: 400;
+    margin: 0 0 50px 0;
+    letter-spacing: 0.03em;
+    color: var(--text);
+    line-height: 1.2;
 }
 
 .btn-hero {
     display: inline-block;
-    padding: 16px 40px;
-    background: transparent;
-    border: 2px solid white;
-    color: white;
+    padding: 18px 50px;
+    background: var(--text);
+    border: 2px solid var(--text);
+    color: var(--bg);
     text-decoration: none;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    font-weight: 600;
-    transition: all 0.3s ease;
+    letter-spacing: 0.2em;
+    font-weight: 500;
+    font-size: 0.85rem;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--gold);
+    transition: left 0.5s ease;
+    z-index: -1;
 }
 
 .btn-hero:hover {
-    background: white;
-    color: var(--bg);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
+    color: var(--text);
+    border-color: var(--gold);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(201, 167, 74, 0.25);
+}
+
+.btn-hero:hover::before {
+    left: 0;
 }
 
 /* Container Wide */
@@ -1533,9 +1779,12 @@ table button:last-child {
 }
 
 .section-header h2 {
-    font-size: 2.5rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    font-weight: 400;
     margin: 0;
     color: var(--text);
+    letter-spacing: 0.03em;
 }
 
 .section-header.centered {
@@ -1545,15 +1794,19 @@ table button:last-child {
 /* Categories Carousel */
 .categories-section {
     background: var(--panel);
-    padding: 80px 0;
+    padding: 100px 0;
     overflow: hidden;
+    border-top: 1px solid rgba(201, 167, 74, 0.1);
 }
 
 .section-subtitle {
     text-align: center;
     color: var(--muted);
-    font-size: 1.1rem;
-    margin-top: 12px;
+    font-size: 1rem;
+    margin-top: 16px;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    line-height: 1.6;
 }
 
 .categories-carousel-wrapper {
@@ -1598,14 +1851,14 @@ table button:last-child {
 .category-card-carousel {
     position: relative;
     width: 100%;
-    height: 380px;
+    height: 420px;
     flex-shrink: 0;
-    border-radius: 20px;
+    border-radius: 0;
     overflow: hidden;
     text-decoration: none;
-    color: white;
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    color: var(--text);
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.5s ease;
+    box-shadow: 0 8px 30px rgba(44, 36, 22, 0.08);
 }
 
 /* Mobile: Fixed width for carousel */
@@ -1617,8 +1870,8 @@ table button:last-child {
 }
 
 .category-card-carousel:hover {
-    transform: translateY(-12px) scale(1.02);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    transform: translateY(-8px);
+    box-shadow: 0 16px 50px rgba(44, 36, 22, 0.12);
 }
 
 .category-image-carousel {
@@ -1644,27 +1897,30 @@ table button:last-child {
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 40px 30px;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.7) 50%, transparent 100%);
+    padding: 50px 40px;
+    background: linear-gradient(to top, rgba(248, 246, 243, 0.98) 0%, rgba(248, 246, 243, 0.85) 40%, transparent 100%);
     transform: translateY(0);
-    transition: transform 0.4s ease;
+    transition: all 0.5s ease;
 }
 
 .category-overlay h3 {
-    margin: 0 0 8px 0;
-    font-size: 1.5rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--gold);
+    margin: 0 0 12px 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: 0.05em;
+    color: var(--text);
 }
 
 .category-overlay p {
     margin: 0;
-    font-size: 1rem;
-    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.95rem;
+    color: var(--text-light);
     opacity: 0;
-    transform: translateY(10px);
-    transition: opacity 0.3s ease, transform 0.3s ease;
+    transform: translateY(15px);
+    transition: opacity 0.4s ease 0.1s, transform 0.4s ease 0.1s;
+    letter-spacing: 0.02em;
 }
 
 .category-card-carousel:hover .category-overlay p {
@@ -1686,9 +1942,12 @@ table button:last-child {
 }
 
 .about-text h2 {
-    font-size: 2.5rem;
-    margin: 0 0 24px 0;
-    color: var(--gold);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    font-weight: 400;
+    margin: 0 0 28px 0;
+    color: var(--text);
+    letter-spacing: 0.03em;
 }
 
 .about-text p {
@@ -1732,7 +1991,7 @@ table button:last-child {
 
 .expertise-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 10px 40px rgba(212, 175, 55, 0.2);
 }
 
 .expertise-icon {
@@ -1741,10 +2000,12 @@ table button:last-child {
 }
 
 .expertise-card h3 {
-    font-size: 1.3rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 500;
     margin: 0 0 16px 0;
-    color: var(--gold);
-    letter-spacing: 1px;
+    color: var(--text);
+    letter-spacing: 0.03em;
 }
 
 .expertise-card p {
@@ -1766,15 +2027,19 @@ table button:last-child {
 
 /* Social Section */
 .social-section {
-    padding: 100px 0;
-    background: linear-gradient(135deg, var(--accent) 0%, #3a0a0e 100%);
+    padding: 120px 0;
+    background: linear-gradient(135deg, var(--text) 0%, var(--text-light) 100%);
     text-align: center;
+    border-top: 1px solid rgba(201, 167, 74, 0.2);
 }
 
 .social-content h2 {
-    font-size: 2.5rem;
-    margin: 0 0 16px 0;
-    color: white;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    font-weight: 400;
+    margin: 0 0 20px 0;
+    color: var(--bg);
+    letter-spacing: 0.03em;
 }
 
 .social-content p {
@@ -1795,20 +2060,24 @@ table button:last-child {
 
 .social-btn {
     display: inline-block;
-    padding: 14px 32px;
-    background: white;
-    color: var(--accent);
+    padding: 16px 40px;
+    background: var(--bg);
+    color: var(--text);
     text-decoration: none;
-    border-radius: 8px;
-    font-weight: 600;
+    border-radius: 0;
+    border: 2px solid var(--bg);
+    font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: all 0.3s ease;
+    letter-spacing: 0.15em;
+    font-size: 0.85rem;
+    transition: all 0.4s ease;
 }
 
 .social-btn:hover {
     transform: translateY(-4px);
-    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.3);
+    box-shadow: 0 10px 35px rgba(248, 246, 243, 0.3);
+    background: transparent;
+    color: var(--bg);
 }
 
 /* ============================================
@@ -1819,12 +2088,12 @@ table button:last-child {
     position: relative;
     height: 50vh;
     min-height: 400px;
-    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), 
+    background: linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.6)), 
                 url('/Amsellem-store.jpg') center/cover;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: var(--text);
 }
 
 .about-hero-overlay {
@@ -1833,9 +2102,12 @@ table button:last-child {
 }
 
 .about-hero h1 {
-    font-size: 3.5rem;
-    margin: 0 0 24px 0;
-    color: var(--gold);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 4rem;
+    font-weight: 400;
+    margin: 0 0 28px 0;
+    color: var(--text);
+    letter-spacing: 0.04em;
 }
 
 .about-hero-lead {
@@ -1843,7 +2115,7 @@ table button:last-child {
     max-width: 700px;
     margin: 0 auto;
     line-height: 1.8;
-    color: rgba(255, 255, 255, 0.9);
+    color: rgba(26, 26, 26, 0.8);
 }
 
 .about-story-section {
@@ -1879,7 +2151,7 @@ table button:last-child {
 .story-image {
     border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
 }
 
 .story-image img {
@@ -1895,11 +2167,12 @@ table button:last-child {
 }
 
 .story-content h2 {
-    font-size: 2.5rem;
-    margin: 0 0 24px 0;
-    color: var(--gold);
-    font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
-    font-weight: 700;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    font-weight: 400;
+    margin: 0 0 28px 0;
+    color: var(--text);
+    letter-spacing: 0.03em;
 }
 
 .story-content p {
@@ -1909,16 +2182,18 @@ table button:last-child {
 }
 
 .about-values-section {
-    padding: 100px 0;
-    background: linear-gradient(135deg, var(--accent) 0%, #3a0a0e 100%);
+    padding: 120px 0;
+    background: linear-gradient(135deg, var(--text) 0%, var(--text-light) 100%);
 }
 
 .centered-title {
     text-align: center;
-    font-size: 3rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.5rem;
+    font-weight: 400;
     margin: 0 0 80px 0;
-    color: white;
-    font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+    color: var(--bg);
+    letter-spacing: 0.03em;
 }
 
 .values-grid {
@@ -1930,16 +2205,16 @@ table button:last-child {
 .value-card {
     text-align: center;
     padding: 50px 30px;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.15);
     border-radius: 16px;
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     transition: transform 0.3s ease, background 0.3s ease;
 }
 
 .value-card:hover {
     transform: translateY(-10px);
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.25);
 }
 
 .value-icon {
@@ -1948,22 +2223,25 @@ table button:last-child {
 }
 
 .value-card h3 {
-    font-size: 1.8rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 500;
     margin: 0 0 16px 0;
-    color: var(--gold);
+    color: var(--bg);
+    letter-spacing: 0.03em;
 }
 
 .value-card p {
     font-size: 1.1rem;
     line-height: 1.6;
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.95);
     margin: 0;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
     .about-hero h1 {
-        font-size: 2.5rem;
+        font-size: 2.8rem;
     }
     
     .about-hero-lead {
@@ -1980,11 +2258,11 @@ table button:last-child {
     }
     
     .story-content h2 {
-        font-size: 2rem;
+        font-size: 2.2rem;
     }
     
     .centered-title {
-        font-size: 2.2rem;
+        font-size: 2.5rem;
         margin-bottom: 60px;
     }
     
@@ -1999,24 +2277,26 @@ table button:last-child {
     }
     
     .hero-logo {
-        width: 90px;
-        margin-bottom: 20px;
+        width: 120px;
+        margin-bottom: 30px;
     }
     
     .hero-tagline {
-        font-size: 1.5rem;
-        letter-spacing: 1px;
+        font-size: 0.85rem;
+        letter-spacing: 0.25em;
+        margin-bottom: 16px;
     }
     
     .hero-subtitle {
-        font-size: 1.8rem;
-        letter-spacing: 2px;
-        margin-bottom: 28px;
+        font-size: 2.5rem;
+        letter-spacing: 0.02em;
+        margin-bottom: 40px;
     }
     
     .btn-hero {
-        padding: 12px 28px;
-        font-size: 0.9rem;
+        padding: 14px 35px;
+        font-size: 0.8rem;
+        letter-spacing: 0.18em;
     }
     
     .category-card-carousel {
@@ -2025,7 +2305,7 @@ table button:last-child {
     }
     
     .category-overlay h3 {
-        font-size: 1.5rem;
+        font-size: 1.7rem;
     }
     
     .about-content {
@@ -2043,41 +2323,42 @@ table button:last-child {
     }
     
     .section-header h2 {
-        font-size: 2rem;
+        font-size: 2.2rem;
     }
     
     .about-text h2 {
-        font-size: 2rem;
+        font-size: 2.2rem;
     }
     
     .hero-main {
-        height: 60vh;
-        min-height: 400px;
+        height: 70vh;
+        min-height: 500px;
     }
     
     .hero-overlay {
-        padding: 20px 16px;
+        padding: 30px 24px;
     }
 }
 
 @media (max-width: 480px) {
     .hero-logo {
-        width: 70px;
-        margin-bottom: 16px;
+        width: 100px;
+        margin-bottom: 24px;
     }
     
     .hero-tagline {
-        font-size: 1.2rem;
+        font-size: 0.75rem;
+        letter-spacing: 0.2em;
     }
     
     .hero-subtitle {
-        font-size: 1.5rem;
-        letter-spacing: 1px;
+        font-size: 2rem;
+        letter-spacing: 0.02em;
     }
     
     .btn-hero {
-        padding: 10px 24px;
-        font-size: 0.85rem;
-        letter-spacing: 1px;
+        padding: 12px 30px;
+        font-size: 0.75rem;
+        letter-spacing: 0.15em;
     }
 }

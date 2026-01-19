@@ -31,36 +31,6 @@ export async function getAllProducts() {
 }
 
 /**
- * Fetch products by category
- * @param {string} category - Category name
- * @returns {Promise<Array>} Array of products in that category
- */
-export async function getProductsByCategory(category) {
-  try {
-    const { data, error } = await supabase
-      .from('products')
-      .select('*')
-      .eq('category', category)
-      .order('name', { ascending: true })
-
-    if (error) throw error
-    
-    return data.map(product => ({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      category: product.category,
-      description: product.description,
-      image: product.image_url,
-      stock: product.stock
-    }))
-  } catch (error) {
-    console.error('Error fetching products by category:', error)
-    return []
-  }
-}
-
-/**
  * Get all unique categories
  * @returns {Promise<Array>} Array of category names
  */
@@ -88,7 +58,6 @@ export async function getCategories() {
  */
 export async function updateProduct(id, updates) {
   try {
-    console.log('Updating product:', id, updates)
     const updateData = {
       name_en: updates.name_en,
       name_fr: updates.name_fr,
@@ -99,7 +68,6 @@ export async function updateProduct(id, updates) {
       stock: parseInt(updates.stock),
       image_url: updates.image_url
     }
-    console.log('Update data:', updateData)
 
     const { data, error } = await supabase
       .from('products')
@@ -108,7 +76,6 @@ export async function updateProduct(id, updates) {
       .select()
 
     if (error) throw error
-    console.log('Update response:', data)
     
     const product = data[0] || data
     return {

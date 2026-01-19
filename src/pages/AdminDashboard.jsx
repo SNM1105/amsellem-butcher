@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAdminAuth } from '../context/AdminAuthContext'
 import { useI18n } from '../context/I18nContext'
@@ -24,13 +24,11 @@ export default function AdminDashboard() {
   }, [])
 
   async function loadData() {
-    console.log('loadData called')
     setLoading(true)
     const [productsData, categoriesData] = await Promise.all([
       getAllProducts(),
       getCategories()
     ])
-    console.log('Products loaded:', productsData.length, 'products')
     setProducts(productsData)
     setCategories(categoriesData)
     setLoading(false)
@@ -62,12 +60,9 @@ export default function AdminDashboard() {
 
   const handleModalSave = async (e) => {
     e.preventDefault()
-    console.log('handleModalSave called with editingProduct:', editingProduct)
     try {
-      const result = await updateProduct(editingProduct.id, editingProduct)
-      console.log('Update result:', result)
+      await updateProduct(editingProduct.id, editingProduct)
       await loadData()
-      console.log('Data reloaded')
       setIsModalOpen(false)
       setEditingProduct(null)
       alert(t('admin.updateSuccess'))

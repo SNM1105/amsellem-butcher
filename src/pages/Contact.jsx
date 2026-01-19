@@ -17,12 +17,18 @@ export default function Contact(){
     <section className="container contact-page">
       <h1>{t('contact.title')}</h1>
       <div className="contact-content">
-        <form onSubmit={onSubmit} className="contact-form">
-          <label>{t('contact.name')}<input name="name" value={form.name} onChange={onChange} required /></label>
-          <label>{t('contact.email')}<input name="email" value={form.email} onChange={onChange} required /></label>
-          <label>{t('contact.message')}<textarea name="message" value={form.message} onChange={onChange} required /></label>
-          <button className="btn" type="submit">{t('contact.send')}</button>
-        </form>
+        <div className="contact-form-wrapper">
+          <h2>{t('contact.title')}</h2>
+          <p className="phone-number">
+            <a href="tel:+15147482121">(514) 748-2121</a>
+          </p>
+          <form onSubmit={onSubmit} className="contact-form">
+            <label>{t('contact.name')}<input name="name" value={form.name} onChange={onChange} required /></label>
+            <label>{t('contact.email')}<input name="email" value={form.email} onChange={onChange} required /></label>
+            <label>{t('contact.message')}<textarea name="message" value={form.message} onChange={onChange} required /></label>
+            <button className="btn" type="submit">{t('contact.send')}</button>
+          </form>
+        </div>
         
         <div className="opening-hours-box">
           <h2>{t('contact.openingHours')}</h2>

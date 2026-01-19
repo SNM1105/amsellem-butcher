@@ -4,9 +4,9 @@ import { useI18n } from '../context/I18nContext'
 
 export default function Checkout(){
   const { items, total, clearCart } = useCart()
-  const { t } = useI18n()
+  const { t, lang } = useI18n()
   const [method, setMethod] = useState('delivery')
-  const [form, setForm] = useState({ firstName: '', lastName: '', email: '', phone: '', street: '', city: '', postal: '' })
+  const [form, setForm] = useState({ firstName: '', lastName: '', email: '', phone: '', street: '', apartment: '', city: '', postal: '' })
   const [processing, setProcessing] = useState(false)
   const [orderError, setOrderError] = useState('')
 
@@ -49,6 +49,7 @@ export default function Checkout(){
         },
         delivery: method === 'delivery' ? {
           street: form.street,
+          apartment: form.apartment,
           city: form.city,
           postal: form.postal
         } : null,
@@ -127,6 +128,10 @@ export default function Checkout(){
                 {t('checkout.street')}
                 <input type="text" name="street" value={form.street} onChange={handleFormChange} required />
               </label>
+              <label>
+                Apartment (optional)
+                <input type="text" name="apartment" value={form.apartment} onChange={handleFormChange} />
+              </label>
               <div className="form-row">
                 <label>
                   {t('checkout.city')}
@@ -142,12 +147,14 @@ export default function Checkout(){
 
           <h3>{t('checkout.summary')}</h3>
           <div className="order-summary">
-            {items.map(i=> (
+            {items.map(i=> {
+              const itemName = lang === 'fr' && i.name_fr ? i.name_fr : i.name_en
+              return (
               <div key={i.id} className="summary-item">
-                <span>{i.name} x {i.qty}</span>
+                <span>{itemName} x {i.qty}</span>
                 <span>${(i.price * i.qty).toFixed(2)}</span>
               </div>
-            ))}
+            )})}
           </div>
           <div className="summary-line">{t('checkout.subtotal')}: ${total.toFixed(2)}</div>
           <div className="summary-line">{t('checkout.fee')}: ${deliveryFee.toFixed(2)}</div>
