@@ -912,12 +912,82 @@ input:-webkit-autofill:focus {
 .footer-inner { display: flex; justify-content: space-between; align-items: flex-start; padding: 18px 24px }
 .footer-location h4 { margin: 0 0 8px 0 }
 .footer-location address a { color: var(--text); text-decoration: none }
+.footer-hours h4 { margin: 0 0 16px 0; color: var(--text); font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 500; }
+
+.hours-list-compact {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.hours-item-compact {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+.hours-item-compact.closed {
+    opacity: 0.6;
+}
+
+.hours-item-compact .day {
+    font-weight: 500;
+    color: var(--text);
+}
+
+.hours-item-compact .time {
+    color: var(--muted);
+    font-size: 0.85rem;
+}
+
+.hours-item-compact.closed .time {
+    color: var(--text-light);
+    font-weight: 500;
+}
+
 .footer-links a { color: var(--muted); text-decoration: none }
 .footer-links a:hover { color: var(--text) }
+
+.hours-list-compact {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.hours-item-compact {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.95rem;
+    gap: 24px;
+}
+
+.hours-item-compact.closed {
+    opacity: 0.6;
+}
+
+.hours-item-compact .day {
+    font-weight: 500;
+    color: var(--text);
+    min-width: 90px;
+}
+
+.hours-item-compact .time {
+    color: var(--muted);
+    font-size: 0.9rem;
+    text-align: right;
+}
+
+.hours-item-compact.closed .time {
+    color: var(--text-light);
+    font-weight: 500;
+}
+
 .footer-bottom { border-top: 1px solid rgba(0,0,0,0.1); padding: 12px 24px }
 
 @media (max-width:800px) {
-    .footer-inner { flex-direction: column; gap: 12px; padding: 16px }
+    .footer-inner { grid-template-columns: 1fr; gap: 24px; padding: 16px }
     
     .contact-page .contact-content {
         grid-template-columns: 1fr;
@@ -1794,7 +1864,7 @@ table button:last-child {
 /* Categories Carousel */
 .categories-section {
     background: var(--panel);
-    padding: 100px 0;
+    padding: 70px 0;
     overflow: hidden;
     border-top: 1px solid rgba(201, 167, 74, 0.1);
 }
@@ -1930,8 +2000,133 @@ table button:last-child {
 
 /* About Section */
 .about-section {
-    padding: 100px 0;
+    padding: 60px 0;
     background: var(--bg);
+}
+
+/* Featured Story Layout */
+.featured-story {
+    padding: 60px 0;
+    background: var(--bg);
+}
+
+.featured-story-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    align-items: center;
+    position: relative;
+}
+
+.featured-story-image {
+    width: 100%;
+    height: 600px;
+    overflow: hidden;
+    position: relative;
+}
+
+.featured-story-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    filter: grayscale(20%);
+    transition: transform 0.6s ease;
+}
+
+.featured-story-layout:hover .featured-story-image img {
+    transform: scale(1.05);
+}
+
+.featured-story-card {
+    background: var(--panel);
+    padding: 60px 50px;
+    position: relative;
+    z-index: 2;
+    margin-left: -80px;
+    box-shadow: 0 20px 60px rgba(44, 36, 22, 0.15);
+    border: 1px solid rgba(201, 167, 74, 0.1);
+    max-width: 520px;
+}
+
+/* Reverse layout for alternating sections */
+.featured-story-layout.reverse {
+    grid-template-columns: 1fr 1fr;
+}
+
+.featured-story-layout.reverse .featured-story-card {
+    margin-left: 0;
+    margin-right: -80px;
+    order: 1;
+}
+
+.featured-story-layout.reverse .featured-story-image {
+    order: 2;
+}
+
+.featured-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--text);
+    margin: 0 0 30px 0;
+    letter-spacing: 0.02em;
+}
+
+.featured-story-card h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0 0 24px 0;
+    line-height: 1.3;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+.featured-story-card h2:first-child {
+    margin-top: 0;
+}
+
+.featured-description {
+    color: var(--text-light);
+    font-size: 1rem;
+    line-height: 1.8;
+    margin: 0 0 32px 0;
+    letter-spacing: 0.01em;
+}
+
+.featured-link {
+    display: inline-block;
+    color: var(--text);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    text-decoration: none;
+    position: relative;
+    padding-bottom: 4px;
+    transition: color 0.3s ease;
+}
+
+.featured-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background: var(--accent);
+    transition: width 0.4s ease;
+}
+
+.featured-link:hover {
+    color: var(--accent);
+}
+
+.featured-link:hover::after {
+    width: 100%;
 }
 
 .about-content {
@@ -1970,7 +2165,7 @@ table button:last-child {
 
 /* Expertise Section */
 .expertise-section {
-    padding: 80px 0;
+    padding: 60px 0;
     background: var(--panel);
 }
 
@@ -2027,7 +2222,7 @@ table button:last-child {
 
 /* Social Section */
 .social-section {
-    padding: 120px 0;
+    padding: 80px 0;
     background: linear-gradient(135deg, var(--text) 0%, var(--text-light) 100%);
     text-align: center;
     border-top: 1px solid rgba(201, 167, 74, 0.2);
@@ -2182,7 +2377,7 @@ table button:last-child {
 }
 
 .about-values-section {
-    padding: 120px 0;
+    padding: 80px 0;
     background: linear-gradient(135deg, var(--text) 0%, var(--text-light) 100%);
 }
 
@@ -2273,7 +2468,7 @@ table button:last-child {
     
     .about-story-section,
     .about-values-section {
-        padding: 60px 0;
+        padding: 50px 0;
     }
     
     .hero-logo {
@@ -2311,6 +2506,46 @@ table button:last-child {
     .about-content {
         grid-template-columns: 1fr;
         gap: 40px;
+    }
+    
+    .featured-story {
+        padding: 50px 0;
+    }
+    
+    .featured-story-layout {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+    
+    .featured-story-image {
+        height: 400px;
+        margin-bottom: -60px;
+    }
+    
+    .featured-story-card {
+        margin-left: 0;
+        margin: 0 24px;
+        padding: 40px 32px;
+        max-width: none;
+    }
+    
+    .featured-story-layout.reverse .featured-story-card {
+        margin-right: 0;
+        margin: 0 24px;
+        order: 2;
+    }
+    
+    .featured-story-layout.reverse .featured-story-image {
+        order: 1;
+    }
+    
+    .featured-label {
+        font-size: 1.6rem;
+        margin-bottom: 20px;
+    }
+    
+    .featured-story-card h2 {
+        font-size: 1.8rem;
     }
     
     .expertise-grid {

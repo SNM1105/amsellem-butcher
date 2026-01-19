@@ -38,32 +38,28 @@ export default function About(){
 
       {/* Story Sections */}
       <section className="about-story-section">
-        <div className="container">
-          <div className="story-grid">
-            <div className="story-item scroll-fade">
-              <div className="story-image">
-                <img src="/Ams-Photo-Landscape.jpg" alt="Heritage" />
-              </div>
-              <div className="story-content">
-                <h2>{t('home.heritageTitle')}</h2>
-                <p>{t('home.history1')}</p>
-              </div>
+        <div className="container-wide">
+          <div className="featured-story-layout">
+            <div className="featured-story-image scroll-fade">
+              <img src="/Ams-Photo-Landscape.jpg" alt="Heritage" />
+            </div>
+            <div className="featured-story-card scroll-fade">
+              <h2>{t('home.heritageTitle')}</h2>
+              <p className="featured-description">{t('home.history1')}</p>
             </div>
           </div>
         </div>
       </section>
 
       <section className="about-story-section alt">
-        <div className="container">
-          <div className="story-grid reverse">
-            <div className="story-item scroll-fade">
-              <div className="story-image">
-                <img src="/Ams-Photo-profile.jpg" alt="Craftsmanship" />
-              </div>
-              <div className="story-content">
-                <h2>{t('home.craftsmanshipTitle')}</h2>
-                <p>{t('home.history2')}</p>
-              </div>
+        <div className="container-wide">
+          <div className="featured-story-layout reverse">
+            <div className="featured-story-card scroll-fade">
+              <h2>{t('home.craftsmanshipTitle')}</h2>
+              <p className="featured-description">{t('home.history2')}</p>
+            </div>
+            <div className="featured-story-image scroll-fade">
+              <img src="/Ams-Photo-profile.jpg" alt="Craftsmanship" />
             </div>
           </div>
         </div>

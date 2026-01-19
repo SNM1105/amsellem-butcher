@@ -31,8 +31,38 @@ export default function Footer(){
             referrerPolicy="no-referrer-when-downgrade">
           </iframe>
         </div>
-        <div className="footer-links">
-          <Link to="/privacy">{t('footer.privacy')}</Link>
+        <div className="footer-hours">
+          <h4>{t('contact.openingHours')}</h4>
+          <div className="hours-list-compact">
+            <div className="hours-item-compact">
+              <span className="day">{t('contact.sunday')}</span>
+              <span className="time">8 a.m.–5 p.m.</span>
+            </div>
+            <div className="hours-item-compact">
+              <span className="day">{t('contact.monday')}</span>
+              <span className="time">8 a.m.–6 p.m.</span>
+            </div>
+            <div className="hours-item-compact">
+              <span className="day">{t('contact.tuesday')}</span>
+              <span className="time">8 a.m.–6 p.m.</span>
+            </div>
+            <div className="hours-item-compact">
+              <span className="day">{t('contact.wednesday')}</span>
+              <span className="time">8 a.m.–7 p.m.</span>
+            </div>
+            <div className="hours-item-compact">
+              <span className="day">{t('contact.thursday')}</span>
+              <span className="time">8 a.m.–8 p.m.</span>
+            </div>
+            <div className="hours-item-compact">
+              <span className="day">{t('contact.friday')}</span>
+              <span className="time">8 a.m.–2:30 p.m.</span>
+            </div>
+            <div className="hours-item-compact closed">
+              <span className="day">{t('contact.saturday')}</span>
+              <span className="time">{t('contact.closed')}</span>
+            </div>
+          </div>
         </div>
       </div>
       <div className="footer-bottom">

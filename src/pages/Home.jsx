@@ -98,17 +98,17 @@ export default function Home(){
     <>
       {/* Hero Section */}
       <section className="hero-main">
-        {/* Video Background - Add your video file to the public folder */}
+        {/* Video Background */}
         <video 
           className="hero-video" 
           autoPlay 
           muted 
           loop 
           playsInline
+          preload="auto"
           poster="/Amsellem-store.jpg"
         >
-          <source src="/hero-video.mp4" type="video/mp4" />
-          {/* Fallback image if video doesn't load */}
+          <source src="/amsellem background video.mp4" type="video/mp4" />
         </video>
         <div className="hero-overlay">
           <div className="hero-content">
@@ -199,19 +199,19 @@ export default function Home(){
         </div>
       </section>
 
-      {/* About Section */}
-      <section className="about-section">
-        <div className="container">
-          <div className="about-content">
-            <div className="about-text scroll-fade">
+      {/* About Section - Featured Story */}
+      <section className="about-section featured-story">
+        <div className="container-wide">
+          <div className="featured-story-layout">
+            <div className="featured-story-image scroll-fade">
+              <img src="/Amsellem-store.jpg" alt="Our Story" />
+            </div>
+            <div className="featured-story-card scroll-fade">
               <h2>{t('home.amssellemDifference')}</h2>
-              <p>
+              <p className="featured-description">
                 {t('home.amssellemDifferenceText')}
               </p>
-              <Link to="/about" className="btn-outline">{t('home.learnMore')}</Link>
-            </div>
-            <div className="about-image scroll-fade">
-              <img src="/Amsellem-store.jpg" alt="Our Story" />
+              <Link to="/about" className="featured-link">{t('home.learnMore')}</Link>
             </div>
           </div>
         </div>
