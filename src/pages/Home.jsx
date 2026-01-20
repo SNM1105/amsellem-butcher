@@ -108,6 +108,7 @@ export default function Home(){
           preload="auto"
           poster="/Amsellem-store.jpg"
         >
+          <source src="/amsellem background video.webm" type="video/webm" />
           <source src="/amsellem background video.mp4" type="video/mp4" />
         </video>
         <div className="hero-overlay">
@@ -230,7 +231,9 @@ export default function Home(){
               <p>{t('home.expertButcheryText')}</p>
             </div>
             <div className="expertise-card scroll-fade">
-              <div className="expertise-icon">✡️</div>
+              <div className="expertise-icon">
+                <img src="/kosher.png" alt="Kosher Certified" className="expertise-icon-img" />
+              </div>
               <h3>{t('home.strictlyKosherTitle')}</h3>
               <p>{t('home.strictlyKosherText')}</p>
             </div>
