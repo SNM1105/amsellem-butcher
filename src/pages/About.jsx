@@ -25,7 +25,7 @@ export default function About(){
   }, [])
   
   return (
-    <>
+    <div className="about-page-wrapper">
       {/* Hero Section */}
       <section className="about-hero">
         <div className="about-hero-overlay">
@@ -36,6 +36,13 @@ export default function About(){
         </div>
       </section>
 
+      {/* Story Sections with Animated Path */}
+      <div className="story-sections-wrapper">
+        {/* Background SVG Path - only in story sections */}
+        <img src="/amsellem svg.svg" alt="" className="about-svg-background about-svg-desktop" />
+        <img src="/amsellem svg 2.svg" alt="" className="about-svg-background about-svg-tablet" />
+        <img src="/amsellem svg 3.svg" alt="" className="about-svg-background about-svg-mobile" />
+        
       {/* Story Sections */}
       <section className="about-story-section">
         <div className="container-wide">
@@ -64,6 +71,7 @@ export default function About(){
           </div>
         </div>
       </section>
+      </div>
 
       {/* Values Section */}
       <section className="about-values-section">
@@ -88,6 +96,6 @@ export default function About(){
           </div>
         </div>
       </section>
-    </>
+    </div>
   )
 }

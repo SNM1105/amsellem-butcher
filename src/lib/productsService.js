@@ -204,3 +204,86 @@ export async function updateSpecial(id, updates) {
     throw error
   }
 }
+
+/**
+ * Fetch all recipes from Supabase
+ * @returns {Promise<Array>} Array of recipes
+ */
+export async function getAllRecipes() {
+  try {
+    const { data, error } = await supabase
+      .from('recipes')
+      .select('*')
+      .order('name_en', { ascending: true })
+
+    if (error) throw error
+    return data || []
+  } catch (error) {
+    console.error('Error fetching recipes:', error)
+    return []
+  }
+}
+
+/**
+ * Create a new recipe
+ * @param {Object} recipeData - Recipe data
+ * @returns {Promise<Object>} Created recipe
+ */
+export async function createRecipe(recipeData) {
+  try {
+    const { data, error } = await supabase
+      .from('recipes')
+      .insert([recipeData])
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  } catch (error) {
+    console.error('Error creating recipe:', error)
+    throw error
+  }
+}
+
+/**
+ * Update a recipe
+ * @param {string} id - Recipe ID
+ * @param {Object} updates - Fields to update
+ * @returns {Promise<Object>} Updated recipe
+ */
+export async function updateRecipe(id, updates) {
+  try {
+    const { data, error } = await supabase
+      .from('recipes')
+      .update(updates)
+      .eq('id', id)
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  } catch (error) {
+    console.error('Error updating recipe:', error)
+    throw error
+  }
+}
+
+/**
+ * Delete a recipe
+ * @param {string} id - Recipe ID
+ * @returns {Promise<boolean>} Success status
+ */
+export async function deleteRecipe(id) {
+  try {
+    const { error } = await supabase
+      .from('recipes')
+      .delete()
+      .eq('id', id)
+
+    if (error) throw error
+    return true
+  } catch (error) {
+    console.error('Error deleting recipe:', error)
+    throw error
+  }
+}

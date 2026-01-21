@@ -8,25 +8,24 @@ export default function Header(){
   const { t, toggleLang, lang } = useI18n()
   const count = items.reduce((s,i)=> s + i.qty, 0)
   const [open, setOpen] = useState(false)
-  const toggleMenu = () => setOpen(o=>!o)
-  const closeMenu = () => setOpen(false)
 
   return (
     <header className="site-header">
       <div className="hebrew-blessing">בס״ד</div>
       <div className="container header-inner">
-        <button className="menu-button" aria-label="Menu" aria-expanded={open} onClick={toggleMenu}>
+        <button className="menu-button" aria-label="Menu" aria-expanded={open} onClick={()=>setOpen(!open)}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
           </svg>
         </button>
 
-        <Link to="/" className="brand-wrap" onClick={closeMenu}>
+        <Link to="/" className="brand-wrap" onClick={()=>setOpen(false)}>
           <img src="/amsellem_logo.png" alt="Amsellem logo" className="logo" />
         </Link>
 
         <nav className="desktop-nav">
           <Link to="/meats">{t('nav.shop')}</Link>
+          <Link to="/recipes">{t('nav.recipes')}</Link>
           <Link to="/about">{t('nav.story')}</Link>
           <Link to="/contact">{t('nav.contact')}</Link>
           <Link to="/cart" className="icon-button cart" aria-label={t('nav.cart')}>
@@ -47,23 +46,24 @@ export default function Header(){
       <div className={`drawer ${open ? 'open' : ''}`} role="dialog" aria-modal="true">
         <div className="drawer-header">
           <span>Amsellem</span>
-          <button className="close-button" aria-label="Close menu" onClick={closeMenu}>
+          <button className="close-button" aria-label="Close menu" onClick={()=>setOpen(false)}>
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
             </svg>
           </button>
         </div>
         <div className="drawer-links">
-          <Link to="/meats" onClick={closeMenu}>{t('nav.shop')}</Link>
-          <Link to="/about" onClick={closeMenu}>{t('nav.story')}</Link>
-          <Link to="/contact" onClick={closeMenu}>{t('nav.contact')}</Link>
-          <Link to="/cart" onClick={closeMenu}>{t('nav.cart')} ({count})</Link>
-          <button className="drawer-button" onClick={()=> { toggleLang(); closeMenu() }}>
+          <Link to="/meats" onClick={()=>setOpen(false)}>{t('nav.shop')}</Link>
+          <Link to="/recipes" onClick={()=>setOpen(false)}>{t('nav.recipes')}</Link>
+          <Link to="/about" onClick={()=>setOpen(false)}>{t('nav.story')}</Link>
+          <Link to="/contact" onClick={()=>setOpen(false)}>{t('nav.contact')}</Link>
+          <Link to="/cart" onClick={()=>setOpen(false)}>{t('nav.cart')} ({count})</Link>
+          <button className="drawer-button" onClick={()=>{ toggleLang(); setOpen(false) }}>
             {lang.toUpperCase()} / {lang === 'en' ? 'FR' : 'EN'}
           </button>
         </div>
       </div>
-      {open && <div className="drawer-overlay" onClick={closeMenu} />}
+      {open && <div className="drawer-overlay" onClick={()=>setOpen(false)} />}
     </header>
   )
 }

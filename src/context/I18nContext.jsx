@@ -4,7 +4,7 @@ const I18nContext = createContext()
 
 const dict = {
   en: {
-    nav: { shop: 'Shop', story: 'Our Story', contact: 'Contact', cart: 'Cart' },
+    nav: { shop: 'Shop', recipes: 'Recipes', story: 'Our Story', contact: 'Contact', cart: 'Cart' },
     home: {
       title: 'Amsellem — Kosher Butcherie',
       lead: 'Tradition, craftsmanship, and care — serving our community with the finest kosher meats and prepared foods.',
@@ -293,7 +293,7 @@ const dict = {
     }
   },
   fr: {
-    nav: { shop: 'Produits', story: 'Notre Histoire', contact: 'Contact', cart: 'Panier' },
+    nav: { shop: 'Produits', recipes: 'Recettes', story: 'Notre Histoire', contact: 'Contact', cart: 'Panier' },
     home: {
       title: 'Amsellem — Boucherie Cacher',
       lead: 'Tradition, savoir-faire et attention — nous servons notre communauté avec les meilleures viandes casher et des plats préparés.',
@@ -583,19 +583,15 @@ const dict = {
 
 export function I18nProvider({ children }){
   const [lang, setLang] = useState(() => {
-    try{ return localStorage.getItem('ams_lang') || 'en' } catch { return 'en' }
+    try{ return localStorage.getItem('ams_lang') || 'en' } catch{ return 'en' }
   })
   useEffect(() => { try{ localStorage.setItem('ams_lang', lang) } catch{} }, [lang])
   const toggleLang = () => setLang(prev => prev === 'en' ? 'fr' : 'en')
 
-  const t = useMemo(() => {
-    const table = dict[lang]
-    return (key) => {
-      const parts = key.split('.')
-      let cur = table
-      for(const p of parts){ cur = cur?.[p] }
-      return cur ?? key
-    }
+  const t = useMemo(() => (key) => {
+    let cur = dict[lang]
+    for(const p of key.split('.')){ cur = cur?.[p] }
+    return cur ?? key
   }, [lang])
 
   const tCategory = (cat) => dict[lang].categories[cat] ?? cat

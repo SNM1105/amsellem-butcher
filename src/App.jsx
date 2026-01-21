@@ -8,6 +8,7 @@ import ProtectedRoute from './components/ProtectedRoute'
 import { useCart } from './context/CartContext'
 import Home from './pages/Home'
 import Products from './pages/Products'
+import Recipes from './pages/Recipes'
 import About from './pages/About'
 import Contact from './pages/Contact'
 import Checkout from './pages/Checkout'
@@ -34,6 +35,7 @@ export default function App(){
         <Routes>
           <Route path="/" element={<Home/>} />
           <Route path="/about" element={<About/>} />
+          <Route path="/recipes" element={<Recipes/>} />
           <Route path="/contact" element={<Contact/>} />
           <Route path="/cart" element={<CartPage/>} />
           <Route path="/checkout" element={<Checkout/>} />

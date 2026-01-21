@@ -3,10 +3,8 @@ import { useI18n } from '../context/I18nContext'
 
 export default function Toast({ product, qty }) {
   const { lang } = useI18n()
-  
   if (!product) return null
-  
-  const name = lang === 'fr' && product.name_fr ? product.name_fr : product.name_en
+  const name = (lang === 'fr' && product.name_fr) ? product.name_fr : product.name_en
   
   return (
     <div className="toast">

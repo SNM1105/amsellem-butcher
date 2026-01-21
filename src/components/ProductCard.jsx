@@ -7,20 +7,14 @@ export default function ProductCard({ product, categoryLabel }){
   const { t, lang } = useI18n()
   const [weight, setWeight] = useState(1)
   
-  // Use the appropriate language field from database
-  const productName = lang === 'fr' && product.name_fr ? product.name_fr : product.name_en
-  const productDesc = lang === 'fr' && product.description_fr ? product.description_fr : product.description_en
-  
+  const productName = (lang === 'fr' && product.name_fr) ? product.name_fr : product.name_en
+  const productDesc = (lang === 'fr' && product.description_fr) ? product.description_fr : product.description_en
   const isPerLb = productName.toLowerCase().includes('per lb') || productName.toLowerCase().includes('par lb')
   const isOutOfStock = product.stock === 0
 
   const handleAddItem = () => {
     if (isOutOfStock) return
-    if (isPerLb) {
-      addItem({...product, weight}, weight)
-    } else {
-      addItem(product, 1)
-    }
+    addItem(isPerLb ? {...product, weight} : product, isPerLb ? weight : 1)
   }
 
   return (

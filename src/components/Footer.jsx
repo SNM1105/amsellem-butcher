@@ -4,11 +4,7 @@ import { useI18n } from '../context/I18nContext'
 
 export default function Footer(){
   const { t } = useI18n()
-  const address = t('footer.address')
-  const city = t('footer.city')
-  const postal = t('footer.postal')
-  const mapQuery = encodeURIComponent(`${address}, ${city} ${postal}`)
-  const mapUrl = `https://www.google.com/maps/search/?api=1&query=${mapQuery}`
+  const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${t('footer.address')}, ${t('footer.city')} ${t('footer.postal')}`)}`
 
   return (
     <footer className="site-footer">
@@ -17,8 +13,8 @@ export default function Footer(){
           <h4>{t('footer.title')}</h4>
           <address>
             <a href={mapUrl} target="_blank" rel="noreferrer">
-              {address}<br />
-              {city} {postal}
+              {t('footer.address')}<br />
+              {t('footer.city')} {t('footer.postal')}
             </a>
           </address>
           <iframe 

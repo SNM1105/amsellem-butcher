@@ -1,23 +1,16 @@
-import React, { useEffect, useCallback, memo } from 'react'
+import React, { useEffect, memo } from 'react'
 
 const Modal = memo(function Modal({ isOpen, onClose, title, children }) {
-  const handleEscape = useCallback((e) => {
-    if (e.key === 'Escape') {
-      onClose()
-    }
-  }, [onClose])
-
   useEffect(() => {
-    if (isOpen) {
-      document.addEventListener('keydown', handleEscape)
-      document.body.style.overflow = 'hidden'
-
-      return () => {
-        document.removeEventListener('keydown', handleEscape)
-        document.body.style.overflow = ''
-      }
+    if (!isOpen) return
+    const handleEscape = (e) => e.key === 'Escape' && onClose()
+    document.addEventListener('keydown', handleEscape)
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', handleEscape)
+      document.body.style.overflow = ''
     }
-  }, [isOpen, handleEscape])
+  }, [isOpen, onClose])
 
   if (!isOpen) return null
 

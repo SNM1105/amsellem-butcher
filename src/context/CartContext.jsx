@@ -8,12 +8,8 @@ export function useCart(){
 
 export function CartProvider({ children }){
   const [items, setItems] = useState(() => {
-    try{
-      const raw = localStorage.getItem('ams_cart')
-      return raw ? JSON.parse(raw) : []
-    }catch(e){
-      return []
-    }
+    try{ return JSON.parse(localStorage.getItem('ams_cart')) || [] }
+    catch{ return [] }
   })
   
   const [toast, setToast] = useState(null)
@@ -31,12 +27,9 @@ export function CartProvider({ children }){
 
   function addItem(product, qty=1){
     setItems(prev=>{
-      const itemId = product.weight ? `${product.id}-${product.weight}` : product.id
-      const found = prev.find(p=> product.weight ? (p.id === product.id && p.weight === product.weight) : (p.id === product.id))
-      if(found){
-        return prev.map(p=> (product.weight ? (p.id === product.id && p.weight === product.weight) : p.id === product.id) ? {...p, qty: p.qty + qty} : p)
-      }
-      return [...prev, {...product, qty}]
+      const match = (p) => product.weight ? (p.id === product.id && p.weight === product.weight) : p.id === product.id
+      const found = prev.find(match)
+      return found ? prev.map(p=> match(p) ? {...p, qty: p.qty + qty} : p) : [...prev, {...product, qty}]
     })
     setToast({ product, qty })
   }
@@ -46,7 +39,8 @@ export function CartProvider({ children }){
   }
 
   function updateQty(id, qty, weight){
-    setItems(prev => prev.map(p=> weight ? (p.id === id && p.weight === weight ? {...p, qty} : p) : (p.id === id ? {...p, qty} : p)))
+    const match = (p) => weight ? (p.id === id && p.weight === weight) : p.id === id
+    setItems(prev => prev.map(p=> match(p) ? {...p, qty} : p))
   }
 
   function clearCart(){
