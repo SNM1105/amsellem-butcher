@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { motion, useScroll, useMotionValue, useMotionValueEvent, animate } from 'framer-motion'
 import { useI18n } from '../context/I18nContext'
 import { getAllProducts } from '../lib/productsService'
+import Carousel from '../components/Carousel'
 
 // Hook for scroll overflow mask effect
 function useScrollOverflowMask(scrollXProgress) {
@@ -47,6 +48,7 @@ export default function Home(){
   const [products, setProducts] = useState([])
   const carouselRef = useRef(null)
   const [isMobile, setIsMobile] = useState(false)
+  const [carouselWidth, setCarouselWidth] = useState(window.innerWidth - 48)
   
   // Track scroll progress for mask effect
   const { scrollXProgress } = useScroll({ container: carouselRef })
@@ -55,9 +57,10 @@ export default function Home(){
   useEffect(() => {
     loadProducts()
     
-    // Check if mobile
+    // Check if mobile and set carousel width
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768)
+      setCarouselWidth(window.innerWidth - 48)
     }
     checkMobile()
     window.addEventListener('resize', checkMobile)
@@ -113,8 +116,8 @@ export default function Home(){
         </video>
         <div className="hero-overlay">
           <div className="hero-content">
-            <img src="/amsellem_logo.png" alt="Amsellem" className="hero-logo" />
             <h1 className="hero-tagline">{t('home.heroTagline')}</h1>
+            <img src="/amsellem_logo.png" alt="Amsellem" className="hero-logo" />
             <h2 className="hero-subtitle">{t('home.heroSubtitle')}</h2>
             <Link to="/meats" className="btn-hero">{t('home.heroButton')}</Link>
           </div>
@@ -129,10 +132,42 @@ export default function Home(){
             <p className="section-subtitle">{t('home.categoriesSubtitle')}</p>
           </div>
           {isMobile ? (
+            <div style={{ display: 'flex', justifyContent: 'center', padding: '0 24px' }}>
+              <Carousel
+                items={[
+                  {
+                    id: 1,
+                    title: t('home.categoryBeef'),
+                    description: t('home.discoverSelection'),
+                    image: beefProducts[0]?.image || '/img/Rib Eye.JPG',
+                    link: '/meats?category=Beef'
+                  },
+                  {
+                    id: 2,
+                    title: t('home.categoryChicken'),
+                    description: t('home.discoverSelection'),
+                    image: chickenProducts[0]?.image || '/img/Whole Chicken.JPG',
+                    link: '/meats?category=Chicken'
+                  },
+                  {
+                    id: 3,
+                    title: t('home.categoryPremade'),
+                    description: t('home.discoverSelection'),
+                    image: premadeProducts[0]?.image || '/img/Kofta.JPG',
+                    link: '/meats?category=Premade'
+                  }
+                ]}
+                baseWidth={carouselWidth}
+                autoplay
+                autoplayDelay={4000}
+                pauseOnHover
+                loop
+              />
+            </div>
+          ) : (
             <motion.div 
               ref={carouselRef}
               className="categories-carousel-wrapper"
-              style={{ maskImage, WebkitMaskImage: maskImage }}
             >
               <div className="categories-carousel">
                 <Link to="/meats?category=Beef" className="category-card-carousel">
@@ -164,38 +199,6 @@ export default function Home(){
                 </Link>
               </div>
             </motion.div>
-          ) : (
-            <div className="categories-carousel-wrapper">
-              <div className="categories-carousel">
-                <Link to="/meats?category=Beef" className="category-card-carousel">
-                  <div className="category-image-carousel">
-                    <img src={beefProducts[0]?.image || '/img/Rib Eye.JPG'} alt="Beef" />
-                    <div className="category-overlay">
-                      <h3>{t('home.categoryBeef')}</h3>
-                      <p>{t('home.discoverSelection')}</p>
-                    </div>
-                  </div>
-                </Link>
-                <Link to="/meats?category=Chicken" className="category-card-carousel">
-                  <div className="category-image-carousel">
-                    <img src={chickenProducts[0]?.image || '/img/Whole Chicken.JPG'} alt="Chicken" />
-                    <div className="category-overlay">
-                      <h3>{t('home.categoryChicken')}</h3>
-                      <p>{t('home.discoverSelection')}</p>
-                    </div>
-                  </div>
-                </Link>
-                <Link to="/meats?category=Premade" className="category-card-carousel">
-                  <div className="category-image-carousel">
-                    <img src={premadeProducts[0]?.image || '/img/Kofta.JPG'} alt="Premade" />
-                    <div className="category-overlay">
-                      <h3>{t('home.categoryPremade')}</h3>
-                      <p>{t('home.discoverSelection')}</p>
-                    </div>
-                  </div>
-                </Link>
-              </div>
-            </div>
           )}
         </div>
       </section>
