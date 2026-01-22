@@ -244,7 +244,8 @@ const dict = {
       address: '2079 Rue Saint-Louis',
       city: 'Saint-Laurent, QC',
       postal: 'H4M 1P1',
-      privacy: 'Privacy Policy'
+      privacy: 'Privacy Policy',
+      terms: 'Terms of Use'
     },
     admin: {
       dashboard: 'Admin Dashboard',
@@ -533,8 +534,10 @@ const dict = {
       address: '2079 Rue Saint-Louis',
       city: 'Saint-Laurent, QC',
       postal: 'H4M 1P1',
-      privacy: 'Politique de confidentialité'
-    },    admin: {
+      privacy: 'Politique de confidentialité',
+      terms: "Conditions d'utilisation"
+    },
+    admin: {
       dashboard: 'Tableau de Bord Admin',
       addProduct: 'Ajouter un Produit',
       logout: 'Déconnexion',

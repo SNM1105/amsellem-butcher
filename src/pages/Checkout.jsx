@@ -173,7 +173,7 @@ export default function Checkout(){
           >
             {processing ? t('checkout.processing') : t('checkout.submitOrder')}
           </button>
-          {orderError && <p style={{ color: '#ff6b6b', fontSize: '0.9rem', margin: '8px 0' }}>{orderError}</p>}
+          {orderError && <p className="checkout-error">{orderError}</p>}
           <p className="muted small" style={{margin: '8px 0 0 0'}}>{t('checkout.cloverNote')}</p>
         </div>
       </div>

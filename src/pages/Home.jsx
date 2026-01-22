@@ -208,7 +208,7 @@ export default function Home(){
         <div className="container-wide">
           <div className="featured-story-layout">
             <div className="featured-story-image scroll-fade">
-              <img src="/Amsellem-store.jpg" alt="Our Story" />
+              <img src="/amsellem salami.jpg" alt="Our Story" />
             </div>
             <div className="featured-story-card scroll-fade">
               <h2>{t('home.amssellemDifference')}</h2>

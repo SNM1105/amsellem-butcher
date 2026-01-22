@@ -14,6 +14,7 @@ import Contact from './pages/Contact'
 import Checkout from './pages/Checkout'
 import CartPage from './pages/CartPage'
 import Privacy from './pages/Privacy'
+import Terms from './pages/Terms'
 import AdminLogin from './pages/AdminLogin'
 import AdminDashboard from './pages/AdminDashboard'
 
@@ -41,6 +42,7 @@ export default function App(){
           <Route path="/checkout" element={<Checkout/>} />
           <Route path="/meats" element={<Products/>} />
           <Route path="/privacy" element={<Privacy/>} />
+          <Route path="/terms" element={<Terms/>} />
           <Route path="/admin" element={<AdminLogin/>} />
           <Route 
             path="/admin/dashboard" 

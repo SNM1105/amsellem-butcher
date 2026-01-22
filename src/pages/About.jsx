@@ -41,7 +41,7 @@ export default function About(){
         {/* Background SVG Path - only in story sections */}
         <img src="/amsellem svg.svg" alt="" className="about-svg-background about-svg-desktop" />
         <img src="/amsellem svg 2.svg" alt="" className="about-svg-background about-svg-tablet" />
-        <img src="/amsellem svg 3.svg" alt="" className="about-svg-background about-svg-mobile" />
+        <img src="/amsellem svg 2.svg" alt="" className="about-svg-background about-svg-mobile" />
         
       {/* Story Sections */}
       <section className="about-story-section">

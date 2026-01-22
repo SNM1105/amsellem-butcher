@@ -86,8 +86,13 @@ export default function Footer(){
         </div>
       </div>
       <div className="footer-bottom">
-        <div className="container">
+        <div className="container footer-bottom-inner">
           <span className="muted">© {new Date().getFullYear()} Amsellem</span>
+          <div className="footer-legal">
+            <Link to="/privacy">{t('footer.privacy')}</Link>
+            <span className="legal-divider">·</span>
+            <Link to="/terms">{t('footer.terms')}</Link>
+          </div>
         </div>
       </div>
     </footer>
