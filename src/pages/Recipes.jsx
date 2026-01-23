@@ -83,7 +83,10 @@ export default function Recipes() {
       {/* Hero Section */}
       <section className="recipes-hero">
         <div className="container">
-          <h1 className="scroll-fade">{lang === 'fr' ? 'Recettes Casher' : 'Kosher Recipes'}</h1>
+          <span className="section-label scroll-fade" style={{color: 'var(--gold)'}}>
+            {lang === 'fr' ? 'Notre Collection de' : 'Our Collection of'}
+          </span>
+          <h1 className="scroll-fade gold-accent">{lang === 'fr' ? 'Recettes Casher' : 'Kosher Recipes'}</h1>
           <p className="hero-subtitle scroll-fade">
             {lang === 'fr' 
               ? 'Découvrez notre collection de recettes traditionnelles marocaines et juives'

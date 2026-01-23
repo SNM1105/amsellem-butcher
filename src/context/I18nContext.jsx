@@ -24,6 +24,9 @@ const dict = {
       amssellemDifferenceText: 'Family-owned and operated, we bring you the finest selection of kosher meats. Every cut is carefully selected and prepared following strict kosher standards, ensuring you receive only the best quality for your family\'s table.',
       learnMore: 'LEARN MORE',
       whyChooseTitle: 'Why Choose Amsellem?',
+      ourExpertise: 'Our Expertise',
+      yearsExperience: 'Years of Experience',
+      heritageTagline: 'Combining tradition and modernity, Amsellem has been serving the community with the finest kosher meats.',
       expertButcheryTitle: 'EXPERT BUTCHERY',
       expertButcheryText: 'Our skilled butchers provide custom cuts and personalized service to meet your exact needs.',
       strictlyKosherTitle: 'STRICTLY KOSHER',
@@ -52,7 +55,8 @@ const dict = {
       qualityTitle: 'Quality',
       qualityDesc: 'Only the finest cuts meeting the highest standards',
       communityTitle: 'Community',
-      communityDesc: 'Serving our neighborhood with care and dedication'
+      communityDesc: 'Serving our neighborhood with care and dedication',
+      established: 'ESTABLISHED'
     },
     products: { title: 'Our Meats & Premade Foods', all: 'All' },
     categories: { Beef: 'Beef', Lamb: 'Lamb', Chicken: 'Chicken', Veal: 'Veal', Spices: 'Spices', Oil: 'Oil', Premade: 'Premade' },
@@ -236,6 +240,13 @@ const dict = {
     },
     about: {
       title: 'About Amsellem',
+      ourHistory: 'Our History',
+      today: 'Today',
+      whatWeBelieve: 'What We Believe',
+      foundingStory: 'In 1928, the Amsellem family opened their doors in Montreal, bringing with them generations of Moroccan butchery tradition. What began as a small shop has grown into a beloved community institution, serving families with the same dedication and expertise for nearly a century.',
+      foundersTitle: 'The Original Owners',
+      foundersStory: 'Our founders brought more than just butchery skills from Morocco — they brought a philosophy of service, quality, and community. Their portraits still hang in our shop today, reminding us of the values they instilled in every generation that followed.',
+      todayStory: 'Today, Amsellem continues the legacy with the same commitment to excellence. We blend time-honored techniques with modern standards, ensuring each cut meets the highest kosher requirements while exceeding your expectations. Our team takes pride in carrying forward the family tradition.',
       p1: 'Welcome to Amsellem, your neighborhood Kosher butcher. We provide high-quality cuts, prepared according to kosher standards, with friendly service and a deep connection to tradition.',
       p2: 'Family-owned and operated — serving the community with care.'
     },
@@ -314,6 +325,9 @@ const dict = {
       amssellemDifferenceText: 'Entreprise familiale, nous vous offrons la meilleure sélection de viandes casher. Chaque coupe est soigneusement sélectionnée et préparée selon des normes casher strictes, garantissant la meilleure qualité pour votre table familiale.',
       learnMore: 'EN SAVOIR PLUS',
       whyChooseTitle: 'Pourquoi Choisir Amsellem?',
+      ourExpertise: 'Notre Expertise',
+      yearsExperience: 'Ans d\'Expérience',
+      heritageTagline: 'Alliant tradition et modernité, Amsellem sert la communauté avec les meilleures viandes casher.',
       expertButcheryTitle: 'EXPERTISE EN BOUCHERIE',
       expertButcheryText: 'Nos bouchers qualifiés offrent des coupes personnalisées et un service adapté à vos besoins.',
       strictlyKosherTitle: 'STRICTEMENT CASHER',
@@ -342,7 +356,8 @@ const dict = {
       qualityTitle: 'Qualité',
       qualityDesc: 'Seulement les meilleures coupes respectant les plus hauts standards',
       communityTitle: 'Communauté',
-      communityDesc: 'Servir notre quartier avec soin et dévouement'
+      communityDesc: 'Servir notre quartier avec soin et dévouement',
+      established: 'FONDÉ EN'
     },
     products: { title: 'Nos viandes et plats préparés', all: 'Toutes' },
     categories: { Beef: 'Boeuf', Lamb: 'Agneau', Chicken: 'Poulet', Veal: 'Veau', Spices: 'Épices', Oil: 'Huiles', Premade: 'Plats préparés' },
@@ -525,7 +540,14 @@ const dict = {
       closed: 'Fermé'
     },
     about: {
-      title: 'À propos d’Amsellem',
+      title: 'À propos d\'Amsellem',
+      ourHistory: 'Notre Histoire',
+      today: 'Aujourd\'hui',
+      whatWeBelieve: 'Ce Que Nous Croyons',
+      foundingStory: 'En 1928, la famille Amsellem a ouvert ses portes à Montréal, apportant avec elle des générations de tradition bouchère marocaine. Ce qui a commencé comme une petite boutique est devenu une institution communautaire bien-aimée, servant les familles avec le même dévouement et la même expertise depuis près d\'un siècle.',
+      foundersTitle: 'Les Fondateurs',
+      foundersStory: 'Nos fondateurs ont apporté plus que des compétences en boucherie du Maroc — ils ont apporté une philosophie de service, de qualité et de communauté. Leurs portraits sont toujours accrochés dans notre boutique aujourd\'hui, nous rappelant les valeurs qu\'ils ont inculquées à chaque génération qui a suivi.',
+      todayStory: 'Aujourd\'hui, Amsellem perpétue l\'héritage avec le même engagement envers l\'excellence. Nous allions des techniques éprouvées aux normes modernes, garantissant que chaque coupe répond aux exigences casher les plus élevées tout en dépassant vos attentes. Notre équipe est fière de perpétuer la tradition familiale.',
       p1: 'Bienvenue chez Amsellem, votre boucherie casher de quartier. Nous proposons des pièces de qualité, préparées selon les règles casher, avec un service chaleureux et un profond attachement à la tradition.',
       p2: 'Entreprise familiale — au service de la communauté avec soin.'
     },

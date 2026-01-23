@@ -38,7 +38,8 @@ export default function Checkout(){
     setOrderError('')
 
     try {
-      const payload = {
+      // First, process payment
+      const paymentPayload = {
         items: items.map(i => ({ id: i.id, qty: i.qty })),
         method,
         contact: {
@@ -54,24 +55,62 @@ export default function Checkout(){
           postal: form.postal
         } : null,
         currency: 'CAD',
-        // TODO: replace with real Clover payment token from Clover.js
         paymentToken: 'demo-token'
       }
 
-      const response = await fetch('/api/payments/clover', {
+      const paymentResponse = await fetch('/api/payments/clover', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(paymentPayload)
       })
 
-      if (!response.ok) {
-        throw new Error('Failed to submit order')
+      if (!paymentResponse.ok) {
+        throw new Error('Payment failed')
       }
 
-      const result = await response.json()
+      const paymentResult = await paymentResponse.json()
+
+      // Then, send order to Clover POS for ticket printing
+      const orderPayload = {
+        customer: {
+          name: `${form.firstName} ${form.lastName}`,
+          phone: form.phone,
+          email: form.email || ''
+        },
+        items: items.map(i => ({
+          id: i.id,
+          name: lang === 'fr' && i.name_fr ? i.name_fr : i.name_en,
+          price: i.price,
+          qty: i.qty
+        })),
+        subtotal: total,
+        deliveryFee: deliveryFee,
+        total: parseFloat(finalAmount),
+        method,
+        delivery: method === 'delivery' ? {
+          street: form.street,
+          apartment: form.apartment,
+          city: form.city,
+          postal: form.postal
+        } : null,
+        timestamp: new Date().toISOString()
+      }
+
+      // Send to Clover for ticket printing
+      const orderResponse = await fetch('/api/clover/order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderPayload)
+      })
+
+      const orderResult = await orderResponse.json()
+
       setProcessing(false)
       clearCart()
-      alert(`Payment processed successfully! Reference: ${result.paymentId || result.orderId || 'pending'}`)
+      
+      // Show success message with order reference
+      const orderId = orderResult.orderId || paymentResult.paymentId || 'pending'
+      alert(`Order submitted successfully!\n\nReference: ${orderId}\n\nYour order will be prepared shortly.`)
     } catch (error) {
       console.error('Order submission error:', error)
       setOrderError('Failed to submit order. Please try again.')

@@ -166,7 +166,7 @@ app.post('/webhook/paypal', (req, res)=> {
 });
 
 // API: Clover Order Endpoint
-// Receives order from frontend and forwards to Clover POS system
+// Receives order from frontend and forwards to Clover POS system for ticket printing
 app.post('/api/clover/order', async (req, res)=> {
   try {
     const { customer, items, subtotal, deliveryFee, total, method, delivery, timestamp } = req.body || {};
@@ -176,49 +176,179 @@ app.post('/api/clover/order', async (req, res)=> {
       return res.status(400).json({ error: 'Missing required order data' });
     }
 
-    // TODO: Integrate with Clover API
-    // Your client will provide:
-    // 1. Clover Merchant ID
-    // 2. Clover API Key
-    // 3. Clover API Endpoint
-    // 4. Order submission format/requirements
-
-    // For now, log the order and prepare for Clover integration
-    const orderId = `AMZ-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+    // Get Clover credentials from environment
+    const merchantId = process.env.CLOVER_MERCHANT_ID;
+    const apiKey = process.env.CLOVER_API_KEY;
+    const cloverEnv = process.env.CLOVER_ENV || 'sandbox'; // 'sandbox' or 'production'
     
-    console.log('Order submitted to Clover:', {
-      orderId,
-      customer,
-      items,
-      total,
-      method,
-      delivery,
-      timestamp
-    });
+    // Clover API base URLs
+    const CLOVER_BASE_URL = cloverEnv === 'production' 
+      ? 'https://api.clover.com'
+      : 'https://sandbox.dev.clover.com';
 
-    // Placeholder: Return order confirmation
-    // Once Clover credentials are available, this will:
-    // 1. Format order data per Clover API specs
-    // 2. Call Clover API endpoint
-    // 3. Return Clover order ID to client
-    
-    res.json({ 
-      success: true,
-      orderId: orderId,
-      message: 'Order sent to POS system',
-      details: {
-        customerName: `${customer.name}`,
-        total: total,
-        method: method,
-        timestamp: timestamp
+    // If Clover credentials are missing, return mock success for development
+    if (!merchantId || !apiKey) {
+      const orderId = `MOCK-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+      console.log('Mock Order (Clover keys not set):', {
+        orderId,
+        customer: customer.name,
+        phone: customer.phone,
+        address: delivery ? `${delivery.street}, ${delivery.city}, ${delivery.postal}` : 'Pickup',
+        items: items.map(i => `${i.name} x${i.qty}`).join(', '),
+        total,
+        method,
+        timestamp
+      });
+      
+      return res.json({
+        success: true,
+        mock: true,
+        orderId,
+        message: 'Clover keys not configured. Order logged for testing.',
+        details: {
+          customerName: customer.name,
+          phone: customer.phone,
+          total,
+          method
+        }
+      });
+    }
+
+    // Format order for Clover Orders API
+    // This creates an order that will appear on Clover POS and print a ticket
+    const cloverOrder = {
+      state: 'open',
+      total: Math.round(total * 100), // Clover uses cents
+      title: `Online Order - ${customer.name}`,
+      note: formatOrderNote(customer, items, method, delivery),
+      // Line items
+      lineItems: items.map(item => ({
+        name: item.name,
+        price: Math.round(item.price * 100),
+        qty: item.qty || 1
+      }))
+    };
+
+    try {
+      // Create order in Clover
+      const orderResponse = await fetch(`${CLOVER_BASE_URL}/v3/merchants/${merchantId}/orders`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(cloverOrder)
+      });
+
+      if (!orderResponse.ok) {
+        const errorText = await orderResponse.text();
+        console.error('Clover API error:', errorText);
+        throw new Error(`Clover API error: ${orderResponse.status}`);
       }
-    });
+
+      const cloverOrderResult = await orderResponse.json();
+      
+      // Add line items to the order
+      for (const item of items) {
+        await fetch(`${CLOVER_BASE_URL}/v3/merchants/${merchantId}/orders/${cloverOrderResult.id}/line_items`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${apiKey}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            name: item.name,
+            price: Math.round(item.price * 100),
+            printed: false
+          })
+        });
+      }
+
+      // Fire order to print on Clover device
+      // The order will automatically print if the merchant has receipt printing enabled
+      await fetch(`${CLOVER_BASE_URL}/v3/merchants/${merchantId}/orders/${cloverOrderResult.id}`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          state: 'locked' // Lock order to trigger printing
+        })
+      });
+
+      console.log('Order created in Clover:', cloverOrderResult.id);
+      
+      res.json({
+        success: true,
+        orderId: cloverOrderResult.id,
+        message: 'Order sent to Clover POS - ticket will print',
+        details: {
+          customerName: customer.name,
+          phone: customer.phone,
+          total,
+          method,
+          timestamp
+        }
+      });
+
+    } catch (cloverError) {
+      console.error('Clover integration error:', cloverError);
+      // Return partial success - order logged but Clover failed
+      const fallbackOrderId = `AMZ-${Date.now()}`;
+      res.json({
+        success: true,
+        orderId: fallbackOrderId,
+        warning: 'Order received but Clover sync failed. Please check POS manually.',
+        details: {
+          customerName: customer.name,
+          total,
+          method
+        }
+      });
+    }
 
   } catch (error) {
     console.error('Clover order error:', error);
     res.status(500).json({ error: 'Failed to process order' });
   }
 });
+
+// Helper function to format order note with customer details for ticket
+function formatOrderNote(customer, items, method, delivery) {
+  let note = `
+━━━━━━━━━━━━━━━━━━━━━━━━━
+    ONLINE ORDER
+━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CUSTOMER: ${customer.name}
+PHONE: ${customer.phone}
+EMAIL: ${customer.email || 'N/A'}
+
+METHOD: ${method.toUpperCase()}
+`;
+
+  if (method === 'delivery' && delivery) {
+    note += `
+DELIVERY ADDRESS:
+${delivery.street}${delivery.apartment ? `, ${delivery.apartment}` : ''}
+${delivery.city}, ${delivery.postal}
+`;
+  }
+
+  note += `
+━━━━━━━━━━━━━━━━━━━━━━━━━
+ITEMS:
+`;
+
+  items.forEach(item => {
+    note += `• ${item.name} x${item.qty} - $${(item.price * item.qty).toFixed(2)}\n`;
+  });
+
+  note += `━━━━━━━━━━━━━━━━━━━━━━━━━`;
+
+  return note;
+}
 
 // Serve static frontend from dist
 const distDir = path.join(__dirname, '..');

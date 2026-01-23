@@ -26,11 +26,14 @@ export default function App(){
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [location.pathname])
+
+  // Only show specials banner on the shop/meats page
+  const showBanner = location.pathname === '/meats'
   
   return (
     <div className="app-root">
       <Header />
-      <SpecialsBanner />
+      {showBanner && <SpecialsBanner />}
       {toast && <Toast product={toast.product} qty={toast.qty} />}
       <main>
         <Routes>
