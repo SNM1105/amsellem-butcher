@@ -350,6 +350,122 @@ ITEMS:
   return note;
 }
 
+// ============================================
+// CLOVER WEBHOOK: Inventory Sync
+// ============================================
+// This webhook receives notifications when orders are completed in-store
+// and automatically updates inventory in Supabase
+app.post('/webhook/clover/inventory', async (req, res) => {
+  try {
+    const webhookSecret = process.env.CLOVER_WEBHOOK_SECRET;
+    
+    // Verify webhook signature if secret is configured
+    if (webhookSecret) {
+      const signature = req.headers['x-clover-signature'];
+      // TODO: Implement signature verification when webhook secret is provided
+      // const expectedSignature = crypto.createHmac('sha256', webhookSecret).update(JSON.stringify(req.body)).digest('hex');
+      // if (signature !== expectedSignature) {
+      //   return res.status(401).json({ error: 'Invalid signature' });
+      // }
+    }
+
+    const { type, merchantId, objectId } = req.body;
+
+    // Only process order completed events
+    if (type !== 'ORDER_UPDATED' || !objectId) {
+      return res.status(200).json({ message: 'Event ignored' });
+    }
+
+    console.log(`[Clover Webhook] Order ${objectId} updated`);
+
+    // Fetch order details from Clover
+    const cloverApiKey = process.env.CLOVER_API_KEY;
+    const cloverMerchantId = process.env.CLOVER_MERCHANT_ID;
+    const cloverEnv = process.env.CLOVER_ENV || 'sandbox';
+    const CLOVER_BASE_URL = cloverEnv === 'production' 
+      ? 'https://api.clover.com'
+      : 'https://sandbox.dev.clover.com';
+
+    if (!cloverApiKey || !cloverMerchantId) {
+      console.log('[Clover Webhook] API keys not configured - skipping inventory sync');
+      return res.status(200).json({ message: 'Keys not configured' });
+    }
+
+    // Fetch order details
+    const orderResponse = await fetch(
+      `${CLOVER_BASE_URL}/v3/merchants/${cloverMerchantId}/orders/${objectId}?expand=lineItems`,
+      {
+        headers: { 'Authorization': `Bearer ${cloverApiKey}` }
+      }
+    );
+
+    if (!orderResponse.ok) {
+      console.error('[Clover Webhook] Failed to fetch order:', await orderResponse.text());
+      return res.status(200).json({ message: 'Order fetch failed' });
+    }
+
+    const order = await orderResponse.json();
+
+    // Only process paid/completed orders
+    if (order.state !== 'locked' && order.state !== 'paid') {
+      return res.status(200).json({ message: 'Order not completed' });
+    }
+
+    console.log(`[Clover Webhook] Processing completed order with ${order.lineItems?.elements?.length || 0} items`);
+
+    // Update inventory in Supabase for each line item
+    const inventoryUpdates = [];
+    
+    for (const lineItem of order.lineItems?.elements || []) {
+      // Match Clover item to Supabase product by name or SKU
+      // You may need to adjust this matching logic based on your product naming
+      const { data: products, error } = await supabase
+        .from('products')
+        .select('id, name, stock')
+        .ilike('name', lineItem.name)
+        .limit(1);
+
+      if (error || !products || products.length === 0) {
+        console.log(`[Clover Webhook] No matching product found for: ${lineItem.name}`);
+        continue;
+      }
+
+      const product = products[0];
+      const quantitySold = lineItem.quantity || 1;
+      const newStock = Math.max(0, (product.stock || 0) - quantitySold);
+
+      // Update stock in Supabase
+      const { error: updateError } = await supabase
+        .from('products')
+        .update({ stock: newStock })
+        .eq('id', product.id);
+
+      if (updateError) {
+        console.error(`[Clover Webhook] Failed to update stock for ${product.name}:`, updateError);
+      } else {
+        console.log(`[Clover Webhook] Updated ${product.name}: ${product.stock} → ${newStock}`);
+        inventoryUpdates.push({
+          product: product.name,
+          oldStock: product.stock,
+          newStock,
+          quantitySold
+        });
+      }
+    }
+
+    res.status(200).json({
+      success: true,
+      message: `Synced ${inventoryUpdates.length} items`,
+      updates: inventoryUpdates
+    });
+
+  } catch (error) {
+    console.error('[Clover Webhook] Error:', error);
+    // Always return 200 to prevent Clover from retrying
+    res.status(200).json({ error: error.message });
+  }
+});
+
 // Serve static frontend from dist
 const distDir = path.join(__dirname, '..');
 const staticDir = path.join(distDir);

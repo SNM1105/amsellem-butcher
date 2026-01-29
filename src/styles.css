@@ -17,6 +17,7 @@
 
 body {
     margin: 0;
+    padding-top: 130px;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
     background: var(--bg);
     color: var(--text);
@@ -24,6 +25,19 @@ body {
     -moz-osx-font-smoothing: grayscale;
     font-weight: 400;
     letter-spacing: 0.01em;
+}
+
+/* Responsive body padding for header + banner */
+@media (max-width: 800px) {
+    body {
+        padding-top: 105px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding-top: 95px;
+    }
 }
 
 html, body { overflow-x: hidden }
@@ -48,17 +62,20 @@ h2 {
 .container {
     max-width: 1000px;
     margin: 0 auto;
-    padding: 24px
+    padding: 13px
 }
 
 .site-header {
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 0;
+    right: 0;
     z-index: 1000;
-    background: rgba(255, 255, 255, 0.98);
+    background: rgba(255, 255, 255, 0.571);
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-    backdrop-filter: blur(12px);
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .hebrew-blessing {
@@ -128,39 +145,47 @@ nav a {
     padding: 10px 0;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     overflow: hidden;
-    position: relative;
+    position: fixed;
+    top: 90px;
+    left: 0;
+    right: 0;
     width: 100%;
+    z-index: 999;
 }
 
-.specials-scroll {
-    display: flex;
-    white-space: nowrap;
-    animation: bannerScroll linear infinite;
-    will-change: transform;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
+/* Responsive banner positioning */
+@media (max-width: 800px) {
+    .specials-banner {
+        top: 64px;
+        padding: 8px 0;
+    }
 }
 
-@keyframes bannerScroll {
-    0% {
-        transform: translate3d(0, 0, 0);
+@media (max-width: 480px) {
+    .specials-banner {
+        top: 60px;
+        padding: 6px 0;
     }
-    100% {
-        transform: translate3d(-50%, 0, 0);
-    }
+}
+
+.specials-scroll-container {
+    display: inline-flex;
+    overflow: hidden;
+    width: 100%;
 }
 
 .ticker-item {
     display: flex;
     align-items: center;
     flex-shrink: 0;
-    padding: 0 25px;
+    padding: 0 40px;
+    will-change: transform;
 }
 
 .ticker-svg {
     width: 8px;
     height: 8px;
-    margin-right: 25px;
+    margin-right: 40px;
     flex-shrink: 0;
 }
 
@@ -174,11 +199,8 @@ nav a {
 }
 
 @media (max-width: 768px) {
-    .specials-banner {
-        padding: 6px 0;
-    }
     .ticker-item {
-        padding: 0 20px;
+        padding: 0 30px;
     }
     .ticker-text {
         font-size: 0.85rem;
@@ -186,7 +208,7 @@ nav a {
     .ticker-svg {
         width: 6px;
         height: 6px;
-        margin-right: 20px;
+        margin-right: 30px;
     }
 }
 
@@ -1416,6 +1438,11 @@ input:-webkit-autofill:focus {
     .logo { height: 46px }
 }
 
+@media (max-width: 480px) {
+    .site-header .container.header-inner { height: 60px }
+    .logo { height: 40px }
+}
+
 /* Toast Notification */
 .toast {
     position: fixed;
@@ -2016,15 +2043,15 @@ table button:last-child {
 .categories-carousel-wrapper {
     position: relative;
     width: 100%;
+    padding: 0 24px;
 }
 
 .categories-carousel {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 32px;
-    max-width: 1200px;
+    gap: 40px;
+    max-width: 1400px;
     margin: 0 auto;
-    padding: 0 24px;
 }
 
 /* Mobile: Horizontal scroll carousel */
@@ -2062,34 +2089,37 @@ table button:last-child {
 .category-card-carousel {
     position: relative;
     width: 100%;
-    height: 420px;
+    height: 500px;
     flex-shrink: 0;
-    border-radius: 0;
+    border-radius: 2px;
     overflow: hidden;
     text-decoration: none;
     color: var(--text);
     transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.5s ease;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.04);
 }
 
 /* Mobile: Card sizing */
 @media (max-width: 768px) {
     .category-card-carousel {
-        width: calc(100vw - 72px);
-        min-width: calc(100vw - 72px);
-        height: 400px;
+        width: calc(100vw - 64px);
+        min-width: 280px;
+        max-width: 400px;
+        height: 440px;
         scroll-snap-align: start;
         flex-shrink: 0;
+        border-radius: 4px;
     }
     
     .category-card-carousel:hover {
-        transform: translateY(-4px);
+        transform: translateY(-2px);
     }
 }
 
 .category-card-carousel:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 16px 50px rgba(0, 0, 0, 0.1);
+    transform: translateY(-12px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
 }
 
 .category-image-carousel {
@@ -2103,11 +2133,11 @@ table button:last-child {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .category-card-carousel:hover .category-image-carousel img {
-    transform: scale(1.15);
+    transform: scale(1.08);
 }
 
 .category-overlay {
@@ -2115,51 +2145,55 @@ table button:last-child {
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 50px 40px;
-    background: linear-gradient(to top, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.85) 40%, transparent 100%);
+    padding: 60px 44px;
+    background: linear-gradient(to top, rgba(255, 255, 255, 0.97) 0%, rgba(255, 255, 255, 0.92) 35%, rgba(255, 255, 255, 0.7) 60%, transparent 100%);
     transform: translateY(0);
     transition: all 0.5s ease;
 }
 
 @media (max-width: 768px) {
     .category-overlay {
-        padding: 24px 20px;
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
+        padding: 32px 24px;
+        background: rgba(255, 255, 255, 0.96);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
     }
 }
 
 .category-overlay h3 {
-    margin: 0 0 12px 0;
+    margin: 0 0 16px 0;
     font-family: 'Cormorant Garamond', serif;
-    font-size: 2rem;
+    font-size: 2.2rem;
     font-weight: 500;
     text-transform: none;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.04em;
     color: var(--text);
+    line-height: 1.2;
 }
 
 @media (max-width: 768px) {
     .category-overlay h3 {
-        font-size: 1.5rem;
-        margin: 0;
+        font-size: 1.8rem;
+        margin: 0 0 8px 0;
     }
 }
 
 .category-overlay p {
     margin: 0;
-    font-size: 0.95rem;
-    color: var(--text-light);
+    font-size: 1rem;
+    color: var(--muted);
     opacity: 0;
-    transform: translateY(15px);
+    transform: translateY(12px);
     transition: opacity 0.4s ease 0.1s, transform 0.4s ease 0.1s;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.01em;
+    font-weight: 400;
 }
 
 @media (max-width: 768px) {
     .category-overlay p {
-        display: none;
+        opacity: 1;
+        transform: translateY(0);
+        font-size: 0.9rem;
     }
 }
 
@@ -2200,9 +2234,14 @@ table button:last-child {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center top;
+    object-position: center;
     filter: grayscale(20%);
     transition: transform 0.6s ease;
+}
+
+/* Original Owners photo - center top positioning */
+.featured-story-layout.reverse .featured-story-image img {
+    object-position: center top;
 }
 
 .featured-story-layout:hover .featured-story-image img {
@@ -2822,8 +2861,7 @@ table button:last-child {
     position: relative;
     height: 40vh;
     min-height: 320px;
-    background: linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.6)), 
-                url('/Amsellem-store.jpg') center/cover;
+    background: linear-gradient(rgba(255, 255, 255, 0.4), rgba(210, 210, 210, 0.6));
     display: flex;
     align-items: center;
     justify-content: center;
@@ -3063,12 +3101,12 @@ table button:last-child {
     }
     
     .category-card-carousel {
-        width: 320px;
-        height: 420px;
+        width: 100%;
+        height: 460px;
     }
     
     .category-overlay h3 {
-        font-size: 1.7rem;
+        font-size: 2rem;
     }
     
     .about-content {
@@ -3910,6 +3948,11 @@ img.butcher-icon {
     .kosher-badge {
         width: 60px;
         height: 60px;
+    }
+
+    .butcher-icon {
+        width: 60px !important;
+        height: 60px !important;
     }
     
     .step-content h3 {
