@@ -47,7 +47,7 @@ export default function Home(){
   const { t } = useI18n()
   const [products, setProducts] = useState([])
   const carouselRef = useRef(null)
-  const [isMobile, setIsMobile] = useState(false)
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768)
   const [carouselWidth, setCarouselWidth] = useState(window.innerWidth - 48)
   
   // Track scroll progress for mask effect
@@ -102,18 +102,30 @@ export default function Home(){
       {/* Hero Section */}
       <section className="hero-main">
         {/* Video Background */}
-        <video 
-          className="hero-video" 
-          autoPlay 
-          muted 
-          loop 
-          playsInline
-          preload="auto"
-          poster="/Amsellem-store.jpg"
-        >
-          <source src="/amsellem background video.webm" type="video/webm" />
-          <source src="/amsellem background video.mp4" type="video/mp4" />
-        </video>
+        {isMobile ? (
+          <video 
+            className="hero-video" 
+            autoPlay 
+            muted 
+            loop 
+            playsInline
+            preload="none"
+          >
+            <source src="/amsellem video background mobile.webm" type="video/webm" />
+          </video>
+        ) : (
+          <video 
+            className="hero-video" 
+            autoPlay 
+            muted 
+            loop 
+            playsInline
+            preload="none"
+          >
+            <source src="/amsellem background video.webm" type="video/webm" />
+            <source src="/amsellem background video.mp4" type="video/mp4" />
+          </video>
+        )}
         <div className="hero-overlay">
           <div className="hero-content">
             <h1 className="hero-tagline">{t('home.heroTagline')}</h1>

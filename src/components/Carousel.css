@@ -51,13 +51,14 @@
 }
 
 .carousel-item-overlay {
-  position: relative;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
   z-index: 2;
   width: 100%;
   padding: 40px 32px;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: linear-gradient(to top, #fff5e8 0%, rgb(255 245 232) 35%, rgb(255 245 232 / 88%) 60%, #fff5e800 100%);
 }
 
 .carousel-item-title {

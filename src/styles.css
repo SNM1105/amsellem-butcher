@@ -10,6 +10,10 @@
     --border: #e0e0e0; /* light gray border */
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 * {
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
@@ -17,7 +21,7 @@
 
 body {
     margin: 0;
-    padding-top: 130px;
+    padding-top: 0;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
     background: var(--bg);
     color: var(--text);
@@ -27,15 +31,40 @@ body {
     letter-spacing: 0.01em;
 }
 
-/* Responsive body padding for header + banner */
+/* Main content area padding for fixed header */
+main {
+    padding-top: 130px;
+}
+
+/* Responsive main padding for header + banner */
 @media (max-width: 800px) {
-    body {
+    main {
         padding-top: 105px;
     }
 }
 
 @media (max-width: 480px) {
-    body {
+    main {
+        padding-top: 95px;
+    }
+}
+
+/* Home page hero should start under header with no gap */
+main > .hero-main:first-child {
+    margin-top: -130px;
+    padding-top: 130px;
+}
+
+@media (max-width: 800px) {
+    main > .hero-main:first-child {
+        margin-top: -105px;
+        padding-top: 105px;
+    }
+}
+
+@media (max-width: 480px) {
+    main > .hero-main:first-child {
+        margin-top: -95px;
         padding-top: 95px;
     }
 }
@@ -961,7 +990,7 @@ input:-webkit-autofill:focus {
 .hero-media img { display: block; width: 100%; height: 280px; object-fit: cover; object-position: center 57%; border-radius: 10px; border: 1px solid rgba(212, 175, 55, 0.2); box-shadow: 0 8px 24px rgba(0,0,0,0.1) }
 
 /* Footer */
-.site-footer { border-top: 1px solid rgba(0, 0, 0, 0.1); background: rgba(250, 250, 250, 0.95); margin-top: 24px }
+.site-footer { border-top: 1px solid rgba(0, 0, 0, 0.1); background: rgba(250, 250, 250, 0.95); margin-top: 0 }
 .footer-inner { display: flex; justify-content: space-between; align-items: flex-start; padding: 18px 24px }
 .footer-location h4 { margin: 0 0 8px 0 }
 .footer-location address a { color: var(--text); text-decoration: none }
@@ -1881,7 +1910,7 @@ table button:last-child {
 
 .hero-video {
     position: absolute;
-    top: 50%;
+    top: 55%;
     left: 50%;
     min-width: 100%;
     min-height: 100%;
@@ -1899,11 +1928,9 @@ table button:last-child {
     position: absolute;
     inset: 0;
     background: linear-gradient(
-        180deg,
-        rgba(255, 255, 255, 0.5) 0%,
-        rgba(255, 255, 255, 0.4) 40%,
-        rgba(255, 255, 255, 0.45) 60%,
-        rgba(255, 255, 255, 0.6) 100%
+        90deg,
+        rgba(255, 255, 255, 1) 20%,
+        rgba(255, 255, 255, 0) 50%
     );
     z-index: 1;
 }
@@ -1911,9 +1938,17 @@ table button:last-child {
 .hero-overlay {
     position: relative;
     z-index: 2;
-    max-width: 900px;
+    width: 100%;
+    max-width: 1200px;
     padding: 60px 40px;
     animation: heroFadeIn 1.2s ease-out;
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.hero-content {
+    max-width: 730px;
+    text-align: left;
 }
 
 @keyframes heroFadeIn {
@@ -1930,7 +1965,7 @@ table button:last-child {
 .hero-logo {
     width: 350px;
     height: auto;
-    margin: 1.5rem auto;
+    margin: 1.5rem 0;
     display: block;
     filter: brightness(0) saturate(100%) drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
     opacity: 0.98;
@@ -1971,6 +2006,7 @@ table button:last-child {
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
+    margin-left: 0;
 }
 
 .btn-hero::before {
@@ -2024,10 +2060,23 @@ table button:last-child {
 
 /* Categories Carousel */
 .categories-section {
-    background: var(--panel);
+    background: #fdf8f0;
     padding: 70px 0;
     overflow: hidden;
-    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    border-top: none;
+    position: relative;
+}
+
+.categories-section::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: linear-gradient(0deg, var(--bg) 0%, rgba(255, 255, 255, 0) 100%);
+    pointer-events: none;
+    z-index: 1;
 }
 
 .section-subtitle {
@@ -2146,8 +2195,7 @@ table button:last-child {
     left: 0;
     right: 0;
     padding: 60px 44px;
-    background: linear-gradient(to top, rgba(255, 255, 255, 0.97) 0%, rgba(255, 255, 255, 0.92) 35%, rgba(255, 255, 255, 0.7) 60%, transparent 100%);
-    transform: translateY(0);
+    background: linear-gradient(to top, #fdf8f0 0%, rgb(253 248 240) 35%, rgb(255 245 232 / 88%) 60%, #fdf8f000 100%);
     transition: all 0.5s ease;
 }
 
@@ -2206,6 +2254,19 @@ table button:last-child {
 .about-section {
     padding: 60px 0;
     background: var(--bg);
+    position: relative;
+}
+
+.about-section::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: linear-gradient(0deg, #fdf8f0 0%, rgba(255, 255, 255, 0) 100%);
+    pointer-events: none;
+    z-index: 1;
 }
 
 /* Featured Story Layout */
@@ -2376,7 +2437,20 @@ table button:last-child {
 /* Expertise Section */
 .expertise-section {
     padding: 60px 0;
-    background: var(--panel);
+    background: #fdf8f0;
+    position: relative;
+}
+
+.expertise-section::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: linear-gradient(0deg, var(--bg) 0%, rgba(255, 255, 255, 0) 100%);
+    pointer-events: none;
+    z-index: 1;
 }
 
 .expertise-grid {
@@ -2503,24 +2577,6 @@ table button:last-child {
     padding: 60px 40px;
     position: relative;
     overflow: hidden;
-}
-
-.heritage-banner-section::before,
-.heritage-banner-section::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, transparent, var(--gold), transparent);
-}
-
-.heritage-banner-section::before {
-    top: 0;
-}
-
-.heritage-banner-section::after {
-    bottom: 0;
 }
 
 .heritage-banner-inner {
@@ -2869,6 +2925,18 @@ table button:last-child {
     z-index: 1;
 }
 
+.about-hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: linear-gradient(0deg, var(--bg) 0%, rgba(255, 255, 255, 0) 100%);
+    pointer-events: none;
+    z-index: 2;
+}
+
 .about-hero-overlay {
     text-align: center;
     padding: 30px 24px;
@@ -2900,10 +2968,34 @@ table button:last-child {
     z-index: 1;
 }
 
+.about-story-section::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: linear-gradient(0deg, #fdf8f0 0%, rgba(255, 255, 255, 0) 100%);
+    pointer-events: none;
+    z-index: 2;
+}
+
 .about-story-section.alt {
-    background: var(--panel);
+    background: #fdf8f0;
     position: relative;
     z-index: 1;
+}
+
+.about-story-section.alt::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: linear-gradient(0deg, var(--bg) 0%, rgba(255, 255, 255, 0) 100%);
+    pointer-events: none;
+    z-index: 2;
 }
 
 .story-grid {
@@ -3183,8 +3275,28 @@ table button:last-child {
         min-height: 500px;
     }
     
+    .hero-main::after {
+        display: none;
+    }
+    
+    .hero-video {
+        min-width: 120%;
+        min-height: 120%;
+        width: 60%;
+        height: 60%;
+    }
+    
     .hero-overlay {
         padding: 30px 24px;
+    }
+    
+    .hero-content {
+        max-width: 100%;
+        text-align: center;
+    }
+    
+    .hero-logo {
+        margin: 1.5rem auto;
     }
 }
 
@@ -4048,7 +4160,7 @@ img.butcher-icon {
 /* Update expertise section for new design */
 .expertise-section {
     padding: 80px 0;
-    background: var(--bg);
+    background: #fdf8f0;
     position: relative;
 }
 
@@ -4166,3 +4278,5 @@ img.butcher-icon {
         margin-bottom: 16px;
     }
 }
+
+
