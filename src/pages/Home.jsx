@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { motion, useScroll, useMotionValue, useMotionValueEvent, animate } from 'framer-motion'
+import { motion, useScroll, useMotionValue, useMotionValueEvent, animate } from 'motion/react'
 import { useI18n } from '../context/I18nContext'
 import { getAllProducts } from '../lib/productsService'
 import Carousel from '../components/Carousel'
@@ -236,7 +236,7 @@ export default function Home(){
         <div className="container-wide">
           <div className="featured-story-layout">
             <div className="featured-story-image scroll-fade">
-              <img src="/amsellem salami.jpg" alt="Our Story" />
+              <img src="/amsellem salami.jpg" alt="Our Story" loading="lazy" />
             </div>
             <div className="featured-story-card scroll-fade">
               <h2>{t('home.amssellemDifference')}</h2>

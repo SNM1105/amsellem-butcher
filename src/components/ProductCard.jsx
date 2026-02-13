@@ -24,6 +24,7 @@ export default function ProductCard({ product, categoryLabel }){
           <img 
             src={product.image} 
             alt={productName} 
+            loading="lazy"
             className={`product-image ${isOutOfStock ? 'out-of-stock' : ''}`} 
           />
           {isOutOfStock && (

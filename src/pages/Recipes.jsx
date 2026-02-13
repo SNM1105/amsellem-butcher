@@ -119,7 +119,7 @@ export default function Recipes() {
             {filteredRecipes.map(recipe => (
               <div key={recipe.id} className="recipe-card scroll-fade" onClick={() => setSelectedRecipe(recipe)}>
                 <div className="recipe-image">
-                  <img src={recipe.image} alt={lang === 'fr' ? recipe.name_fr : recipe.name_en} />
+                  <img src={recipe.image} alt={lang === 'fr' ? recipe.name_fr : recipe.name_en} loading="lazy" />
                   <div className="recipe-category-badge">{t(`categories.${recipe.category}`)}</div>
                 </div>
                 <div className="recipe-card-content">

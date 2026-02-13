@@ -20,7 +20,7 @@ export default function Header(){
         </button>
 
         <Link to="/" className="brand-wrap" onClick={()=>setOpen(false)}>
-          <img src="/amsellem_logo.png" alt="Amsellem logo" className="logo" />
+          <img src="/Maison-Amsellem_tete.png" alt="Amsellem logo" className="logo" />
         </Link>
 
         <nav className="desktop-nav">

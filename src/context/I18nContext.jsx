@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import React, { createContext, useContext, useCallback, useEffect, useMemo, useState } from 'react'
 
 const I18nContext = createContext()
 
@@ -611,7 +611,7 @@ export function I18nProvider({ children }){
     try{ return localStorage.getItem('ams_lang') || 'en' } catch{ return 'en' }
   })
   useEffect(() => { try{ localStorage.setItem('ams_lang', lang) } catch{} }, [lang])
-  const toggleLang = () => setLang(prev => prev === 'en' ? 'fr' : 'en')
+  const toggleLang = useCallback(() => setLang(prev => prev === 'en' ? 'fr' : 'en'), [])
 
   const t = useMemo(() => (key) => {
     let cur = dict[lang]
@@ -619,10 +619,12 @@ export function I18nProvider({ children }){
     return cur ?? key
   }, [lang])
 
-  const tCategory = (cat) => dict[lang].categories[cat] ?? cat
+  const tCategory = useCallback((cat) => dict[lang].categories[cat] ?? cat, [lang])
+
+  const value = useMemo(() => ({ lang, setLang, toggleLang, t, tCategory }), [lang, toggleLang, t, tCategory])
 
   return (
-    <I18nContext.Provider value={{ lang, setLang, toggleLang, t, tCategory }}>
+    <I18nContext.Provider value={value}>
       {children}
     </I18nContext.Provider>
   )

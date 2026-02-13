@@ -54,7 +54,7 @@ export default function About(){
         <div className="container-wide">
           <div className="featured-story-layout">
             <div className="featured-story-image scroll-fade">
-              <img src="/Ams-Photo-Landscape.jpg" alt="Heritage" />
+              <img src="/Ams-Photo-Landscape.jpg" alt="Heritage" loading="lazy" />
             </div>
             <div className="featured-story-card scroll-fade">
               <span className="story-year">1928</span>
@@ -74,7 +74,7 @@ export default function About(){
               <p className="featured-description">{t('about.foundersStory')}</p>
             </div>
             <div className="featured-story-image scroll-fade">
-              <img src="/Ams-Photo-profile.jpg" alt="The Original Owners" />
+              <img src="/Ams-Photo-profile.jpg" alt="The Original Owners" loading="lazy" />
             </div>
           </div>
         </div>
@@ -84,7 +84,7 @@ export default function About(){
         <div className="container-wide">
           <div className="featured-story-layout">
             <div className="featured-story-image scroll-fade">
-              <img src="/amsellem salami.jpg" alt="Today" />
+              <img src="/amsellem salami.jpg" alt="Today" loading="lazy" />
             </div>
             <div className="featured-story-card scroll-fade">
               <span className="story-year">{t('about.today')}</span>

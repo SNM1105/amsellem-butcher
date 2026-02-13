@@ -100,10 +100,10 @@ h2 {
     left: 0;
     right: 0;
     z-index: 1000;
-    background: rgba(255, 255, 255, 0.571);
+    background: rgba(255, 255, 255, 0.92);
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
@@ -136,6 +136,7 @@ h2 {
     display: flex;
     align-items: center;
     gap: 12px;
+    margin-left: -100px;
 }
 
 .logo {
@@ -198,9 +199,20 @@ nav a {
 }
 
 .specials-scroll-container {
-    display: inline-flex;
+    display: flex;
     overflow: hidden;
     width: 100%;
+}
+
+@keyframes ticker-scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+}
+
+.ticker-track {
+    display: flex;
+    flex-shrink: 0;
+    animation: ticker-scroll 120s linear infinite;
 }
 
 .ticker-item {
@@ -208,7 +220,6 @@ nav a {
     align-items: center;
     flex-shrink: 0;
     padding: 0 40px;
-    will-change: transform;
 }
 
 .ticker-svg {

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, Suspense, lazy } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import Header from './components/Header'
 import Footer from './components/Footer'
@@ -6,17 +6,19 @@ import SpecialsBanner from './components/SpecialsBanner'
 import Toast from './components/Toast'
 import ProtectedRoute from './components/ProtectedRoute'
 import { useCart } from './context/CartContext'
-import Home from './pages/Home'
-import Products from './pages/Products'
-import Recipes from './pages/Recipes'
-import About from './pages/About'
-import Contact from './pages/Contact'
-import Checkout from './pages/Checkout'
-import CartPage from './pages/CartPage'
-import Privacy from './pages/Privacy'
-import Terms from './pages/Terms'
-import AdminLogin from './pages/AdminLogin'
-import AdminDashboard from './pages/AdminDashboard'
+
+// Lazy-load page components for code splitting
+const Home = lazy(() => import('./pages/Home'))
+const Products = lazy(() => import('./pages/Products'))
+const Recipes = lazy(() => import('./pages/Recipes'))
+const About = lazy(() => import('./pages/About'))
+const Contact = lazy(() => import('./pages/Contact'))
+const Checkout = lazy(() => import('./pages/Checkout'))
+const CartPage = lazy(() => import('./pages/CartPage'))
+const Privacy = lazy(() => import('./pages/Privacy'))
+const Terms = lazy(() => import('./pages/Terms'))
+const AdminLogin = lazy(() => import('./pages/AdminLogin'))
+const AdminDashboard = lazy(() => import('./pages/AdminDashboard'))
 
 export default function App(){
   const { toast } = useCart()
@@ -36,6 +38,7 @@ export default function App(){
       {showBanner && <SpecialsBanner />}
       {toast && <Toast product={toast.product} qty={toast.qty} />}
       <main>
+        <Suspense fallback={<div style={{ minHeight: '60vh' }} />}>
         <Routes>
           <Route path="/" element={<Home/>} />
           <Route path="/about" element={<About/>} />
@@ -56,6 +59,7 @@ export default function App(){
             } 
           />
         </Routes>
+        </Suspense>
       </main>
       <Footer />
     </div>
