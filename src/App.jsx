@@ -37,7 +37,7 @@ export default function App(){
       <Header />
       {showBanner && <SpecialsBanner />}
       {toast && <Toast product={toast.product} qty={toast.qty} />}
-      <main>
+      <main className={showBanner ? 'with-banner' : ''}>
         <Suspense fallback={<div style={{ minHeight: '60vh' }} />}>
         <Routes>
           <Route path="/" element={<Home/>} />

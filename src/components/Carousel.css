@@ -107,14 +107,25 @@
 
 @media (max-width: 768px) {
   .carousel-item-overlay {
-    padding: 24px 20px;
+    padding: 26px 20px 22px;
+    background: linear-gradient(180deg, rgba(15, 12, 10, 0.18) 0%, rgba(15, 12, 10, 0.72) 34%, rgba(15, 12, 10, 0.94) 100%);
+    border-top: 1px solid rgba(201, 176, 135, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
   }
   
   .carousel-item-title {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
+    color: #ffffff;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
   
   .carousel-item-description {
-    font-size: 0.875rem;
+    font-size: 0.78rem;
+    color: var(--gold);
+    opacity: 1;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
   }
 }

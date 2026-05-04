@@ -109,7 +109,7 @@ export default function Home(){
             muted 
             loop 
             playsInline
-            preload="none"
+            preload="auto"
           >
             <source src="/amsellem video background mobile.webm" type="video/webm" />
           </video>
@@ -120,17 +120,14 @@ export default function Home(){
             muted 
             loop 
             playsInline
-            preload="none"
+            preload="auto"
           >
             <source src="/amsellem background video.webm" type="video/webm" />
             <source src="/amsellem background video.mp4" type="video/mp4" />
           </video>
         )}
         <div className="hero-overlay">
-          <div className="hero-content">
-            <h1 className="hero-tagline">{t('home.heroTagline')}</h1>
-            <img src="/amsellem_logo.png" alt="Amsellem" className="hero-logo" />
-            <h2 className="hero-subtitle">{t('home.heroSubtitle')}</h2>
+          <div className="hero-content hero-content-centered">
             <Link to="/meats" className="btn-hero">{t('home.heroButton')}</Link>
           </div>
         </div>
@@ -172,10 +169,10 @@ export default function Home(){
                   },
                   {
                     id: 2,
-                    title: t('home.categoryChicken'),
+                    title: t('home.categoryCharcuterie'),
                     description: t('home.discoverSelection'),
-                    image: chickenProducts[0]?.image || '/img/Whole Chicken.JPG',
-                    link: '/meats?category=Chicken'
+                    image: '/img/Kofta.JPG',
+                    link: '/meats?category=Charcuterie'
                   },
                   {
                     id: 3,
@@ -193,53 +190,48 @@ export default function Home(){
               />
             </div>
           ) : (
-            <motion.div 
-              ref={carouselRef}
-              className="categories-carousel-wrapper"
-            >
-              <div className="categories-carousel">
-                <Link to="/meats?category=Beef" className="category-card-carousel">
-                  <div className="category-image-carousel">
-                    <img src={beefProducts[0]?.image || '/img/Rib Eye.JPG'} alt="Beef" />
-                    <div className="category-overlay">
-                      <h3>{t('home.categoryBeef')}</h3>
-                      <p>{t('home.discoverSelection')}</p>
-                    </div>
+            <div className="categories-grid-2-1">
+              <Link to="/meats?category=Beef" className="category-card-carousel">
+                <div className="category-image-carousel">
+                  <img src={beefProducts[0]?.image || '/img/Rib Eye.JPG'} alt="Beef" loading="lazy" />
+                  <div className="category-overlay">
+                    <h3>{t('home.categoryBeef')}</h3>
+                    <p>{t('home.discoverSelection')}</p>
                   </div>
-                </Link>
-                <Link to="/meats?category=Chicken" className="category-card-carousel">
-                  <div className="category-image-carousel">
-                    <img src={chickenProducts[0]?.image || '/img/Whole Chicken.JPG'} alt="Chicken" />
-                    <div className="category-overlay">
-                      <h3>{t('home.categoryChicken')}</h3>
-                      <p>{t('home.discoverSelection')}</p>
-                    </div>
+                </div>
+              </Link>
+              <Link to="/meats?category=Charcuterie" className="category-card-carousel">
+                <div className="category-image-carousel">
+                  <img src="/img/Kofta.JPG" alt="Charcuterie" loading="lazy" />
+                  <div className="category-overlay">
+                    <h3>{t('home.categoryCharcuterie')}</h3>
+                    <p>{t('home.discoverSelection')}</p>
                   </div>
-                </Link>
-                <Link to="/meats?category=Premade" className="category-card-carousel">
-                  <div className="category-image-carousel">
-                    <img src={premadeProducts[0]?.image || '/img/Kofta.JPG'} alt="Premade" />
-                    <div className="category-overlay">
-                      <h3>{t('home.categoryPremade')}</h3>
-                      <p>{t('home.discoverSelection')}</p>
-                    </div>
+                </div>
+              </Link>
+              <Link to="/meats?category=Premade" className="category-card-carousel category-card-wide">
+                <div className="category-image-carousel">
+                  <img src={premadeProducts[0]?.image || '/img/Kofta.JPG'} alt="Prepared Plates" loading="lazy" />
+                  <div className="category-overlay">
+                    <h3>{t('home.categoryPremade')}</h3>
+                    <p>{t('home.discoverSelection')}</p>
                   </div>
-                </Link>
-              </div>
-            </motion.div>
+                </div>
+              </Link>
+            </div>
           )}
         </div>
       </section>
 
-      {/* About Section - Featured Story */}
+      {/* About Section - The Amsellem Difference */}
       <section className="about-section featured-story">
         <div className="container-wide">
-          <div className="featured-story-layout">
-            <div className="featured-story-image scroll-fade">
-              <img src="/amsellem salami.jpg" alt="Our Story" loading="lazy" />
+          <div className="featured-story-layout scroll-fade">
+            <div className="featured-story-image">
+              <img src="/amsellem salami.jpg" alt="Amsellem Charcuterie" loading="lazy" />
             </div>
-            <div className="featured-story-card scroll-fade">
-              <h2>{t('home.amssellemDifference')}</h2>
+            <div className="featured-story-card">
+              <p className="featured-label">{t('home.amssellemDifference')}</p>
               <p className="featured-description">
                 {t('home.amssellemDifferenceText')}
               </p>
