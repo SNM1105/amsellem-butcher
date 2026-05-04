@@ -73,7 +73,7 @@ main {
 }
 
 main.with-banner {
-    padding-top: 160px;
+    padding-top: 200px;
 }
 
 /* Responsive main padding for header + banner */
@@ -254,7 +254,7 @@ nav a {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     overflow: hidden;
     position: fixed;
-    top: 110px;
+    top: 170px;
     left: 0;
     right: 0;
     width: 100%;

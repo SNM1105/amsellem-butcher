@@ -15,6 +15,7 @@ const dict = {
       categoriesSubtitle: 'Swipe to explore our selection',
       categoryBeef: 'PREMIUM BEEF',
       categoryChicken: 'FRESH CHICKEN',
+      categoryCharcuterie: 'CHARCUTERIE',
       categoryLamb: 'TENDER LAMB',
       categoryPremade: 'PREMADE FOOD',
       categoryVeal: 'CHOICE VEAL',
@@ -59,7 +60,7 @@ const dict = {
       established: 'ESTABLISHED'
     },
     products: { title: 'Our Meats & Premade Foods', all: 'All' },
-    categories: { Beef: 'Beef', Lamb: 'Lamb', Chicken: 'Chicken', Veal: 'Veal', Spices: 'Spices', Oil: 'Oil', Premade: 'Premade' },
+    categories: { Beef: 'Beef', Lamb: 'Lamb', Chicken: 'Chicken', Veal: 'Veal', Spices: 'Spices', Oil: 'Oil', Premade: 'Premade', Charcuterie: 'Charcuterie' },
     product: { addToBasket: 'Add to Basket', each: 'each', outOfStock: 'Out of Stock' },
     products_list: {
       b1_name: 'Ribeye Steak (per lb)',
@@ -316,6 +317,7 @@ const dict = {
       categoriesSubtitle: 'Glissez pour explorer notre sélection',
       categoryBeef: 'BŒUF PREMIUM',
       categoryChicken: 'POULET FRAIS',
+      categoryCharcuterie: 'CHARCUTERIE',
       categoryLamb: 'AGNEAU TENDRE',
       categoryPremade: 'PLATS PRÉPARÉS',
       categoryVeal: 'VEAU DE CHOIX',
@@ -360,7 +362,7 @@ const dict = {
       established: 'FONDÉ EN'
     },
     products: { title: 'Nos viandes et plats préparés', all: 'Toutes' },
-    categories: { Beef: 'Boeuf', Lamb: 'Agneau', Chicken: 'Poulet', Veal: 'Veau', Spices: 'Épices', Oil: 'Huiles', Premade: 'Plats préparés' },
+    categories: { Beef: 'Boeuf', Lamb: 'Agneau', Chicken: 'Poulet', Veal: 'Veau', Spices: 'Épices', Oil: 'Huiles', Premade: 'Plats préparés', Charcuterie: 'Charcuterie' },
     product: { addToBasket: 'Ajouter au panier', each: 'unité', outOfStock: 'Rupture de Stock' },
     products_list: {
       b1_name: 'Steak Ribeye (par lb)',
