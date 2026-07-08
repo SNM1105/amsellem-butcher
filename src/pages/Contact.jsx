@@ -15,7 +15,6 @@ export default function Contact(){
 
   return (
     <section className="container contact-page">
-      <h1>{t('contact.title')}</h1>
       <div className="contact-content">
         <div className="contact-form-wrapper">
           <h2>{t('contact.title')}</h2>
