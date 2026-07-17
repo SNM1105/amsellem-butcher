@@ -7,23 +7,33 @@ export default function ProductCard({ product, categoryLabel }){
   const { t, lang } = useI18n()
   const [weight, setWeight] = useState(1)
   
-  // Use the appropriate language field from database
-  const productName = lang === 'fr' && product.name_fr ? product.name_fr : product.name_en
-  const productDesc = lang === 'fr' && product.description_fr ? product.description_fr : product.description_en
-  
+  const productName = (lang === 'fr' && product.name_fr) ? product.name_fr : product.name_en
+  const productDesc = (lang === 'fr' && product.description_fr) ? product.description_fr : product.description_en
   const isPerLb = productName.toLowerCase().includes('per lb') || productName.toLowerCase().includes('par lb')
+  const isOutOfStock = product.stock === 0
 
   const handleAddItem = () => {
-    if (isPerLb) {
-      addItem({...product, weight}, weight)
-    } else {
-      addItem(product, 1)
-    }
+    if (isOutOfStock) return
+    addItem(isPerLb ? {...product, weight} : product, isPerLb ? weight : 1)
   }
 
   return (
     <div className="product-card">
-      {product.image && <img src={product.image} alt={productName} className="product-image" />}
+      {product.image && (
+        <div className="product-image-wrapper">
+          <img 
+            src={product.image} 
+            alt={productName} 
+            loading="lazy"
+            className={`product-image ${isOutOfStock ? 'out-of-stock' : ''}`} 
+          />
+          {isOutOfStock && (
+            <div className="out-of-stock-overlay">
+              <span>{t('product.outOfStock')}</span>
+            </div>
+          )}
+        </div>
+      )}
       <div className="product-info">
         <h3>{productName}</h3>
         <p className="muted">{categoryLabel ?? product.category}</p>
@@ -45,7 +55,14 @@ export default function ProductCard({ product, categoryLabel }){
             <div className="estimated-price">${(product.price * weight).toFixed(2)}</div>
           </div>
         )}
-        <button className="btn" onClick={handleAddItem}>{t('product.addToBasket')}</button>
+        <button 
+          className="btn" 
+          onClick={handleAddItem}
+          disabled={isOutOfStock}
+          style={{ opacity: isOutOfStock ? 0.5 : 1, cursor: isOutOfStock ? 'not-allowed' : 'pointer' }}
+        >
+          {isOutOfStock ? t('product.outOfStock') : t('product.addToBasket')}
+        </button>
       </div>
     </div>
   )

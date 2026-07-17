@@ -1,23 +1,67 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import React, { createContext, useContext, useCallback, useEffect, useMemo, useState } from 'react'
 
 const I18nContext = createContext()
 
 const dict = {
   en: {
-    nav: { meats: 'Meats', about: 'About', contact: 'Contact', cart: 'Cart' },
+    nav: { shop: 'Shop', recipes: 'Recipes', story: 'Our Story', contact: 'Contact', cart: 'Cart' },
     home: {
       title: 'Amsellem — Kosher Butcherie',
       lead: 'Tradition, craftsmanship, and care — serving our community with the finest kosher meats and prepared foods.',
+      heroTagline: 'Nearly 100 Years of Tradition',
+      heroSubtitle: 'KOSHER BUTCHERY SINCE 1928',
+      heroButton: 'SHOP NOW',
+      categoriesTitle: 'Browse By Category',
+      categoriesSubtitle: 'Swipe to explore our selection',
+      categoryBeef: 'PREMIUM BEEF',
+      categoryChicken: 'FRESH CHICKEN',
+      categoryCharcuterie: 'CHARCUTERIE',
+      categoryLamb: 'TENDER LAMB',
+      categoryPremade: 'PREMADE FOOD',
+      categoryVeal: 'CHOICE VEAL',
+      discoverSelection: 'Discover our selection →',
+      featured: 'À la Une',
+      amssellemDifference: 'The Amsellem Difference',
+      amssellemDifferenceText: 'Family-owned and operated, we bring you the finest selection of kosher meats. Every cut is carefully selected and prepared following strict kosher standards, ensuring you receive only the best quality for your family\'s table.',
+      learnMore: 'LEARN MORE',
+      whyChooseTitle: 'Why Choose Amsellem?',
+      ourExpertise: 'Our Expertise',
+      yearsExperience: 'Years of Experience',
+      heritageTagline: 'Combining tradition and modernity, Amsellem has been serving the community with the finest kosher meats.',
+      expertButcheryTitle: 'EXPERT BUTCHERY',
+      expertButcheryText: 'Our skilled butchers provide custom cuts and personalized service to meet your exact needs.',
+      strictlyKosherTitle: 'STRICTLY KOSHER',
+      strictlyKosherText: 'Certified by COR, Montreal Kosher, and OU. We uphold the highest standards in every product.',
+      visitShopTitle: 'VISIT OUR SHOP',
+      visitShopText: 'Experience our full selection of premium cuts and specialty items in person.',
+      getDirections: 'Get directions →',
+      stayConnected: 'Stay Connected',
+      stayConnectedText: 'Follow us for weekly specials, recipe ideas, and updates on our latest offerings!',
       ctaShop: 'Shop Meats',
       ctaHistory: 'Our History',
       story: 'Our Story',
-      storyDesc: 'From humble beginnings to a cornerstone of the neighborhood — Amsellem has upheld kosher standards with dedication and pride.',
-      history1: 'Founded on principles of faith and family, our butcherie has served generations with carefully prepared cuts and warm service. Every order carries our commitment to quality.',
-      history2: 'Our team blends time-honored techniques with modern standards — ensuring each selection meets kosher requirements and your expectations.'
+      storyDesc: 'It all began in 1928 in the lively streets of Casablanca. Driven by his craft, Jacob Amsellem opened his butcher shop with one goal: to offer products of uncompromising quality.',
+      history1: 'His artisanal know-how and famous beef dry sausage recipe quickly became a benchmark within the community.',
+      history2: 'From one generation to the next, the Amsellem family has passed down more than recipes — it has passed down passion, discipline, and deep respect for the trade. That legacy crossed the Mediterranean, took root in Europe, and crossed the Atlantic to write a new chapter in Montreal.',
+      featuredTitle: 'Featured Products',
+      featuredSubtitle: 'Hand-picked selections from our premium collection',
+      viewAll: 'View All Products',
+      certTitle: 'Kosher Certifications',
+      certSubtitle: 'Certified and trusted by leading kosher authorities',
+      heritageTitle: 'Heritage & Tradition',
+      craftsmanshipTitle: 'Craftsmanship & Quality',
+      valuesTitle: 'Our Values',
+      traditionTitle: 'Tradition',
+      traditionDesc: 'Generations of kosher expertise passed down through our family',
+      qualityTitle: 'Quality',
+      qualityDesc: 'Only the finest cuts meeting the highest standards',
+      communityTitle: 'Community',
+      communityDesc: 'Serving our neighborhood with care and dedication',
+      established: 'ESTABLISHED'
     },
     products: { title: 'Our Meats & Premade Foods', all: 'All' },
-    categories: { Beef: 'Beef', Lamb: 'Lamb', Chicken: 'Chicken', Veal: 'Veal', Spices: 'Spices', Oil: 'Oil', Premade: 'Premade' },
-    product: { addToBasket: 'Add to Basket', each: 'each' },
+    categories: { Beef: 'Beef', Lamb: 'Lamb', Chicken: 'Chicken', Veal: 'Veal', Spices: 'Spices', Oil: 'Oil', Premade: 'Premade', Charcuterie: 'Charcuterie' },
+    product: { addToBasket: 'Add to Basket', each: 'each', outOfStock: 'Out of Stock' },
     products_list: {
       b1_name: 'Ribeye Steak (per lb)',
       b1_desc: 'Well-marbled ribeye, Kosher-cut.',
@@ -169,15 +213,41 @@ const dict = {
       summary: 'Order Summary',
       subtotal: 'Subtotal',
       fee: 'Delivery',
+      gst: 'GST (5%)',
+      qst: 'QST (9.975%)',
+      taxes: 'Taxes',
       total: 'Total',
-      payWith: 'Submit Order to Clover',
-      submitOrder: 'Submit Order',
-      processing: 'Submitting order...',
-      cloverNote: 'Your order will be sent to the register. Payment will be processed at the counter.'
+      payWith: 'Pay with Clover (CAD)',
+      submitOrder: 'Pay Now',
+      processing: 'Processing payment...',
+      cloverNote: 'Secure Clover payment. Immediate capture in CAD with GST/QST included.'
     },
-    contact: { title: 'Contact Us', name: 'Name', email: 'Email', message: 'Message', send: 'Send Message', thanks: 'Thanks! We received your message (demo).' },
+    contact: { 
+      title: 'Contact Us', 
+      name: 'Name', 
+      email: 'Email', 
+      message: 'Message', 
+      send: 'Send Message', 
+      thanks: 'Thanks! We received your message (demo).',
+      openingHours: 'Opening Hours',
+      monday: 'Monday',
+      tuesday: 'Tuesday',
+      wednesday: 'Wednesday',
+      thursday: 'Thursday',
+      friday: 'Friday',
+      saturday: 'Saturday',
+      sunday: 'Sunday',
+      closed: 'Closed'
+    },
     about: {
       title: 'About Amsellem',
+      ourHistory: 'Our History',
+      today: 'Today',
+      whatWeBelieve: 'What We Believe',
+      foundingStory: 'It all began in 1928 in the lively streets of Casablanca. Driven by his craft, Jacob Amsellem opened his butcher shop with one goal: to offer products of uncompromising quality. His artisanal know-how and famous beef dry sausage recipe quickly became a benchmark within the community.',
+      foundersTitle: 'The Original Owners',
+      foundersStory: 'From one generation to the next, the Amsellem family has passed down more than recipes — it has passed down passion, discipline, and deep respect for the trade. That legacy crossed the Mediterranean, took root in Europe, and crossed the Atlantic to write a new chapter in Montreal.',
+      todayStory: 'In 2015, Daniel Amsellem, heir to three generations of master butchers, opened Maison Amsellem in Ville Saint-Laurent with a clear mission: to share a family craft nearly a century old without ever compromising on quality. Today, every cut of meat, every artisanal charcuterie, and every house-made preparation tells that story. It is a story of tradition, innovation, and passion that has brought families together around the same table for nearly 100 years. Welcome to Maison Amsellem, where every product carries a family heritage and the taste of excellence.',
       p1: 'Welcome to Amsellem, your neighborhood Kosher butcher. We provide high-quality cuts, prepared according to kosher standards, with friendly service and a deep connection to tradition.',
       p2: 'Family-owned and operated — serving the community with care.'
     },
@@ -186,7 +256,43 @@ const dict = {
       address: '2079 Rue Saint-Louis',
       city: 'Saint-Laurent, QC',
       postal: 'H4M 1P1',
-      privacy: 'Privacy Policy'
+      privacy: 'Privacy Policy',
+      terms: 'Terms of Use'
+    },
+    admin: {
+      dashboard: 'Admin Dashboard',
+      addProduct: 'Add Product',
+      logout: 'Logout',
+      specialsBanner: 'Specials Banner',
+      edit: 'Edit',
+      save: 'Save',
+      cancel: 'Cancel',
+      delete: 'Delete',
+      bannerTextEn: 'Banner Text (English)',
+      bannerTextFr: 'Banner Text (French)',
+      addNewProduct: 'Add New Product',
+      editProduct: 'Edit Product',
+      nameEn: 'Name (English)',
+      nameFr: 'Name (French)',
+      price: 'Price',
+      category: 'Category',
+      selectCategory: 'Select a category...',
+      descEn: 'Description (English)',
+      descFr: 'Description (French)',
+      stock: 'Stock',
+      imageUrl: 'Image URL',
+      create: 'Create',
+      image: 'Image',
+      name: 'Name',
+      actions: 'Actions',
+      loading: 'Loading...',
+      deleteConfirm: 'Are you sure you want to delete this product?',
+      updateSuccess: 'Product updated successfully!',
+      updateError: 'Error updating product: ',
+      deleteError: 'Error deleting product: ',
+      createError: 'Error creating product: ',
+      specialUpdateSuccess: 'Special banner updated successfully!',
+      specialUpdateError: 'Error updating special: '
     },
     privacy: {
       title: 'Privacy Policy',
@@ -200,20 +306,64 @@ const dict = {
     }
   },
   fr: {
-    nav: { meats: 'Viandes', about: 'À propos', contact: 'Contact', cart: 'Panier' },
+    nav: { shop: 'Produits', recipes: 'Recettes', story: 'Notre Histoire', contact: 'Contact', cart: 'Panier' },
     home: {
       title: 'Amsellem — Boucherie Cacher',
       lead: 'Tradition, savoir-faire et attention — nous servons notre communauté avec les meilleures viandes casher et des plats préparés.',
+      heroTagline: 'Près de 100 Ans de Tradition',
+      heroSubtitle: 'BOUCHERIE CASHER DEPUIS 1928',
+      heroButton: 'MAGASINER',
+      categoriesTitle: 'Parcourir par Catégorie',
+      categoriesSubtitle: 'Glissez pour explorer notre sélection',
+      categoryBeef: 'BŒUF PREMIUM',
+      categoryChicken: 'POULET FRAIS',
+      categoryCharcuterie: 'CHARCUTERIE',
+      categoryLamb: 'AGNEAU TENDRE',
+      categoryPremade: 'PLATS PRÉPARÉS',
+      categoryVeal: 'VEAU DE CHOIX',
+      discoverSelection: 'Découvrir notre sélection →',
+      featured: 'À la Une',
+      amssellemDifference: 'La Différence Amsellem',
+      amssellemDifferenceText: 'Entreprise familiale, nous vous offrons la meilleure sélection de viandes casher. Chaque coupe est soigneusement sélectionnée et préparée selon des normes casher strictes, garantissant la meilleure qualité pour votre table familiale.',
+      learnMore: 'EN SAVOIR PLUS',
+      whyChooseTitle: 'Pourquoi Choisir Amsellem?',
+      ourExpertise: 'Notre Expertise',
+      yearsExperience: 'Ans d\'Expérience',
+      heritageTagline: 'Alliant tradition et modernité, Amsellem sert la communauté avec les meilleures viandes casher.',
+      expertButcheryTitle: 'EXPERTISE EN BOUCHERIE',
+      expertButcheryText: 'Nos bouchers qualifiés offrent des coupes personnalisées et un service adapté à vos besoins.',
+      strictlyKosherTitle: 'STRICTEMENT CASHER',
+      strictlyKosherText: 'Certifié par COR, Montreal Kosher et OU. Nous maintenons les plus hauts standards dans chaque produit.',
+      visitShopTitle: 'VISITEZ NOTRE MAGASIN',
+      visitShopText: 'Découvrez notre sélection complète de coupes premium et produits spécialisés en personne.',
+      getDirections: 'Obtenir l\'itinéraire →',
+      stayConnected: 'Restez Connecté',
+      stayConnectedText: 'Suivez-nous pour les spéciaux hebdomadaires, idées de recettes et nos dernières nouveautés!',
       ctaShop: 'Voir les viandes',
       ctaHistory: 'Notre histoire',
       story: 'Notre histoire',
-      storyDesc: 'Depuis des débuts modestes jusqu\'à devenir un pilier du quartier — Amsellem a maintenu les standards casher avec dévouement et fierté.',
-      history1: 'Fondée sur des principes de foi et de famille, notre boucherie sert des générations avec des pièces soigneusement préparées et un service chaloureux. Chaque commande porte notre engagement de qualité.',
-      history2: 'Notre équipe allie des techniques éprouvées à des standards modernes — chaque sélection respecte les exigences casher et vos attentes.'
+      storyDesc: 'Tout a commencé en 1928, dans les ruelles animées de Casablanca. Passionné par son métier, Jacob Amsellem ouvre sa charcuterie avec une seule ambition : offrir des produits d\'une qualité irréprochable.',
+      history1: 'Son savoir-faire artisanal et sa célèbre recette de saucisson sec de bœuf deviennent rapidement une référence au sein de la communauté.',
+      history2: 'De génération en génération, la famille Amsellem transmet bien plus que des recettes : elle transmet une passion, une exigence et un profond respect du métier. Cet héritage traverse la Méditerranée, s\'établit en Europe, puis franchit l\'Atlantique pour écrire un nouveau chapitre à Montréal.',
+      featuredTitle: 'Produits en Vedette',
+      featuredSubtitle: 'Sélections triées sur le volet de notre collection premium',
+      viewAll: 'Voir Tous les Produits',
+      certTitle: 'Certifications Casher',
+      certSubtitle: 'Certifiés et approuvés par les principales autorités casher',
+      heritageTitle: 'Héritage & Tradition',
+      craftsmanshipTitle: 'Savoir-faire & Qualité',
+      valuesTitle: 'Nos Valeurs',
+      traditionTitle: 'Tradition',
+      traditionDesc: 'Des générations d\'expertise casher transmises dans notre famille',
+      qualityTitle: 'Qualité',
+      qualityDesc: 'Seulement les meilleures coupes respectant les plus hauts standards',
+      communityTitle: 'Communauté',
+      communityDesc: 'Servir notre quartier avec soin et dévouement',
+      established: 'FONDÉ EN'
     },
     products: { title: 'Nos viandes et plats préparés', all: 'Toutes' },
-    categories: { Beef: 'Boeuf', Lamb: 'Agneau', Chicken: 'Poulet', Veal: 'Veau', Spices: 'Épices', Oil: 'Huiles', Premade: 'Plats préparés' },
-    product: { addToBasket: 'Ajouter au panier', each: 'unité' },
+    categories: { Beef: 'Boeuf', Lamb: 'Agneau', Chicken: 'Poulet', Veal: 'Veau', Spices: 'Épices', Oil: 'Huiles', Premade: 'Plats préparés', Charcuterie: 'Charcuterie' },
+    product: { addToBasket: 'Ajouter au panier', each: 'unité', outOfStock: 'Rupture de Stock' },
     products_list: {
       b1_name: 'Steak Ribeye (par lb)',
       b1_desc: 'Ribeye bien persillé, coupe casher.',
@@ -365,15 +515,41 @@ const dict = {
       summary: 'Récapitulatif de commande',
       subtotal: 'Sous-total',
       fee: 'Livraison',
+      gst: 'TPS (5%)',
+      qst: 'TVQ (9,975%)',
+      taxes: 'Taxes',
       total: 'Total',
-      payWith: 'Soumettre la commande à Clover',
-      submitOrder: 'Soumettre la commande',
-      processing: 'Envoi de la commande...',
-      cloverNote: 'Votre commande sera envoyée à la caisse. Le paiement sera traité au comptoir.'
+      payWith: 'Payer avec Clover (CAD)',
+      submitOrder: 'Payer maintenant',
+      processing: 'Traitement du paiement...',
+      cloverNote: 'Paiement Clover sécurisé. Capture immédiate en CAD avec TPS/TVQ incluses.'
     },
-    contact: { title: 'Nous contacter', name: 'Nom', email: 'Email', message: 'Message', send: 'Envoyer', thanks: 'Merci ! Nous avons bien reçu votre message (démo).' },
+    contact: { 
+      title: 'Nous Contacter', 
+      name: 'Nom', 
+      email: 'Courriel', 
+      message: 'Message', 
+      send: 'Envoyer', 
+      thanks: 'Merci! Nous avons reçu votre message (démo).',
+      openingHours: 'Heures d\'Ouverture',
+      monday: 'Lundi',
+      tuesday: 'Mardi',
+      wednesday: 'Mercredi',
+      thursday: 'Jeudi',
+      friday: 'Vendredi',
+      saturday: 'Samedi',
+      sunday: 'Dimanche',
+      closed: 'Fermé'
+    },
     about: {
-      title: 'À propos d’Amsellem',
+      title: 'À propos d\'Amsellem',
+      ourHistory: 'Notre Histoire',
+      today: 'Aujourd\'hui',
+      whatWeBelieve: 'Ce Que Nous Croyons',
+      foundingStory: 'Tout a commencé en 1928, dans les ruelles animées de Casablanca. Passionné par son métier, Jacob Amsellem ouvre sa charcuterie avec une seule ambition : offrir des produits d\'une qualité irréprochable. Son savoir-faire artisanal et sa célèbre recette de saucisson sec de bœuf deviennent rapidement une référence au sein de la communauté.',
+      foundersTitle: 'Les Fondateurs',
+      foundersStory: 'De génération en génération, la famille Amsellem transmet bien plus que des recettes : elle transmet une passion, une exigence et un profond respect du métier. Cet héritage traverse la Méditerranée, s\'établit en Europe, puis franchit l\'Atlantique pour écrire un nouveau chapitre à Montréal.',
+      todayStory: 'En 2015, Daniel Amsellem, héritier de trois générations de maîtres bouchers, ouvre Maison Amsellem à Ville Saint-Laurent avec une mission claire : faire découvrir un savoir-faire familial vieux de près d\'un siècle, sans jamais faire de compromis sur la qualité. Aujourd\'hui, chaque pièce de viande, chaque charcuterie artisanale et chaque préparation maison racontent cette histoire. Une histoire de tradition, d\'innovation et de passion qui rassemble les familles autour de la même table depuis près de 100 ans. Bienvenue chez Maison Amsellem. Là où chaque produit porte l\'héritage d\'une famille et le goût de l\'excellence.',
       p1: 'Bienvenue chez Amsellem, votre boucherie casher de quartier. Nous proposons des pièces de qualité, préparées selon les règles casher, avec un service chaleureux et un profond attachement à la tradition.',
       p2: 'Entreprise familiale — au service de la communauté avec soin.'
     },
@@ -382,9 +558,44 @@ const dict = {
       address: '2079 Rue Saint-Louis',
       city: 'Saint-Laurent, QC',
       postal: 'H4M 1P1',
-      privacy: 'Politique de confidentialité'
+      privacy: 'Politique de confidentialité',
+      terms: "Conditions d'utilisation"
     },
-    privacy: {
+    admin: {
+      dashboard: 'Tableau de Bord Admin',
+      addProduct: 'Ajouter un Produit',
+      logout: 'Déconnexion',
+      specialsBanner: 'Bannière des Spéciaux',
+      edit: 'Modifier',
+      save: 'Sauvegarder',
+      cancel: 'Annuler',
+      delete: 'Supprimer',
+      bannerTextEn: 'Texte de la Bannière (Anglais)',
+      bannerTextFr: 'Texte de la Bannière (Français)',
+      addNewProduct: 'Ajouter un Nouveau Produit',
+      editProduct: 'Modifier le Produit',
+      nameEn: 'Nom (Anglais)',
+      nameFr: 'Nom (Français)',
+      price: 'Prix',
+      category: 'Catégorie',
+      selectCategory: 'Sélectionnez une catégorie...',
+      descEn: 'Description (Anglais)',
+      descFr: 'Description (Français)',
+      stock: 'Stock',
+      imageUrl: 'URL de l\'Image',
+      create: 'Créer',
+      image: 'Image',
+      name: 'Nom',
+      actions: 'Actions',
+      loading: 'Chargement...',
+      deleteConfirm: 'Êtes-vous sûr de vouloir supprimer ce produit?',
+      updateSuccess: 'Produit mis à jour avec succès!',
+      updateError: 'Erreur lors de la mise à jour du produit: ',
+      deleteError: 'Erreur lors de la suppression du produit: ',
+      createError: 'Erreur lors de la création du produit: ',
+      specialUpdateSuccess: 'Bannière spéciale mise à jour avec succès!',
+      specialUpdateError: 'Erreur lors de la mise à jour du spécial: '
+    },    privacy: {
       title: 'Politique de confidentialité',
       intro: 'Nous respectons votre vie privée. Cette page résume la manière dont nous traitons les données pour cette application de démonstration.',
       data: 'Données personnelles',
@@ -399,25 +610,23 @@ const dict = {
 
 export function I18nProvider({ children }){
   const [lang, setLang] = useState(() => {
-    try{ return localStorage.getItem('ams_lang') || 'en' } catch { return 'en' }
+    try{ return localStorage.getItem('ams_lang') || 'en' } catch{ return 'en' }
   })
   useEffect(() => { try{ localStorage.setItem('ams_lang', lang) } catch{} }, [lang])
-  const toggleLang = () => setLang(prev => prev === 'en' ? 'fr' : 'en')
+  const toggleLang = useCallback(() => setLang(prev => prev === 'en' ? 'fr' : 'en'), [])
 
-  const t = useMemo(() => {
-    const table = dict[lang]
-    return (key) => {
-      const parts = key.split('.')
-      let cur = table
-      for(const p of parts){ cur = cur?.[p] }
-      return cur ?? key
-    }
+  const t = useMemo(() => (key) => {
+    let cur = dict[lang]
+    for(const p of key.split('.')){ cur = cur?.[p] }
+    return cur ?? key
   }, [lang])
 
-  const tCategory = (cat) => dict[lang].categories[cat] ?? cat
+  const tCategory = useCallback((cat) => dict[lang].categories[cat] ?? cat, [lang])
+
+  const value = useMemo(() => ({ lang, setLang, toggleLang, t, tCategory }), [lang, toggleLang, t, tCategory])
 
   return (
-    <I18nContext.Provider value={{ lang, setLang, toggleLang, t, tCategory }}>
+    <I18nContext.Provider value={value}>
       {children}
     </I18nContext.Provider>
   )

@@ -31,36 +31,6 @@ export async function getAllProducts() {
 }
 
 /**
- * Fetch products by category
- * @param {string} category - Category name
- * @returns {Promise<Array>} Array of products in that category
- */
-export async function getProductsByCategory(category) {
-  try {
-    const { data, error } = await supabase
-      .from('products')
-      .select('*')
-      .eq('category', category)
-      .order('name', { ascending: true })
-
-    if (error) throw error
-    
-    return data.map(product => ({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      category: product.category,
-      description: product.description,
-      image: product.image_url,
-      stock: product.stock
-    }))
-  } catch (error) {
-    console.error('Error fetching products by category:', error)
-    return []
-  }
-}
-
-/**
  * Get all unique categories
  * @returns {Promise<Array>} Array of category names
  */
@@ -88,7 +58,6 @@ export async function getCategories() {
  */
 export async function updateProduct(id, updates) {
   try {
-    console.log('Updating product:', id, updates)
     const updateData = {
       name_en: updates.name_en,
       name_fr: updates.name_fr,
@@ -99,7 +68,6 @@ export async function updateProduct(id, updates) {
       stock: parseInt(updates.stock),
       image_url: updates.image_url
     }
-    console.log('Update data:', updateData)
 
     const { data, error } = await supabase
       .from('products')
@@ -108,7 +76,6 @@ export async function updateProduct(id, updates) {
       .select()
 
     if (error) throw error
-    console.log('Update response:', data)
     
     const product = data[0] || data
     return {
@@ -234,6 +201,89 @@ export async function updateSpecial(id, updates) {
     return data
   } catch (error) {
     console.error('Error updating special:', error)
+    throw error
+  }
+}
+
+/**
+ * Fetch all recipes from Supabase
+ * @returns {Promise<Array>} Array of recipes
+ */
+export async function getAllRecipes() {
+  try {
+    const { data, error } = await supabase
+      .from('recipes')
+      .select('*')
+      .order('name_en', { ascending: true })
+
+    if (error) throw error
+    return data || []
+  } catch (error) {
+    console.error('Error fetching recipes:', error)
+    return []
+  }
+}
+
+/**
+ * Create a new recipe
+ * @param {Object} recipeData - Recipe data
+ * @returns {Promise<Object>} Created recipe
+ */
+export async function createRecipe(recipeData) {
+  try {
+    const { data, error } = await supabase
+      .from('recipes')
+      .insert([recipeData])
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  } catch (error) {
+    console.error('Error creating recipe:', error)
+    throw error
+  }
+}
+
+/**
+ * Update a recipe
+ * @param {string} id - Recipe ID
+ * @param {Object} updates - Fields to update
+ * @returns {Promise<Object>} Updated recipe
+ */
+export async function updateRecipe(id, updates) {
+  try {
+    const { data, error } = await supabase
+      .from('recipes')
+      .update(updates)
+      .eq('id', id)
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  } catch (error) {
+    console.error('Error updating recipe:', error)
+    throw error
+  }
+}
+
+/**
+ * Delete a recipe
+ * @param {string} id - Recipe ID
+ * @returns {Promise<boolean>} Success status
+ */
+export async function deleteRecipe(id) {
+  try {
+    const { error } = await supabase
+      .from('recipes')
+      .delete()
+      .eq('id', id)
+
+    if (error) throw error
+    return true
+  } catch (error) {
+    console.error('Error deleting recipe:', error)
     throw error
   }
 }

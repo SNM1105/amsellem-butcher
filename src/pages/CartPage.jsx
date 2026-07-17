@@ -5,7 +5,7 @@ import { useI18n } from '../context/I18nContext'
 
 export default function CartPage(){
   const { items, updateQty, removeItem, total } = useCart()
-  const { t } = useI18n()
+  const { t, lang } = useI18n()
   const nav = useNavigate()
 
   if(items.length === 0) return (
@@ -20,10 +20,12 @@ export default function CartPage(){
     <section className="container">
       <h1>{t('cart.title')}</h1>
       <div className="cart-list">
-        {items.map(i=> (
+        {items.map(i=> {
+          const itemName = lang === 'fr' && i.name_fr ? i.name_fr : i.name_en
+          return (
           <div className="cart-item" key={i.weight ? `${i.id}-${i.weight}` : i.id}>
             <div>
-              <strong>{i.name}</strong>
+              <strong>{itemName}</strong>
               <div className="muted">${i.price.toFixed(2)} {i.weight ? `x ${i.weight} lb` : t('product.each')}</div>
             </div>
             <div className="cart-actions">
@@ -32,7 +34,7 @@ export default function CartPage(){
               <button className="btn small" onClick={()=> removeItem(i.id, i.weight)}>{t('cart.remove')}</button>
             </div>
           </div>
-        ))}
+        )})}
       </div>
       <div className="cart-summary">
         <div>{t('cart.total')}: <strong>${total.toFixed(2)}</strong></div>

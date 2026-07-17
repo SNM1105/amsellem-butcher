@@ -4,6 +4,10 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const crypto = require('crypto');
 
+const GST_RATE = 0.05;      // Federal GST (Canada)
+const QST_RATE = 0.09975;   // Quebec Sales Tax
+const CURRENCY = 'CAD';
+
 const app = express();
 
 // Trust proxy if behind a reverse proxy (Cloudflare, etc.)
@@ -58,7 +62,11 @@ const PRODUCTS = [
 ];
 const PRODUCT_MAP = Object.fromEntries(PRODUCTS.map(p=> [p.id, p.price]));
 
-function calcTotal(items, method){
+function round2(n){
+  return Math.round((Number(n) || 0) * 100) / 100;
+}
+
+function calcTotals(items, method){
   let subtotal = 0;
   for(const it of items){
     const unit = PRODUCT_MAP[it.id];
@@ -68,8 +76,19 @@ function calcTotal(items, method){
     subtotal += unit * qty;
   }
   const fee = method === 'delivery' ? 5.0 : 0;
-  const total = +(subtotal + fee).toFixed(2);
-  return { subtotal: +subtotal.toFixed(2), fee, total };
+  const base = subtotal + fee;
+  const gst = round2(base * GST_RATE);
+  const qst = round2(base * QST_RATE);
+  const total = round2(base + gst + qst);
+  return {
+    currency: CURRENCY,
+    subtotal: round2(subtotal),
+    fee: round2(fee),
+    gst,
+    qst,
+    taxTotal: round2(gst + qst),
+    total
+  };
 }
 
 // API: get products (prices only for demo)
@@ -81,7 +100,7 @@ app.get('/api/products', (req, res)=> {
 app.post('/api/orders', (req, res)=> {
   try{
     const { items = [], method = 'delivery', contact = {} } = req.body || {};
-    const totals = calcTotal(items, method);
+    const totals = calcTotals(items, method);
     // Basic contact validation
     const nameOk = typeof contact.firstName === 'string' && typeof contact.lastName === 'string';
     const phoneOk = typeof contact.phone === 'string';
@@ -96,6 +115,50 @@ app.post('/api/orders', (req, res)=> {
   }
 });
 
+// API: Clover card payment (immediate capture, CAD)
+app.post('/api/payments/clover', async (req, res)=> {
+  try {
+    const { items = [], method = 'delivery', contact = {}, delivery = null, paymentToken = null } = req.body || {};
+    const totals = calcTotals(items, method);
+
+    const nameOk = typeof contact.firstName === 'string' && typeof contact.lastName === 'string';
+    const phoneOk = typeof contact.phone === 'string';
+    if(!nameOk || !phoneOk){
+      return res.status(400).json({ error: 'Invalid contact' });
+    }
+
+    // Require delivery fields when delivery is selected
+    if(method === 'delivery'){
+      const { street, city, postal } = delivery || {};
+      if(!street || !city || !postal){
+        return res.status(400).json({ error: 'Delivery address required' });
+      }
+    }
+
+    // If Clover credentials are missing, return a mock success so dev flow keeps working
+    const merchantId = process.env.CLOVER_MERCHANT_ID;
+    const secretKey = process.env.CLOVER_SECRET_KEY;
+    if(!merchantId || !secretKey){
+      const paymentId = `mock_clover_${Date.now()}`;
+      return res.json({
+        success: true,
+        mock: true,
+        message: 'Clover keys not set on server; returning mocked payment success',
+        paymentId,
+        totals
+      });
+    }
+
+    // TODO: Exchange paymentToken with Clover Payments API and capture funds
+    // Placeholder response until Clover integration is completed
+    const paymentId = `clover_${Date.now()}`;
+    res.json({ success: true, paymentId, totals });
+  } catch (err){
+    console.error('Clover payment error:', err);
+    res.status(400).json({ error: err.message || 'Payment failed' });
+  }
+});
+
 // Placeholder PayPal webhook endpoint (to be completed with verification)
 app.post('/webhook/paypal', (req, res)=> {
   // TODO: verify signature and event type
@@ -103,7 +166,7 @@ app.post('/webhook/paypal', (req, res)=> {
 });
 
 // API: Clover Order Endpoint
-// Receives order from frontend and forwards to Clover POS system
+// Receives order from frontend and forwards to Clover POS system for ticket printing
 app.post('/api/clover/order', async (req, res)=> {
   try {
     const { customer, items, subtotal, deliveryFee, total, method, delivery, timestamp } = req.body || {};
@@ -113,47 +176,293 @@ app.post('/api/clover/order', async (req, res)=> {
       return res.status(400).json({ error: 'Missing required order data' });
     }
 
-    // TODO: Integrate with Clover API
-    // Your client will provide:
-    // 1. Clover Merchant ID
-    // 2. Clover API Key
-    // 3. Clover API Endpoint
-    // 4. Order submission format/requirements
-
-    // For now, log the order and prepare for Clover integration
-    const orderId = `AMZ-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+    // Get Clover credentials from environment
+    const merchantId = process.env.CLOVER_MERCHANT_ID;
+    const apiKey = process.env.CLOVER_API_KEY;
+    const cloverEnv = process.env.CLOVER_ENV || 'sandbox'; // 'sandbox' or 'production'
     
-    console.log('Order submitted to Clover:', {
-      orderId,
-      customer,
-      items,
-      total,
-      method,
-      delivery,
-      timestamp
-    });
+    // Clover API base URLs
+    const CLOVER_BASE_URL = cloverEnv === 'production' 
+      ? 'https://api.clover.com'
+      : 'https://sandbox.dev.clover.com';
 
-    // Placeholder: Return order confirmation
-    // Once Clover credentials are available, this will:
-    // 1. Format order data per Clover API specs
-    // 2. Call Clover API endpoint
-    // 3. Return Clover order ID to client
-    
-    res.json({ 
-      success: true,
-      orderId: orderId,
-      message: 'Order sent to POS system',
-      details: {
-        customerName: `${customer.name}`,
-        total: total,
-        method: method,
-        timestamp: timestamp
+    // If Clover credentials are missing, return mock success for development
+    if (!merchantId || !apiKey) {
+      const orderId = `MOCK-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+      console.log('Mock Order (Clover keys not set):', {
+        orderId,
+        customer: customer.name,
+        phone: customer.phone,
+        address: delivery ? `${delivery.street}, ${delivery.city}, ${delivery.postal}` : 'Pickup',
+        items: items.map(i => `${i.name} x${i.qty}`).join(', '),
+        total,
+        method,
+        timestamp
+      });
+      
+      return res.json({
+        success: true,
+        mock: true,
+        orderId,
+        message: 'Clover keys not configured. Order logged for testing.',
+        details: {
+          customerName: customer.name,
+          phone: customer.phone,
+          total,
+          method
+        }
+      });
+    }
+
+    // Format order for Clover Orders API
+    // This creates an order that will appear on Clover POS and print a ticket
+    const cloverOrder = {
+      state: 'open',
+      total: Math.round(total * 100), // Clover uses cents
+      title: `Online Order - ${customer.name}`,
+      note: formatOrderNote(customer, items, method, delivery),
+      // Line items
+      lineItems: items.map(item => ({
+        name: item.name,
+        price: Math.round(item.price * 100),
+        qty: item.qty || 1
+      }))
+    };
+
+    try {
+      // Create order in Clover
+      const orderResponse = await fetch(`${CLOVER_BASE_URL}/v3/merchants/${merchantId}/orders`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(cloverOrder)
+      });
+
+      if (!orderResponse.ok) {
+        const errorText = await orderResponse.text();
+        console.error('Clover API error:', errorText);
+        throw new Error(`Clover API error: ${orderResponse.status}`);
       }
-    });
+
+      const cloverOrderResult = await orderResponse.json();
+      
+      // Add line items to the order
+      for (const item of items) {
+        await fetch(`${CLOVER_BASE_URL}/v3/merchants/${merchantId}/orders/${cloverOrderResult.id}/line_items`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${apiKey}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            name: item.name,
+            price: Math.round(item.price * 100),
+            printed: false
+          })
+        });
+      }
+
+      // Fire order to print on Clover device
+      // The order will automatically print if the merchant has receipt printing enabled
+      await fetch(`${CLOVER_BASE_URL}/v3/merchants/${merchantId}/orders/${cloverOrderResult.id}`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          state: 'locked' // Lock order to trigger printing
+        })
+      });
+
+      console.log('Order created in Clover:', cloverOrderResult.id);
+      
+      res.json({
+        success: true,
+        orderId: cloverOrderResult.id,
+        message: 'Order sent to Clover POS - ticket will print',
+        details: {
+          customerName: customer.name,
+          phone: customer.phone,
+          total,
+          method,
+          timestamp
+        }
+      });
+
+    } catch (cloverError) {
+      console.error('Clover integration error:', cloverError);
+      // Return partial success - order logged but Clover failed
+      const fallbackOrderId = `AMZ-${Date.now()}`;
+      res.json({
+        success: true,
+        orderId: fallbackOrderId,
+        warning: 'Order received but Clover sync failed. Please check POS manually.',
+        details: {
+          customerName: customer.name,
+          total,
+          method
+        }
+      });
+    }
 
   } catch (error) {
     console.error('Clover order error:', error);
     res.status(500).json({ error: 'Failed to process order' });
+  }
+});
+
+// Helper function to format order note with customer details for ticket
+function formatOrderNote(customer, items, method, delivery) {
+  let note = `
+━━━━━━━━━━━━━━━━━━━━━━━━━
+    ONLINE ORDER
+━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CUSTOMER: ${customer.name}
+PHONE: ${customer.phone}
+EMAIL: ${customer.email || 'N/A'}
+
+METHOD: ${method.toUpperCase()}
+`;
+
+  if (method === 'delivery' && delivery) {
+    note += `
+DELIVERY ADDRESS:
+${delivery.street}${delivery.apartment ? `, ${delivery.apartment}` : ''}
+${delivery.city}, ${delivery.postal}
+`;
+  }
+
+  note += `
+━━━━━━━━━━━━━━━━━━━━━━━━━
+ITEMS:
+`;
+
+  items.forEach(item => {
+    note += `• ${item.name} x${item.qty} - $${(item.price * item.qty).toFixed(2)}\n`;
+  });
+
+  note += `━━━━━━━━━━━━━━━━━━━━━━━━━`;
+
+  return note;
+}
+
+// ============================================
+// CLOVER WEBHOOK: Inventory Sync
+// ============================================
+// This webhook receives notifications when orders are completed in-store
+// and automatically updates inventory in Supabase
+app.post('/webhook/clover/inventory', async (req, res) => {
+  try {
+    const webhookSecret = process.env.CLOVER_WEBHOOK_SECRET;
+    
+    // Verify webhook signature if secret is configured
+    if (webhookSecret) {
+      const signature = req.headers['x-clover-signature'];
+      // TODO: Implement signature verification when webhook secret is provided
+      // const expectedSignature = crypto.createHmac('sha256', webhookSecret).update(JSON.stringify(req.body)).digest('hex');
+      // if (signature !== expectedSignature) {
+      //   return res.status(401).json({ error: 'Invalid signature' });
+      // }
+    }
+
+    const { type, merchantId, objectId } = req.body;
+
+    // Only process order completed events
+    if (type !== 'ORDER_UPDATED' || !objectId) {
+      return res.status(200).json({ message: 'Event ignored' });
+    }
+
+    console.log(`[Clover Webhook] Order ${objectId} updated`);
+
+    // Fetch order details from Clover
+    const cloverApiKey = process.env.CLOVER_API_KEY;
+    const cloverMerchantId = process.env.CLOVER_MERCHANT_ID;
+    const cloverEnv = process.env.CLOVER_ENV || 'sandbox';
+    const CLOVER_BASE_URL = cloverEnv === 'production' 
+      ? 'https://api.clover.com'
+      : 'https://sandbox.dev.clover.com';
+
+    if (!cloverApiKey || !cloverMerchantId) {
+      console.log('[Clover Webhook] API keys not configured - skipping inventory sync');
+      return res.status(200).json({ message: 'Keys not configured' });
+    }
+
+    // Fetch order details
+    const orderResponse = await fetch(
+      `${CLOVER_BASE_URL}/v3/merchants/${cloverMerchantId}/orders/${objectId}?expand=lineItems`,
+      {
+        headers: { 'Authorization': `Bearer ${cloverApiKey}` }
+      }
+    );
+
+    if (!orderResponse.ok) {
+      console.error('[Clover Webhook] Failed to fetch order:', await orderResponse.text());
+      return res.status(200).json({ message: 'Order fetch failed' });
+    }
+
+    const order = await orderResponse.json();
+
+    // Only process paid/completed orders
+    if (order.state !== 'locked' && order.state !== 'paid') {
+      return res.status(200).json({ message: 'Order not completed' });
+    }
+
+    console.log(`[Clover Webhook] Processing completed order with ${order.lineItems?.elements?.length || 0} items`);
+
+    // Update inventory in Supabase for each line item
+    const inventoryUpdates = [];
+    
+    for (const lineItem of order.lineItems?.elements || []) {
+      // Match Clover item to Supabase product by name or SKU
+      // You may need to adjust this matching logic based on your product naming
+      const { data: products, error } = await supabase
+        .from('products')
+        .select('id, name, stock')
+        .ilike('name', lineItem.name)
+        .limit(1);
+
+      if (error || !products || products.length === 0) {
+        console.log(`[Clover Webhook] No matching product found for: ${lineItem.name}`);
+        continue;
+      }
+
+      const product = products[0];
+      const quantitySold = lineItem.quantity || 1;
+      const newStock = Math.max(0, (product.stock || 0) - quantitySold);
+
+      // Update stock in Supabase
+      const { error: updateError } = await supabase
+        .from('products')
+        .update({ stock: newStock })
+        .eq('id', product.id);
+
+      if (updateError) {
+        console.error(`[Clover Webhook] Failed to update stock for ${product.name}:`, updateError);
+      } else {
+        console.log(`[Clover Webhook] Updated ${product.name}: ${product.stock} → ${newStock}`);
+        inventoryUpdates.push({
+          product: product.name,
+          oldStock: product.stock,
+          newStock,
+          quantitySold
+        });
+      }
+    }
+
+    res.status(200).json({
+      success: true,
+      message: `Synced ${inventoryUpdates.length} items`,
+      updates: inventoryUpdates
+    });
+
+  } catch (error) {
+    console.error('[Clover Webhook] Error:', error);
+    // Always return 200 to prevent Clover from retrying
+    res.status(200).json({ error: error.message });
   }
 });
 

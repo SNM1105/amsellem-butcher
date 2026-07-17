@@ -4,18 +4,24 @@ import { useI18n } from '../context/I18nContext'
 
 export default function Checkout(){
   const { items, total, clearCart } = useCart()
-  const { t } = useI18n()
+  const { t, lang } = useI18n()
   const [method, setMethod] = useState('delivery')
-  const [form, setForm] = useState({ firstName: '', lastName: '', email: '', phone: '', street: '', city: '', postal: '' })
+  const [form, setForm] = useState({ firstName: '', lastName: '', email: '', phone: '', street: '', apartment: '', city: '', postal: '' })
   const [processing, setProcessing] = useState(false)
   const [orderError, setOrderError] = useState('')
+
+  const TAX_RATES = { gst: 0.05, qst: 0.09975 }
 
   const handleFormChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
   const deliveryFee = method === 'delivery' ? 5.0 : 0
-  const finalAmount = (total + deliveryFee).toFixed(2)
+  const baseAmount = total + deliveryFee
+  const gst = +(baseAmount * TAX_RATES.gst).toFixed(2)
+  const qst = +(baseAmount * TAX_RATES.qst).toFixed(2)
+  const taxTotal = +(gst + qst).toFixed(2)
+  const finalAmount = (baseAmount + taxTotal).toFixed(2)
 
   const handleSubmitOrder = async () => {
     // Validate form
@@ -32,45 +38,79 @@ export default function Checkout(){
     setOrderError('')
 
     try {
-      const orderData = {
-        customer: {
-          name: `${form.firstName} ${form.lastName}`,
+      // First, process payment
+      const paymentPayload = {
+        items: items.map(i => ({ id: i.id, qty: i.qty })),
+        method,
+        contact: {
+          firstName: form.firstName,
+          lastName: form.lastName,
           email: form.email || '',
           phone: form.phone
         },
-        items: items.map(i => ({
-          name: i.name,
-          price: i.price,
-          qty: i.qty,
-          weight: i.weight || null
-        })),
-        subtotal: parseFloat(total),
-        deliveryFee: deliveryFee,
-        total: parseFloat(finalAmount),
-        method: method,
         delivery: method === 'delivery' ? {
           street: form.street,
+          apartment: form.apartment,
+          city: form.city,
+          postal: form.postal
+        } : null,
+        currency: 'CAD',
+        paymentToken: 'demo-token'
+      }
+
+      const paymentResponse = await fetch('/api/payments/clover', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(paymentPayload)
+      })
+
+      if (!paymentResponse.ok) {
+        throw new Error('Payment failed')
+      }
+
+      const paymentResult = await paymentResponse.json()
+
+      // Then, send order to Clover POS for ticket printing
+      const orderPayload = {
+        customer: {
+          name: `${form.firstName} ${form.lastName}`,
+          phone: form.phone,
+          email: form.email || ''
+        },
+        items: items.map(i => ({
+          id: i.id,
+          name: lang === 'fr' && i.name_fr ? i.name_fr : i.name_en,
+          price: i.price,
+          qty: i.qty
+        })),
+        subtotal: total,
+        deliveryFee: deliveryFee,
+        total: parseFloat(finalAmount),
+        method,
+        delivery: method === 'delivery' ? {
+          street: form.street,
+          apartment: form.apartment,
           city: form.city,
           postal: form.postal
         } : null,
         timestamp: new Date().toISOString()
       }
 
-      // Send order to server to forward to Clover
-      const response = await fetch('/api/clover/order', {
+      // Send to Clover for ticket printing
+      const orderResponse = await fetch('/api/clover/order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(orderData)
+        body: JSON.stringify(orderPayload)
       })
 
-      if (!response.ok) {
-        throw new Error('Failed to submit order')
-      }
+      const orderResult = await orderResponse.json()
 
-      const result = await response.json()
       setProcessing(false)
       clearCart()
-      alert(`Order submitted successfully! Order ID: ${result.orderId || 'pending'}`)
+      
+      // Show success message with order reference
+      const orderId = orderResult.orderId || paymentResult.paymentId || 'pending'
+      alert(`Order submitted successfully!\n\nReference: ${orderId}\n\nYour order will be prepared shortly.`)
     } catch (error) {
       console.error('Order submission error:', error)
       setOrderError('Failed to submit order. Please try again.')
@@ -127,6 +167,10 @@ export default function Checkout(){
                 {t('checkout.street')}
                 <input type="text" name="street" value={form.street} onChange={handleFormChange} required />
               </label>
+              <label>
+                Apartment (optional)
+                <input type="text" name="apartment" value={form.apartment} onChange={handleFormChange} />
+              </label>
               <div className="form-row">
                 <label>
                   {t('checkout.city')}
@@ -142,15 +186,20 @@ export default function Checkout(){
 
           <h3>{t('checkout.summary')}</h3>
           <div className="order-summary">
-            {items.map(i=> (
+            {items.map(i=> {
+              const itemName = lang === 'fr' && i.name_fr ? i.name_fr : i.name_en
+              return (
               <div key={i.id} className="summary-item">
-                <span>{i.name} x {i.qty}</span>
+                <span>{itemName} x {i.qty}</span>
                 <span>${(i.price * i.qty).toFixed(2)}</span>
               </div>
-            ))}
+            )})}
           </div>
           <div className="summary-line">{t('checkout.subtotal')}: ${total.toFixed(2)}</div>
           <div className="summary-line">{t('checkout.fee')}: ${deliveryFee.toFixed(2)}</div>
+          <div className="summary-line">{t('checkout.gst')}: ${gst.toFixed(2)}</div>
+          <div className="summary-line">{t('checkout.qst')}: ${qst.toFixed(2)}</div>
+          <div className="summary-line">{t('checkout.taxes')}: ${taxTotal.toFixed(2)}</div>
           <div className="summary-line total">{t('checkout.total')}: ${finalAmount}</div>
         </div>
         <div className="payment-panel">
@@ -163,7 +212,7 @@ export default function Checkout(){
           >
             {processing ? t('checkout.processing') : t('checkout.submitOrder')}
           </button>
-          {orderError && <p style={{ color: '#ff6b6b', fontSize: '0.9rem', margin: '8px 0' }}>{orderError}</p>}
+          {orderError && <p className="checkout-error">{orderError}</p>}
           <p className="muted small" style={{margin: '8px 0 0 0'}}>{t('checkout.cloverNote')}</p>
         </div>
       </div>

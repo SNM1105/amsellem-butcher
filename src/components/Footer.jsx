@@ -4,11 +4,7 @@ import { useI18n } from '../context/I18nContext'
 
 export default function Footer(){
   const { t } = useI18n()
-  const address = t('footer.address')
-  const city = t('footer.city')
-  const postal = t('footer.postal')
-  const mapQuery = encodeURIComponent(`${address}, ${city} ${postal}`)
-  const mapUrl = `https://www.google.com/maps/search/?api=1&query=${mapQuery}`
+  const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${t('footer.address')}, ${t('footer.city')} ${t('footer.postal')}`)}`
 
   return (
     <footer className="site-footer">
@@ -17,8 +13,8 @@ export default function Footer(){
           <h4>{t('footer.title')}</h4>
           <address>
             <a href={mapUrl} target="_blank" rel="noreferrer">
-              {address}<br />
-              {city} {postal}
+              {t('footer.address')}<br />
+              {t('footer.city')} {t('footer.postal')}
             </a>
           </address>
           <iframe 
@@ -31,13 +27,72 @@ export default function Footer(){
             referrerPolicy="no-referrer-when-downgrade">
           </iframe>
         </div>
-        <div className="footer-links">
-          <Link to="/privacy">{t('footer.privacy')}</Link>
+        <div className="footer-hours">
+          <h4>{t('contact.openingHours')}</h4>
+          <div className="hours-list-compact">
+            <div className="hours-item-compact">
+              <span className="day">{t('contact.sunday')}</span>
+              <span className="time">
+                <span className="time-start">8 a.m.</span>
+                <span className="time-dash">–</span>
+                <span className="time-end">5 p.m.</span>
+              </span>
+            </div>
+            <div className="hours-item-compact">
+              <span className="day">{t('contact.monday')}</span>
+              <span className="time">
+                <span className="time-start">8 a.m.</span>
+                <span className="time-dash">–</span>
+                <span className="time-end">6 p.m.</span>
+              </span>
+            </div>
+            <div className="hours-item-compact">
+              <span className="day">{t('contact.tuesday')}</span>
+              <span className="time">
+                <span className="time-start">8 a.m.</span>
+                <span className="time-dash">–</span>
+                <span className="time-end">6 p.m.</span>
+              </span>
+            </div>
+            <div className="hours-item-compact">
+              <span className="day">{t('contact.wednesday')}</span>
+              <span className="time">
+                <span className="time-start">8 a.m.</span>
+                <span className="time-dash">–</span>
+                <span className="time-end">7 p.m.</span>
+              </span>
+            </div>
+            <div className="hours-item-compact">
+              <span className="day">{t('contact.thursday')}</span>
+              <span className="time">
+                <span className="time-start">8 a.m.</span>
+                <span className="time-dash">–</span>
+                <span className="time-end">8 p.m.</span>
+              </span>
+            </div>
+            <div className="hours-item-compact">
+              <span className="day">{t('contact.friday')}</span>
+              <span className="time">
+                <span className="time-start">8 a.m.</span>
+                <span className="time-dash">–</span>
+                <span className="time-end">2:30 p.m.</span>
+              </span>
+            </div>
+            <div className="hours-item-compact closed">
+              <span className="day">{t('contact.saturday')}</span>
+              <span className="time">{t('contact.closed')}</span>
+            </div>
+          </div>
         </div>
       </div>
       <div className="footer-bottom">
-        <div className="container">
+        <div className="container footer-bottom-inner">
           <span className="muted">© {new Date().getFullYear()} Amsellem</span>
+          <div className="footer-legal">
+            <Link to="/privacy">{t('footer.privacy')}</Link>
+            <span className="legal-divider">·</span>
+            <Link to="/terms">{t('footer.terms')}</Link>
+          </div>
         </div>
       </div>
     </footer>
